@@ -129,21 +129,7 @@ Using go get:
 go get -u github.com/sgreben/terraform-module-versions
 ```
 
-Or [download the binary](https://github.com/sgreben/terraform-module-versions/releases/latest) from the releases page.
-
-```bash
-# Linux
-curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.2/terraform-module-versions_0.11.2_linux_x86_64.zip
-unzip terraform-module-versions_0.11.2_linux_x86_64.zip
-
-# OS X
-curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.2/terraform-module-versions_0.11.2_osx_x86_64.zip
-unzip terraform-module-versions_0.11.2_osx_x86_64.zip
-
-# Windows
-curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.2/terraform-module-versions_0.11.2_windows_x86_64.zip
-unzip terraform-module-versions_0.11.2_windows_x86_64.zip
-```
+Or [download the binary for your platform](https://github.com/sgreben/terraform-module-versions/releases/latest) from the releases page.
 
 ## Usage
 

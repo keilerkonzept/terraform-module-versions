@@ -129,21 +129,7 @@ Using go get:
 go get -u github.com/sgreben/${APP}
 ```
 
-Or [download the binary](https://github.com/sgreben/${APP}/releases/latest) from the releases page.
-
-```bash
-# Linux
-curl -LO https://github.com/sgreben/${APP}/releases/download/${VERSION}/${APP}_${VERSION}_linux_x86_64.zip
-unzip ${APP}_${VERSION}_linux_x86_64.zip
-
-# OS X
-curl -LO https://github.com/sgreben/${APP}/releases/download/${VERSION}/${APP}_${VERSION}_osx_x86_64.zip
-unzip ${APP}_${VERSION}_osx_x86_64.zip
-
-# Windows
-curl -LO https://github.com/sgreben/${APP}/releases/download/${VERSION}/${APP}_${VERSION}_windows_x86_64.zip
-unzip ${APP}_${VERSION}_windows_x86_64.zip
-```
+Or [download the binary for your platform](https://github.com/sgreben/${APP}/releases/latest) from the releases page.
 
 ## Usage
 
