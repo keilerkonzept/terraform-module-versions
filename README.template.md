@@ -14,7 +14,7 @@ Supported module sources:
   - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
 - [Get it](#get-it)
 - [Usage](#usage)
--
+
 ## Examples
 
 ```sh
