@@ -9,7 +9,7 @@ Supported module sources:
 ## Contents
 
 - [Examples](#examples)
-  - [List current modules with their versions](#list-current-modules-with-their-versions)
+  - [List modules with their current versions](#list-modules-with-their-current-versions)
   - [Check for module updates](#check-for-module-updates)
   - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
 - [Get it](#get-it)
@@ -33,10 +33,10 @@ module "example" {
 }
 ```
 
-### List current modules with their versions
+### List modules with their current versions
 
 ```sh
-# default operation: list current modules with their versions and version constraints (if specified)
+# default operation: list modules with their current versions and version constraints (if specified)
 $ ${APP} main.tf
 ```
 
