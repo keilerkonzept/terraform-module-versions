@@ -8,11 +8,14 @@ Supported module sources:
 
 ## Contents
 
-- [Example](#example)
+- [Examples](#examples)
+  - [List current modules with their versions](#list-current-modules-with-their-versions)
+  - [Check for module updates](#check-for-module-updates)
+  - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
 - [Get it](#get-it)
 - [Usage](#usage)
-
-## Example
+-
+## Examples
 
 ```sh
 $ cat main.tf
@@ -29,6 +32,8 @@ module "example" {
   version = "~> 0.10"
 }
 ```
+
+### List current modules with their versions
 
 ```sh
 # default operation: list current modules with their versions and version constraints (if specified)
@@ -53,8 +58,10 @@ $ terraform-module-versions main.tf
 }
 ```
 
+### Check for module updates
+
 ```sh
-# -update: check for module updates from (usually) remote sources
+# -updates: check for module updates from (usually) remote sources
 $ terraform-module-versions -updates main.tf
 ```
 
@@ -89,7 +96,29 @@ $ terraform-module-versions -updates main.tf
   ],
   "hasMinorUpdate": true
 }
+```
 
+### Check for updates of specific modules
+
+```sh
+# -updates and -module: check for updates of specific modules
+$ terraform-module-versions -updates -module=example main.tf
+```
+
+```json
+{
+  "path": "main.tf",
+  "name": "example",
+  "source": "git::ssh://git@github.com/sgreben/terraform-module-versions?ref=0.10.0",
+  "version": "0.10.0",
+  "versionConstraint": "~> 0.10",
+  "type": "git",
+  "latestMatchingUpdate": "0.11.0",
+  "updates": [
+    "0.11.0"
+  ],
+  "hasMinorUpdate": true
+}
 ```
 
 ## Get it
