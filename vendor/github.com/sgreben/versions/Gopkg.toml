@@ -1,0 +1,7 @@
+[[constraint]]
+  name ="gopkg.in/src-d/go-git.v4"
+  version ="v4.1.1"
+
+[[constraint]]
+  name = "github.com/sgreben/flagvar"
+  version = "1.6.0"
