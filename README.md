@@ -133,16 +133,16 @@ Or [download the binary](https://github.com/sgreben/terraform-module-versions/re
 
 ```bash
 # Linux
-curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.0/terraform-module-versions_0.11.0_linux_x86_64.zip
-unzip terraform-module-versions_0.11.0_linux_x86_64.zip
+curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.2/terraform-module-versions_0.11.2_linux_x86_64.zip
+unzip terraform-module-versions_0.11.2_linux_x86_64.zip
 
 # OS X
-curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.0/terraform-module-versions_0.11.0_osx_x86_64.zip
-unzip terraform-module-versions_0.11.0_osx_x86_64.zip
+curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.2/terraform-module-versions_0.11.2_osx_x86_64.zip
+unzip terraform-module-versions_0.11.2_osx_x86_64.zip
 
 # Windows
-curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.0/terraform-module-versions_0.11.0_windows_x86_64.zip
-unzip terraform-module-versions_0.11.0_windows_x86_64.zip
+curl -LO https://github.com/sgreben/terraform-module-versions/releases/download/0.11.2/terraform-module-versions_0.11.2_windows_x86_64.zip
+unzip terraform-module-versions_0.11.2_windows_x86_64.zip
 ```
 
 ## Usage

@@ -19,11 +19,11 @@ const terraformSourceFileExt = ".tf"
 func (s *scanner) ScanFile(path string) error {
 	hclSource, err := ioutil.ReadFile(path)
 	if err != nil {
-		return fmt.Errorf("read terraform source %q: v", err)
+		return fmt.Errorf("read terraform source %q: %v", path, err)
 	}
 	var sourceFile struct{ Module map[string]*moduleReference }
 	if err := hcl.Unmarshal(hclSource, &sourceFile); err != nil {
-		return fmt.Errorf("process terraform source %q: v", err)
+		return fmt.Errorf("process terraform source %q: %v", path, err)
 	}
 	for k := range sourceFile.Module {
 		m := sourceFile.Module[k]
