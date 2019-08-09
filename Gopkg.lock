@@ -15,7 +15,7 @@
 
 [[projects]]
   name = "github.com/hashicorp/hcl"
-  packages = [".","hcl/ast","hcl/parser","hcl/printer","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
+  packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
   revision = "8cb6e5b959231cc1119e43259c4a608f9c51a241"
   version = "v1.0.0"
 
@@ -32,10 +32,22 @@
   version = "1.0"
 
 [[projects]]
+  name = "github.com/mattn/go-runewidth"
+  packages = ["."]
+  revision = "3ee7d812e62a0804a7d0a324e0249ca2db3476d3"
+  version = "v0.0.4"
+
+[[projects]]
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
   revision = "af06845cf3004701891bf4fdb884bfe4920b3727"
   version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/olekukonko/tablewriter"
+  packages = ["."]
+  revision = "e6d60cf7ba1f42d86d54cdf5508611c4aafb3970"
+  version = "v0.0.1"
 
 [[projects]]
   name = "github.com/sergi/go-diff"
@@ -52,8 +64,8 @@
 [[projects]]
   name = "github.com/sgreben/versions"
   packages = ["pkg/semver","pkg/simpledocker","pkg/simplegit","pkg/versions"]
-  revision = "f4d15e08e588e17d8ad585cf66212853222acecd"
-  version = "1.1.0"
+  revision = "9ceea0b2fe0a2903963e55789f09625c16def07d"
+  version = "1.1.6"
 
 [[projects]]
   name = "github.com/src-d/gcfg"
@@ -106,6 +118,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d266a1d4211a771504cc67c610f4f8fe0c888a0d10b27be1868334c2615dc844"
+  inputs-digest = "63fe7690ce89779365eef0086aba26e2ec20660688475773def525130c80afea"
   solver-name = "gps-cdcl"
   solver-version = 1

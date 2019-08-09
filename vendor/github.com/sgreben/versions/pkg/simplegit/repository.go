@@ -4,6 +4,7 @@ import (
 	"gopkg.in/src-d/go-billy.v4"
 	"gopkg.in/src-d/go-billy.v4/memfs"
 	git "gopkg.in/src-d/go-git.v4"
+	"gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/storage/memory"
 )
@@ -40,6 +41,39 @@ func (r *Repository) Raw() (raw *git.Repository, err error) {
 	}
 	raw = r.Cached
 	return
+}
+
+// RemoteRefs returns the list of refs in the default remote
+func (r *Repository) RemoteRefs() (out []struct {
+	Name      string
+	Reference string
+}, err error) {
+	raw, err := git.Init(memory.NewStorage(), nil)
+	if err != nil {
+		return nil, err
+	}
+	raw.CreateRemote(&config.RemoteConfig{
+		Name: git.DefaultRemoteName,
+		URLs: []string{r.URL},
+	})
+	remote, err := raw.Remote(git.DefaultRemoteName)
+	if err != nil {
+		return nil, err
+	}
+	refs, err := remote.List(&git.ListOptions{})
+	if err != nil {
+		return nil, err
+	}
+	for _, ref := range refs {
+		out = append(out, struct {
+			Name      string
+			Reference string
+		}{
+			Name:      ref.Name().Short(),
+			Reference: ref.Name().String(),
+		})
+	}
+	return out, nil
 }
 
 // Tags returns the list of tags in this repository.

@@ -151,7 +151,7 @@ func init() {
 		"<=": constraintLessThanEqual,
 		"=<": constraintLessThanEqual,
 		"~":  constraintTilde,
-		"~>": constraintTilde,
+		"~>": constraintTildeGreater,
 		"^":  constraintCaret,
 	}
 
@@ -204,6 +204,7 @@ type constraint struct {
 	minorDirty bool
 	dirty      bool
 	patchDirty bool
+	noPatch    bool
 }
 
 // Check if a version meets the constraint
@@ -224,14 +225,15 @@ func parseConstraint(c string) (*constraint, error) {
 	minorDirty := false
 	patchDirty := false
 	dirty := false
-	if isX(m[3]) {
+	switch {
+	case isX(m[3]):
 		ver = "0.0.0"
 		dirty = true
-	} else if isX(strings.TrimPrefix(m[4], ".")) || m[4] == "" {
+	case isX(strings.TrimPrefix(m[4], ".")) || m[4] == "":
 		minorDirty = true
 		dirty = true
 		ver = fmt.Sprintf("%s.0.0%s", m[3], m[6])
-	} else if isX(strings.TrimPrefix(m[5], ".")) {
+	case isX(strings.TrimPrefix(m[5], ".")):
 		dirty = true
 		patchDirty = true
 		ver = fmt.Sprintf("%s%s.0%s", m[3], m[4], m[6])
@@ -253,6 +255,7 @@ func parseConstraint(c string) (*constraint, error) {
 		minorDirty: minorDirty,
 		patchDirty: patchDirty,
 		dirty:      dirty,
+		noPatch:    m[5] == "",
 	}
 	return cs, nil
 }
@@ -379,6 +382,36 @@ func constraintTilde(v *Version, c *constraint) bool {
 	}
 
 	if v.Minor != c.con.Minor && !c.minorDirty {
+		return false
+	}
+
+	return true
+}
+
+func constraintTildeGreater(v *Version, c *constraint) bool {
+	// If there is a pre-release on the version but the constraint isn't looking
+	// for them assume that pre-releases are not compatible. See issue 21 for
+	// more details.
+	if v.Prerelease != "" && c.con.Prerelease == "" {
+		return false
+	}
+
+	if v.LessThan(c.con) {
+		return false
+	}
+
+	// ~0.0.0 is a special case where all constraints are accepted. It's
+	// equivalent to >= 0.0.0.
+	if c.con.Major == 0 && c.con.Minor == 0 && c.con.Patch == 0 &&
+		!c.minorDirty && !c.patchDirty {
+		return true
+	}
+
+	if v.Major != c.con.Major {
+		return false
+	}
+
+	if v.Minor != c.con.Minor && !c.minorDirty && !c.noPatch {
 		return false
 	}
 

@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"sort"
 	"sync"
 
 	"github.com/sgreben/versions/pkg/semver"
@@ -26,6 +27,7 @@ var config struct {
 	PrintVersionAndExit bool
 	Quiet               bool
 	Updates             bool
+	Pretty              bool
 }
 
 func init() {
@@ -34,9 +36,12 @@ func init() {
 	log.SetOutput(os.Stderr)
 	flag.BoolVar(&config.PrintVersionAndExit, "version", config.PrintVersionAndExit, "print version and exit")
 	flag.BoolVar(&config.Updates, "updates", config.Updates, "check for updates")
+	flag.BoolVar(&config.Updates, "update", config.Updates, "(alias for -updates)")
 	flag.BoolVar(&config.Updates, "u", config.Updates, "(alias for -updates)")
 	flag.BoolVar(&config.Quiet, "quiet", config.Quiet, "suppress log output (stderr)")
 	flag.BoolVar(&config.Quiet, "q", config.Quiet, "(alias for -quiet)")
+	flag.BoolVar(&config.Pretty, "pretty", config.Pretty, "human-readable output")
+	flag.BoolVar(&config.Pretty, "p", config.Pretty, "(alias for -pretty)")
 	flag.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
 	flag.Parse()
 
@@ -72,41 +77,83 @@ func main() {
 
 	switch {
 	case config.Updates:
-		updates(included)
+		if config.Pretty {
+			updatesPretty(included)
+			return
+		}
+		updatesJSON(included)
 	default:
-		list(included)
+		if config.Pretty {
+			listPretty(included)
+			return
+		}
+		listJSON(included)
 	}
 }
 
-func list(rs []*moduleReference) {
+func listPretty(rs []*moduleReference) {
+	var out []outputList
+	for _, r := range rs {
+		src := r.SourceStruct()
+		version := ""
+		constraint := ""
+		if v := src.InferredVersion(); v != nil {
+			version = *v
+		}
+		if c := src.Version; c != nil {
+			constraint = *src.Version
+		}
+		out = append(out, outputList{
+			Path:              r.Path,
+			Name:              r.Name,
+			Source:            r.Source,
+			Version:           version,
+			VersionConstraint: constraint,
+			Type:              src.Type(),
+		})
+	}
+	listPrettyPrint(os.Stdout, out)
+}
+
+func listJSON(rs []*moduleReference) {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetEscapeHTML(false)
 	for _, r := range rs {
 		src := r.SourceStruct()
+		version := ""
+		constraint := ""
+		if v := src.InferredVersion(); v != nil {
+			version = *v
+		}
+		if c := src.Version; c != nil {
+			constraint = *src.Version
+		}
 		enc.Encode(outputList{
 			Path:              r.Path,
 			Name:              r.Name,
 			Source:            r.Source,
-			Version:           src.InferredVersion(),
-			VersionConstraint: r.Version,
+			Version:           version,
+			VersionConstraint: constraint,
 			Type:              src.Type(),
 		})
 	}
 }
 
-func updates(rs []*moduleReference) {
+func updatesJSON(rs []*moduleReference) {
 	enc := json.NewEncoder(os.Stdout)
 	enc.SetEscapeHTML(false)
-	out := make(chan outputUpdates, 1)
+	out := make(chan outputUpdates, len(rs))
 	var wg sync.WaitGroup
 	outputDone := make(chan bool)
 	wg.Add(len(rs))
 	for _, r := range rs {
 		r := r
-		go func() {
+		go func(r *moduleReference) {
 			defer wg.Done()
-			updatesSingle(r, out)
-		}()
+			if err := updates(r, out); err != nil {
+				log.Printf("%v: %v", r, err)
+			}
+		}(r)
 	}
 	go func() {
 		for o := range out {
@@ -119,71 +166,104 @@ func updates(rs []*moduleReference) {
 	<-outputDone
 }
 
-func updatesSingle(r *moduleReference, out chan outputUpdates) {
+func updatesPretty(rs []*moduleReference) {
+	out := make(chan outputUpdates, len(rs))
+	var wg sync.WaitGroup
+	wg.Add(len(rs))
+	for _, r := range rs {
+		r := r
+		go func(r *moduleReference) {
+			defer wg.Done()
+			if err := updates(r, out); err != nil {
+				log.Printf("%v: %v", r, err)
+			}
+		}(r)
+	}
+	wg.Wait()
+	close(out)
+	var output []outputUpdates
+	for o := range out {
+		output = append(output, o)
+	}
+	updatePrettyPrint(os.Stdout, output)
+}
+
+func updates(r *moduleReference, out chan outputUpdates) error {
 	src := r.SourceStruct()
-	currentVersion := src.InferredVersion()
-	var currentVersionStruct *semver.Version
-	versionConstraint := "*"
-	if currentVersion != nil {
-		currentVersionStruct, _ = semver.Parse(*currentVersion)
+	currentVersionString := src.InferredVersion()
+	var currentVersion *semver.Version
+	var versionConstraintString string
+	if currentVersionString != nil {
+		var err error
+		currentVersion, err = semver.Parse(*currentVersionString)
+		if err != nil {
+			return fmt.Errorf("parse version %q: %v", *currentVersionString, err)
+		}
 	}
-	if r.Version != nil {
-		versionConstraint = *r.Version
+	switch {
+	case r.Version == nil && currentVersion == nil:
+		versionConstraintString = "*"
+	case r.Version == nil && currentVersion != nil:
+		versionConstraintString = fmt.Sprintf(">%s", currentVersion.String())
+	case r.Version != nil && currentVersion == nil:
+		versionConstraintString = *r.Version
+	case r.Version != nil && currentVersion != nil:
+		versionConstraintString = fmt.Sprintf("%s,>%s", *r.Version, currentVersion.String())
 	}
-	versionConstraintStruct, err := semver.ParseConstraint(versionConstraint)
+	versionConstraint, err := semver.ParseConstraint(versionConstraintString)
 	if err != nil {
-		log.Printf("%q: %v", versionConstraint, err)
-		return
+		return fmt.Errorf("parse version constraint %q: %v", versionConstraintString, err)
 	}
 	versions, err := src.Versions()
 	if err != nil {
-		log.Printf("fetch versions for %q: %v", r.Source, err)
-		return
+		return fmt.Errorf("fetch versions: %v", err)
 	}
-	var versionsStrings []string
-	var hasMajorUpdate, hasMinorUpdate, hasPatchUpdate bool
-	var latest string
-	var oldest *semver.Version
+	var versionsCollection semver.Collection
 	for _, v := range versions {
-		if !versionConstraintStruct.Check(v.VersionStruct) {
-			continue
-		}
-		if oldest == nil {
-			oldest = v.VersionStruct
-		}
-		compareAgainst := currentVersionStruct
-		if compareAgainst == nil {
-			compareAgainst = oldest
-		}
-		if !v.VersionStruct.GreaterThan(compareAgainst) {
-			continue
-		}
-		if v.VersionStruct.Major > compareAgainst.Major {
-			hasMajorUpdate = true
-		}
-		if v.VersionStruct.Minor > compareAgainst.Minor {
-			hasMinorUpdate = true
-		}
-		if v.VersionStruct.Patch > compareAgainst.Patch {
-			hasPatchUpdate = true
-		}
-		latest = v.Version
-		versionsStrings = append(versionsStrings, v.Version)
+		versionsCollection = append(versionsCollection, v.Version)
 	}
-	if len(versionsStrings) == 0 {
-		return
+	var matchingUpdate bool
+	var constraintUpdate bool
+	latest := versionConstraint.LatestMatching(versionsCollection)
+	var latestString string
+	if latest != nil {
+		latestString = latest.String()
+		if currentVersion != nil {
+			matchingUpdate = latest.GreaterThan(currentVersion)
+		}
+		oldest := versionConstraint.OldestMatching(versionsCollection)
+		if latest.GreaterThan(oldest) {
+			constraintUpdate = true
+		}
+	}
+	var latestOverallString string
+	var nonMatchingUpdate bool
+	if len(versionsCollection) > 0 {
+		sort.Sort(versionsCollection)
+		latestOverall := versionsCollection[len(versionsCollection)-1]
+		latestOverallString = latestOverall.String()
+		if !versionConstraint.Check(latestOverall) {
+			nonMatchingUpdate = true
+		}
+	}
+	version := ""
+	constraint := ""
+	if v := src.InferredVersion(); v != nil {
+		version = *v
+	}
+	if c := src.Version; c != nil {
+		constraint = *src.Version
 	}
 	out <- outputUpdates{
-		Path:              r.Path,
-		Name:              r.Name,
-		Source:            r.Source,
-		Version:           currentVersion,
-		VersionConstraint: r.Version,
-		Type:              src.Type(),
-		Updates:           versionsStrings,
-		UpdateLatest:      latest,
-		HasMajorUpdate:    hasMajorUpdate,
-		HasMinorUpdate:    hasMinorUpdate,
-		HasPatchUpdate:    hasPatchUpdate,
+		Path:                    r.Path,
+		Name:                    r.Name,
+		Version:                 version,
+		VersionConstraint:       constraint,
+		ConstraintUpdate:        constraintUpdate,
+		Latest:                  latestString,
+		MatchingUpdate:          matchingUpdate,
+		LatestWithoutConstraint: latestOverallString,
+		NonMatchingUpdate:       nonMatchingUpdate,
 	}
+	return nil
 }

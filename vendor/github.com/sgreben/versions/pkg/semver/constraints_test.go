@@ -57,6 +57,7 @@ func TestConstraintCheck(t *testing.T) {
 		check      bool
 	}{
 		{"= 2.0", "1.2.3", false},
+		{"~> 0.10", "0.11.2", true},
 		{"= 2.0", "2.0.0", true},
 		{"4.1", "4.1.0", true},
 		{"!=4.1", "4.1.0", false},

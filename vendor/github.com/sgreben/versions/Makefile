@@ -1,4 +1,4 @@
-VERSION = 1.1.0
+VERSION = 1.1.6
 
 APP      := versions
 PACKAGES := $(shell go list -f {{.Dir}} ./...)
@@ -13,12 +13,8 @@ clean:
 
 # go get -u github.com/github/hub
 release: README.md zip
-	git reset
-	dep ensure
 	git add vendor
 	git add Gopkg.toml Gopkg.lock
-	git commit -m "dep ensure" || true
-	git reset
 	git add README.md
 	git add Makefile
 	git commit -m "Release $(VERSION)" || true

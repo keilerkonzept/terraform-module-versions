@@ -30,7 +30,7 @@ type SourceGit struct {
 
 // Fetch retrieves git tags as versions
 func (t SourceGit) Fetch() (WithSources, error) {
-	tags, err := t.Repository.Tags()
+	tags, err := t.Repository.RemoteRefs()
 	if err != nil {
 		return nil, err
 	}

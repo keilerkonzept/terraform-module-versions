@@ -1,24 +1,22 @@
 package main
 
 type outputList struct {
-	Path              string  `json:"path,omitempty"`
-	Name              string  `json:"name,omitempty"`
-	Source            string  `json:"source,omitempty"`
-	Version           *string `json:"version,omitempty"`
-	VersionConstraint *string `json:"versionConstraint,omitempty"`
-	Type              string  `json:"type,omitempty"`
+	Path              string `json:"path,omitempty"`
+	Name              string `json:"name,omitempty"`
+	Type              string `json:"type,omitempty"`
+	Source            string `json:"source,omitempty"`
+	VersionConstraint string `json:"constraint,omitempty"`
+	Version           string `json:"version,omitempty"`
 }
 
 type outputUpdates struct {
-	Path              string   `json:"path,omitempty"`
-	Name              string   `json:"name,omitempty"`
-	Source            string   `json:"source,omitempty"`
-	Version           *string  `json:"version,omitempty"`
-	VersionConstraint *string  `json:"versionConstraint,omitempty"`
-	Type              string   `json:"type,omitempty"`
-	UpdateLatest      string   `json:"latestMatchingUpdate,omitempty"`
-	Updates           []string `json:"updates,omitempty"`
-	HasMajorUpdate    bool     `json:"hasMajorUpdate,omitempty"`
-	HasMinorUpdate    bool     `json:"hasMinorUpdate,omitempty"`
-	HasPatchUpdate    bool     `json:"hasPatchUpdate,omitempty"`
+	Path                    string `json:"path,omitempty"`
+	Name                    string `json:"name,omitempty"`
+	VersionConstraint       string `json:"constraint,omitempty"`
+	Version                 string `json:"version,omitempty"`
+	ConstraintUpdate        bool   `json:"constraintUpdate,omitempty"`
+	Latest                  string `json:"latestMatching,omitempty"`
+	MatchingUpdate          bool   `json:"matchingUpdate,omitempty"`
+	LatestWithoutConstraint string `json:"latestOverall,omitempty"`
+	NonMatchingUpdate       bool   `json:"nonMatchingUpdate,omitempty"`
 }

@@ -7,18 +7,22 @@ import (
 	"strings"
 )
 
+// Module source prefixes
 const (
-	terraformModuleSourceGitPrefix         = "git::"
-	terraformModuleSourceGithubHTTPSPrefix = "github.com/"
-	terraformModuleSourceGithubSSHPrefix   = "git@github.com:"
-	terraformRegistryHostname              = "registry.terraform.io"
+	ModuleSourceGitPrefix           = "git::"
+	ModuleSourceGithubHTTPSPrefix   = "github.com/"
+	ModuleSourceGithubSSHPrefix     = "git@github.com:"
+	ModuleSourceLocalPathPrefix1    = "./"
+	ModuleSourceLocalPathPrefix2    = "../"
+	terraformPublicRegistryHostname = "registry.terraform.io"
 )
 
 type moduleSource struct {
-	Source   string
-	Version  *string
-	Git      *moduleReferenceGit
-	Registry *moduleReferenceRegistry
+	Source    string
+	Version   *string
+	Git       *moduleReferenceGit
+	Registry  *moduleReferenceRegistry
+	LocalPath *string
 }
 
 func (s *moduleSource) InferredVersion() *string {
@@ -32,26 +36,30 @@ func (s *moduleSource) InferredVersion() *string {
 }
 
 func (s *moduleSource) Type() string {
-	if s.Git != nil {
+	switch {
+	case s.LocalPath != nil:
+		return "local"
+	case s.Git != nil:
 		return "git"
+	case s.Registry != nil:
+		return "registry"
+	default:
+		return "unknown"
 	}
-	if s.Registry != nil {
-		return "terraform-registry"
-	}
-	return "unknown"
 }
 
 type moduleReference struct {
-	Name     string
-	Path     string
-	Source   string
-	Version  *string
-	Git      *moduleReferenceGit
-	Registry *moduleReferenceRegistry
+	Name      string
+	Path      string
+	Source    string
+	Version   *string
+	Git       *moduleReferenceGit
+	Registry  *moduleReferenceRegistry
+	LocalPath *string
 }
 
 func (r *moduleReference) SourceStruct() moduleSource {
-	return moduleSource{r.Source, r.Version, r.Git, r.Registry}
+	return moduleSource{r.Source, r.Version, r.Git, r.Registry, r.LocalPath}
 }
 
 type moduleReferenceRegistry struct {
@@ -71,7 +79,7 @@ func (r *moduleReference) EncodeGit() {
 	if r.Git == nil {
 		return
 	}
-	source := terraformModuleSourceGitPrefix + r.Git.Remote
+	source := ModuleSourceGitPrefix + r.Git.Remote
 	if r.Git.RemotePath != nil {
 		source = source + "//" + *r.Git.RemotePath
 	}
@@ -86,25 +94,37 @@ func (r *moduleReference) EncodeGit() {
 func (r *moduleReference) ParseSource() error {
 	sourcePartsNum := strings.Count(r.Source, "/")
 	switch {
-	case strings.HasPrefix(r.Source, terraformModuleSourceGitPrefix),
-		strings.HasPrefix(r.Source, terraformModuleSourceGithubHTTPSPrefix),
-		strings.HasPrefix(r.Source, terraformModuleSourceGithubSSHPrefix):
-		return r.parseGit()
+	case strings.HasPrefix(r.Source, ModuleSourceLocalPathPrefix1),
+		strings.HasPrefix(r.Source, ModuleSourceLocalPathPrefix2):
+		r.parseLocalPath(r.Source)
+		return nil
+	case strings.HasPrefix(r.Source, ModuleSourceGitPrefix):
+		return r.parseGit(r.Source)
+	case strings.HasPrefix(r.Source, ModuleSourceGithubHTTPSPrefix):
+		return r.parseGit("https://" + r.Source)
+	case strings.HasPrefix(r.Source, ModuleSourceGithubSSHPrefix):
+		source := strings.TrimPrefix(r.Source, ModuleSourceGithubSSHPrefix)
+		source = fmt.Sprintf("git@github.com/%s", source)
+		return r.parseGit("ssh://" + source)
 	case sourcePartsNum == 2:
-		return r.parsePublicRegistry()
-	case sourcePartsNum == 3:
-		return r.parsePrivateRegistry()
+		return r.parsePublicRegistry(r.Source)
+	case sourcePartsNum > 2:
+		return r.parsePrivateRegistry(r.Source)
 	}
 	return nil
 }
 
-func (r *moduleReference) parsePublicRegistry() error {
-	sourceParts := strings.Split(r.Source, "/")
-	if len(sourceParts) != 3 {
-		return fmt.Errorf("not a public registry module: %q", r.Source)
+func (r *moduleReference) parseLocalPath(source string) {
+	r.LocalPath = &source
+}
+
+func (r *moduleReference) parsePublicRegistry(source string) error {
+	sourceParts := strings.Split(source, "/")
+	if len(sourceParts) < 3 {
+		return fmt.Errorf("not a public registry module: %q", source)
 	}
 	r.Registry = &moduleReferenceRegistry{
-		Hostname:  terraformRegistryHostname,
+		Hostname:  terraformPublicRegistryHostname,
 		Namespace: sourceParts[0],
 		Name:      sourceParts[1],
 		Provider:  sourceParts[2],
@@ -112,10 +132,10 @@ func (r *moduleReference) parsePublicRegistry() error {
 	return nil
 }
 
-func (r *moduleReference) parsePrivateRegistry() error {
-	sourceParts := strings.Split(r.Source, "/")
-	if len(sourceParts) != 4 {
-		return fmt.Errorf("not a private registry module: %q", r.Source)
+func (r *moduleReference) parsePrivateRegistry(source string) error {
+	sourceParts := strings.Split(source, "/")
+	if len(sourceParts) < 4 {
+		return fmt.Errorf("not a private registry module: %q", source)
 	}
 	r.Registry = &moduleReferenceRegistry{
 		Hostname:  sourceParts[0],
@@ -126,8 +146,8 @@ func (r *moduleReference) parsePrivateRegistry() error {
 	return nil
 }
 
-func (r *moduleReference) parseGit() error {
-	sourceURL, err := url.Parse(strings.TrimPrefix(r.Source, terraformModuleSourceGitPrefix))
+func (r *moduleReference) parseGit(source string) error {
+	sourceURL, err := url.Parse(strings.TrimPrefix(source, ModuleSourceGitPrefix))
 	if err != nil {
 		return err
 	}

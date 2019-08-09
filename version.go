@@ -6,6 +6,8 @@ import (
 	"net/url"
 	"sort"
 
+	"gopkg.in/src-d/go-git.v4"
+
 	"github.com/sgreben/versions/pkg/semver"
 
 	"github.com/sgreben/versions/pkg/simplegit"
@@ -13,8 +15,8 @@ import (
 )
 
 type moduleVersion struct {
-	Version               string
-	VersionStruct         *semver.Version
+	VersionString         string
+	Version               *semver.Version
 	VersionSourceGit      *versions.VersionSourceGit
 	VersionSourceRegistry *versionSourceRegistry
 }
@@ -30,7 +32,12 @@ func (r *moduleSource) Versions() ([]moduleVersion, error) {
 }
 
 func (r *moduleSource) versionsGit() ([]moduleVersion, error) {
-	repository := simplegit.Repository{URL: r.Git.Remote}
+	repository := simplegit.Repository{URL: r.Git.Remote, CloneOptions: git.CloneOptions{
+		SingleBranch: true,
+		Depth:        1,
+		Tags:         git.NoTags,
+		NoCheckout:   true,
+	}}
 	vs := versions.SourceGit{Repository: repository}
 	versions, err := vs.Fetch()
 	if err != nil {
@@ -40,8 +47,8 @@ func (r *moduleSource) versionsGit() ([]moduleVersion, error) {
 	var out []moduleVersion
 	for _, v := range versions {
 		out = append(out, moduleVersion{
-			Version:          v.Version.String(),
-			VersionStruct:    v.Version,
+			VersionString:    v.Version.String(),
+			Version:          v.Version,
 			VersionSourceGit: v.Source.Git,
 		})
 	}
@@ -70,26 +77,19 @@ func (r *moduleSource) versionsRegistry() ([]moduleVersion, error) {
 		return nil, err
 	}
 	var moduleVersions []moduleVersion
-	for _, v := range versions {
-		versionStruct, err := semver.Parse(v)
+	for _, versionString := range versions {
+		version, err := semver.Parse(versionString)
 		if err != nil {
-			versionStruct = nil
+			version = nil
 		}
 		moduleVersions = append(moduleVersions, moduleVersion{
-			Version:       v,
-			VersionStruct: versionStruct,
+			VersionString: versionString,
+			Version:       version,
 			VersionSourceRegistry: &versionSourceRegistry{
 				Hostname: r.Registry.Hostname,
 			},
 		})
 	}
-	sort.Slice(moduleVersions, func(i, j int) bool {
-		a, b := moduleVersions[i], moduleVersions[j]
-		if !(a.VersionStruct != nil && b.VersionStruct != nil) {
-			return a.Version < b.Version
-		}
-		return a.VersionStruct.LessThan(b.VersionStruct)
-	})
 	return moduleVersions, nil
 }
 

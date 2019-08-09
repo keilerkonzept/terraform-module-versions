@@ -18,7 +18,7 @@ func fetchFromGit(url string, limit int) (versions.WithSources, error) {
 			CloneOptions: git.CloneOptions{
 				NoCheckout: true,
 				Depth:      1,
-				Tags:       git.AllTags,
+				Tags:       git.NoTags,
 			},
 		},
 	}
