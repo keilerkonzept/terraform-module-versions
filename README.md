@@ -20,7 +20,7 @@ $ terraform-module-versions -updates -pretty examples/main.tf
 ```markdown
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
-| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.1 |
+| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.2 |
 | ?       | consul              | > 0.1.0    |         | 0.7.3           | 0.7.3  |
 | (Y)     | consul_github_ssh   | 0.1.0      | 0.1.0   |                 | 0.7.3  |
 |         | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.3  |
@@ -134,7 +134,7 @@ $ terraform-module-versions -updates examples/main.tf
   "constraintUpdate": true,
   "latestMatching": "0.11.2",
   "matchingUpdate": true,
-  "latestOverall": "1.11.1",
+  "latestOverall": "1.11.2",
   "nonMatchingUpdate": true
 }
 {

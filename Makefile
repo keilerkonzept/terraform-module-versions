@@ -1,4 +1,4 @@
-VERSION = 1.11.2
+VERSION = 1.11.3
 
 APP      := terraform-module-versions
 PACKAGES := $(shell go list -f {{.Dir}} ./...)
