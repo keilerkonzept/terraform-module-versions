@@ -3,8 +3,15 @@
 Checks for updates of external terraform modules referenced in given `.tf` files. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
 
 Supported module sources:
-- **Git** (`git::`, `github.com/...`, or `git@github.com:...` values for `source`) with SemVer tags.
-- **Terraform Registry** (public `<NAMESPACE>/<NAME>/<PROVIDER>` and private `<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>`)
+- **Git** with SemVer tags
+  - `git::...`
+  - `github.com/...`
+  - `git@github.com:...`
+- **Terraform Registry**
+  - public `<NAMESPACE>/<NAME>/<PROVIDER>`
+  - private `<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>`
+
+## Example
 
 ```sh
 $ terraform-module-versions -updates -pretty examples/main.tf
@@ -13,7 +20,7 @@ $ terraform-module-versions -updates -pretty examples/main.tf
 ```markdown
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
-| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.0 |
+| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.1 |
 | ?       | consul              | > 0.1.0    |         | 0.7.3           | 0.7.3  |
 | (Y)     | consul_github_ssh   | 0.1.0      | 0.1.0   |                 | 0.7.3  |
 |         | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.3  |
@@ -121,21 +128,21 @@ $ terraform-module-versions -updates examples/main.tf
 }
 {
   "path": "examples/main.tf",
-  "name": "consul_github_ssh",
-  "constraint": "0.1.0",
-  "version": "0.1.0",
-  "latestOverall": "0.7.3",
-  "nonMatchingUpdate": true
-}
-{
-  "path": "examples/main.tf",
   "name": "example_git_ssh",
   "constraint": "~> 0.10",
   "version": "0.10.0",
   "constraintUpdate": true,
   "latestMatching": "0.11.2",
   "matchingUpdate": true,
-  "latestOverall": "1.11.0",
+  "latestOverall": "1.11.1",
+  "nonMatchingUpdate": true
+}
+{
+  "path": "examples/main.tf",
+  "name": "consul_github_ssh",
+  "constraint": "0.1.0",
+  "version": "0.1.0",
+  "latestOverall": "0.7.3",
   "nonMatchingUpdate": true
 }
 ```

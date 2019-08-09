@@ -3,8 +3,15 @@
 Checks for updates of external terraform modules referenced in given `.tf` files. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
 
 Supported module sources:
-- **Git** (`git::`, `github.com/...`, or `git@github.com:...` values for `source`) with SemVer tags.
-- **Terraform Registry** (public `<NAMESPACE>/<NAME>/<PROVIDER>` and private `<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>`)
+- **Git** with SemVer tags
+  - `git::...`
+  - `github.com/...`
+  - `git@github.com:...`
+- **Terraform Registry**
+  - public `<NAMESPACE>/<NAME>/<PROVIDER>`
+  - private `<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>`
+
+## Example
 
 ```sh
 $ ${APP} -updates -pretty examples/main.tf
