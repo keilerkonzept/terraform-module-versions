@@ -51,6 +51,10 @@ $ ${APP} examples/main.tf
 ${EXAMPLE_LIST}
 ```
 
+with `-pretty`:
+
+${EXAMPLE_LIST_PRETTY}
+
 ### Check for module updates
 
 ```sh
@@ -62,6 +66,10 @@ $ ${APP} -updates examples/main.tf
 ${EXAMPLE_UPDATES}
 ```
 
+with `-pretty`:
+
+${EXAMPLE_UPDATES_PRETTY}
+
 ### Check for updates of specific modules
 
 ```sh
@@ -72,6 +80,10 @@ $ ${APP} -updates -module=consul_github_https examples/main.tf
 ```json
 ${EXAMPLE_UPDATES_SINGLE}
 ```
+
+with `-pretty`:
+
+${EXAMPLE_UPDATES_SINGLE_PRETTY}
 
 ## Get it
 

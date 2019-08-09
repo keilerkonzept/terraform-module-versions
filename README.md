@@ -20,7 +20,7 @@ $ terraform-module-versions -updates -pretty examples/main.tf
 ```markdown
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
-| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.2 |
+| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.3 |
 | ?       | consul              | > 0.1.0    |         | 0.7.3           | 0.7.3  |
 | (Y)     | consul_github_ssh   | 0.1.0      | 0.1.0   |                 | 0.7.3  |
 |         | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.3  |
@@ -103,6 +103,15 @@ $ terraform-module-versions examples/main.tf
 }
 ```
 
+with `-pretty`:
+
+|   TYPE   |        NAME         | CONSTRAINT | VERSION |                                 SOURCE                                 |
+|----------|---------------------|------------|---------|------------------------------------------------------------------------|
+| registry | consul              | > 0.1.0    |         | hashicorp/consul/aws                                                   |
+| git      | example_git_ssh     | ~> 0.10    | 0.10.0  | git::ssh://git@github.com/sgreben/terraform-module-versions?ref=0.10.0 |
+| git      | consul_github_ssh   | 0.1.0      | 0.1.0   | git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0                |
+| git      | consul_github_https | 0.7.3      |         | github.com/hashicorp/terraform-aws-consul                              |
+
 ### Check for module updates
 
 ```sh
@@ -134,7 +143,7 @@ $ terraform-module-versions -updates examples/main.tf
   "constraintUpdate": true,
   "latestMatching": "0.11.2",
   "matchingUpdate": true,
-  "latestOverall": "1.11.2",
+  "latestOverall": "1.11.3",
   "nonMatchingUpdate": true
 }
 {
@@ -146,6 +155,15 @@ $ terraform-module-versions -updates examples/main.tf
   "nonMatchingUpdate": true
 }
 ```
+
+with `-pretty`:
+
+| UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
+|---------|---------------------|------------|---------|-----------------|--------|
+| Y       | example_git_ssh     | ~> 0.10    | 0.10.0  | 0.11.2          | 1.11.3 |
+| ?       | consul              | > 0.1.0    |         | 0.7.3           | 0.7.3  |
+| (Y)     | consul_github_ssh   | 0.1.0      | 0.1.0   |                 | 0.7.3  |
+|         | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.3  |
 
 ### Check for updates of specific modules
 
@@ -171,6 +189,13 @@ $ terraform-module-versions -updates -module=consul_github_https examples/main.t
   "nonMatchingUpdate": true
 }
 ```
+
+with `-pretty`:
+
+| UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
+|---------|---------------------|------------|---------|-----------------|--------|
+| (Y)     | consul_github_ssh   | 0.1.0      | 0.1.0   |                 | 0.7.3  |
+|         | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.3  |
 
 ## Get it
 

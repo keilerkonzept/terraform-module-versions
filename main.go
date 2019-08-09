@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"sort"
 	"sync"
 
@@ -59,9 +60,18 @@ func init() {
 
 func main() {
 	var scanner scanner
+	if len(config.Paths) == 0 {
+		config.Paths, _ = filepath.Glob("*.tf")
+	}
 	for _, path := range config.Paths {
-		if err := scanner.ScanFile(path); err != nil {
-			log.Fatal(err)
+		paths := []string{path}
+		if info, err := os.Stat(path); err == nil && info.IsDir() {
+			paths, _ = filepath.Glob(filepath.Join(path, "*.tf"))
+		}
+		for _, path := range paths {
+			if err := scanner.ScanFile(path); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 	var included []*moduleReference
