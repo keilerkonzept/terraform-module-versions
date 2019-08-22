@@ -74,7 +74,7 @@ ${EXAMPLE_UPDATES_PRETTY}
 
 ```sh
 # -update and -module: check for updates of specific modules
-$ ${APP} -updates -module=consul_github_https examples/main.tf
+$ ${APP} -updates -module=consul_github_https -module=consul_github_ssh examples/main.tf
 ```
 
 ```json
