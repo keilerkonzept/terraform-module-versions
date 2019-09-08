@@ -73,14 +73,6 @@ $ terraform-module-versions examples/main.tf
 ```json
 {
   "path": "examples/main.tf",
-  "name": "example_git_ssh",
-  "type": "git",
-  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
-  "constraint": "~> 0.10",
-  "version": "0.10.0"
-}
-{
-  "path": "examples/main.tf",
   "name": "consul",
   "type": "registry",
   "source": "hashicorp/consul/aws",
@@ -100,6 +92,14 @@ $ terraform-module-versions examples/main.tf
   "source": "git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0",
   "constraint": "0.1.0",
   "version": "0.1.0"
+}
+{
+  "path": "examples/main.tf",
+  "name": "example_git_ssh",
+  "type": "git",
+  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
+  "constraint": "~> 0.10",
+  "version": "0.10.0"
 }
 ```
 
@@ -137,6 +137,14 @@ $ terraform-module-versions -updates examples/main.tf
 }
 {
   "path": "examples/main.tf",
+  "name": "consul_github_ssh",
+  "constraint": "0.1.0",
+  "version": "0.1.0",
+  "latestOverall": "0.7.3",
+  "nonMatchingUpdate": true
+}
+{
+  "path": "examples/main.tf",
   "name": "example_git_ssh",
   "constraint": "~> 0.10",
   "version": "0.10.0",
@@ -144,14 +152,6 @@ $ terraform-module-versions -updates examples/main.tf
   "latestMatching": "0.11.2",
   "matchingUpdate": true,
   "latestOverall": "1.11.5",
-  "nonMatchingUpdate": true
-}
-{
-  "path": "examples/main.tf",
-  "name": "consul_github_ssh",
-  "constraint": "0.1.0",
-  "version": "0.1.0",
-  "latestOverall": "0.7.3",
   "nonMatchingUpdate": true
 }
 ```
