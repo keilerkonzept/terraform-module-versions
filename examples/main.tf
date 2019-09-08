@@ -14,6 +14,6 @@ module "consul_github_ssh" {
 }
 
 module "example_git_ssh" {
-  source = "git::ssh://git@github.com/sgreben/terraform-module-versions?ref=0.10.0"
+  source = "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0"
   version = "~> 0.10"
 }

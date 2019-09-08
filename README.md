@@ -58,7 +58,7 @@ module "consul_github_ssh" {
 }
 
 module "example_git_ssh" {
-  source = "git::ssh://git@github.com/sgreben/terraform-module-versions?ref=0.10.0"
+  source = "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0"
   version = "~> 0.10"
 }
 ```
@@ -71,6 +71,14 @@ $ terraform-module-versions examples/main.tf
 ```
 
 ```json
+{
+  "path": "examples/main.tf",
+  "name": "example_git_ssh",
+  "type": "git",
+  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
+  "constraint": "~> 0.10",
+  "version": "0.10.0"
+}
 {
   "path": "examples/main.tf",
   "name": "consul",
@@ -93,24 +101,16 @@ $ terraform-module-versions examples/main.tf
   "constraint": "0.1.0",
   "version": "0.1.0"
 }
-{
-  "path": "examples/main.tf",
-  "name": "example_git_ssh",
-  "type": "git",
-  "source": "git::ssh://git@github.com/sgreben/terraform-module-versions?ref=0.10.0",
-  "constraint": "~> 0.10",
-  "version": "0.10.0"
-}
 ```
 
 with `-pretty`:
 
-|   TYPE   |        NAME         | CONSTRAINT | VERSION |                                 SOURCE                                 |
-|----------|---------------------|------------|---------|------------------------------------------------------------------------|
-| registry | consul              | > 0.1.0    |         | hashicorp/consul/aws                                                   |
-| git      | example_git_ssh     | ~> 0.10    | 0.10.0  | git::ssh://git@github.com/sgreben/terraform-module-versions?ref=0.10.0 |
-| git      | consul_github_ssh   | 0.1.0      | 0.1.0   | git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0                |
-| git      | consul_github_https | 0.7.3      |         | github.com/hashicorp/terraform-aws-consul                              |
+|   TYPE   |        NAME         | CONSTRAINT | VERSION |                                    SOURCE                                    |
+|----------|---------------------|------------|---------|------------------------------------------------------------------------------|
+| registry | consul              | > 0.1.0    |         | hashicorp/consul/aws                                                         |
+| git      | example_git_ssh     | ~> 0.10    | 0.10.0  | git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0 |
+| git      | consul_github_ssh   | 0.1.0      | 0.1.0   | git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0                      |
+| git      | consul_github_https | 0.7.3      |         | github.com/hashicorp/terraform-aws-consul                                    |
 
 ### Check for module updates
 
@@ -202,10 +202,10 @@ with `-pretty`:
 Using go get:
 
 ```bash
-go get -u github.com/sgreben/terraform-module-versions
+go get -u github.com/keilerkonzept/terraform-module-versions
 ```
 
-Or [download the binary for your platform](https://github.com/sgreben/terraform-module-versions/releases/latest) from the releases page.
+Or [download the binary for your platform](https://github.com/keilerkonzept/terraform-module-versions/releases/latest) from the releases page.
 
 ## Usage
 

@@ -1,4 +1,4 @@
-VERSION = 1.11.5
+VERSION = 1.11.6
 
 APP      := terraform-module-versions
 PACKAGES := $(shell go list -f {{.Dir}} ./...)
@@ -19,7 +19,7 @@ release: README.md zip
 	hub release create $(VERSION) -m "$(VERSION)" -a release/$(APP)_$(VERSION)_osx_x86_64.tar.gz -a release/$(APP)_$(VERSION)_windows_x86_64.zip -a release/$(APP)_$(VERSION)_linux_x86_64.tar.gz -a release/$(APP)_$(VERSION)_osx_x86_32.tar.gz -a release/$(APP)_$(VERSION)_windows_x86_32.zip -a release/$(APP)_$(VERSION)_linux_x86_32.tar.gz -a release/$(APP)_$(VERSION)_linux_arm64.tar.gz
 
 README.md:
-	go get github.com/sgreben/$(APP) && <README.template.md subst \
+	go get github.com/keilerkonzept/$(APP) && <README.template.md subst \
 		EXAMPLES_MAIN_TF="$$(cat examples/main.tf)"\
 		EXAMPLE_PRETTY="$$($(APP) -update -pretty examples/main.tf)"\
 		EXAMPLE_LIST="$$($(APP) examples/main.tf | jq .)"\
