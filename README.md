@@ -1,6 +1,6 @@
 # terraform-module-versions
 
-Checks for updates of external terraform modules referenced in given Terraform (0.12.x) modules. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
+Checks for updates of external terraform modules referenced in given Terraform (0.10.x - 0.12.x) modules. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
 
 Supported module sources:
 - **Git** with SemVer tags
@@ -20,7 +20,7 @@ $ terraform-module-versions -updates -pretty examples
 ```markdown
 | UPDATE? |        NAME         |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|-----------------|---------|-----------------|--------|
-| Y       | example_git_ssh     | ~> 0.10         | 0.10.0  | 0.11.2          | 1.11.6 |
+| Y       | example_git_ssh     | ~> 0.10         | 0.10.0  | 0.11.2          | 2.0.0  |
 | ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.4           | 0.7.4  |
 | ?       | consul              | > 0.1.0         |         | 0.7.4           | 0.7.4  |
 | (Y)     | consul_github_ssh   | 0.1.0           | 0.1.0   |                 | 0.7.4  |
@@ -117,13 +117,6 @@ $ terraform-module-versions examples
 ```json
 {
   "path": "examples/main.tf",
-  "name": "consul",
-  "type": "registry",
-  "source": "hashicorp/consul/aws",
-  "constraint": "> 0.1.0"
-}
-{
-  "path": "examples/main.tf",
   "name": "consul_github_https",
   "type": "git",
   "source": "github.com/hashicorp/terraform-aws-consul",
@@ -152,6 +145,13 @@ $ terraform-module-versions examples
   "source": "hashicorp/consul/aws",
   "constraint": ">=0.5.0,<=1.0.0"
 }
+{
+  "path": "examples/main.tf",
+  "name": "consul",
+  "type": "registry",
+  "source": "hashicorp/consul/aws",
+  "constraint": "> 0.1.0"
+}
 ```
 
 with `-pretty`:
@@ -173,17 +173,17 @@ $ terraform-module-versions -updates examples
 
 ```json
 {
-  "path": "examples/0.12.x.tf",
-  "name": "consul_aws",
-  "constraint": ">=0.5.0,<=1.0.0",
+  "path": "examples/main.tf",
+  "name": "consul",
+  "constraint": "> 0.1.0",
   "constraintUpdate": true,
   "latestMatching": "0.7.4",
   "latestOverall": "0.7.4"
 }
 {
-  "path": "examples/main.tf",
-  "name": "consul",
-  "constraint": "> 0.1.0",
+  "path": "examples/0.12.x.tf",
+  "name": "consul_aws",
+  "constraint": ">=0.5.0,<=1.0.0",
   "constraintUpdate": true,
   "latestMatching": "0.7.4",
   "latestOverall": "0.7.4"
@@ -204,7 +204,7 @@ $ terraform-module-versions -updates examples
   "constraintUpdate": true,
   "latestMatching": "0.11.2",
   "matchingUpdate": true,
-  "latestOverall": "1.11.6",
+  "latestOverall": "2.0.0",
   "nonMatchingUpdate": true
 }
 {
@@ -221,7 +221,7 @@ with `-pretty`:
 
 | UPDATE? |        NAME         |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|-----------------|---------|-----------------|--------|
-| Y       | example_git_ssh     | ~> 0.10         | 0.10.0  | 0.11.2          | 1.11.6 |
+| Y       | example_git_ssh     | ~> 0.10         | 0.10.0  | 0.11.2          | 2.0.0  |
 | ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.4           | 0.7.4  |
 | ?       | consul              | > 0.1.0         |         | 0.7.4           | 0.7.4  |
 | (Y)     | consul_github_ssh   | 0.1.0           | 0.1.0   |                 | 0.7.4  |

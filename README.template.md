@@ -1,6 +1,6 @@
 # ${APP}
 
-Checks for updates of external terraform modules referenced in given Terraform (0.12.x) modules. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
+Checks for updates of external terraform modules referenced in given Terraform (0.10.x - 0.12.x) modules. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
 
 Supported module sources:
 - **Git** with SemVer tags
