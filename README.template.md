@@ -1,6 +1,6 @@
 # ${APP}
 
-Checks for updates of external terraform modules referenced in given `.tf` files. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
+Checks for updates of external terraform modules referenced in given Terraform (0.12.x) modules. Outputs JSONL (one JSON object per line), or Markdown tables (`-pretty, -p`).
 
 Supported module sources:
 - **Git** with SemVer tags
@@ -14,7 +14,7 @@ Supported module sources:
 ## Example
 
 ```sh
-$ ${APP} -updates -pretty examples/main.tf
+$ ${APP} -updates -pretty examples
 ```
 
 ```markdown
@@ -33,7 +33,7 @@ ${EXAMPLE_PRETTY}
 ## Examples
 
 ```sh
-$ cat examples/main.tf
+$ cat examples/main.tf examples/0.12.x.tf
 ```
 
 ```terraform
@@ -44,7 +44,7 @@ ${EXAMPLES_MAIN_TF}
 
 ```sh
 # default operation: list modules with their current versions and version constraints (if specified)
-$ ${APP} examples/main.tf
+$ ${APP} examples
 ```
 
 ```json
@@ -59,7 +59,7 @@ ${EXAMPLE_LIST_PRETTY}
 
 ```sh
 # -update: check for module updates from (usually) remote sources
-$ ${APP} -updates examples/main.tf
+$ ${APP} -updates examples
 ```
 
 ```json
@@ -74,7 +74,7 @@ ${EXAMPLE_UPDATES_PRETTY}
 
 ```sh
 # -update and -module: check for updates of specific modules
-$ ${APP} -updates -module=consul_github_https -module=consul_github_ssh examples/main.tf
+$ ${APP} -updates -module=consul_github_https -module=consul_github_ssh examples
 ```
 
 ```json

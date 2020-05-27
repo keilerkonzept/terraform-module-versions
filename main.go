@@ -18,7 +18,7 @@ import (
 
 var (
 	appName                 = "terrafile-module-versions"
-	version                 = "SNAPSHOT"
+	version                 = "2-SNAPSHOT"
 	terrafileVersionDefault = "master"
 )
 
@@ -64,14 +64,8 @@ func main() {
 		config.Paths, _ = filepath.Glob("*.tf")
 	}
 	for _, path := range config.Paths {
-		paths := []string{path}
-		if info, err := os.Stat(path); err == nil && info.IsDir() {
-			paths, _ = filepath.Glob(filepath.Join(path, "*.tf"))
-		}
-		for _, path := range paths {
-			if err := scanner.ScanFile(path); err != nil {
-				log.Fatal(err)
-			}
+		if err := scanner.ScanDir(path); err != nil {
+			log.Fatal(err)
 		}
 	}
 	var included []*moduleReference

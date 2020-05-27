@@ -1,4 +1,4 @@
-VERSION = 1.11.6
+VERSION = 2.0.0
 
 APP      := terraform-module-versions
 PACKAGES := $(shell go list -f {{.Dir}} ./...)
@@ -20,14 +20,14 @@ release: README.md zip
 
 README.md:
 	go get github.com/keilerkonzept/$(APP) && <README.template.md subst \
-		EXAMPLES_MAIN_TF="$$(cat examples/main.tf)"\
-		EXAMPLE_PRETTY="$$($(APP) -update -pretty examples/main.tf)"\
-		EXAMPLE_LIST="$$($(APP) examples/main.tf | jq .)"\
-		EXAMPLE_LIST_PRETTY="$$($(APP) -pretty examples/main.tf)"\
-		EXAMPLE_UPDATES="$$($(APP) -update examples/main.tf | jq .)"\
-		EXAMPLE_UPDATES_PRETTY="$$($(APP) -pretty -update examples/main.tf)"\
-		EXAMPLE_UPDATES_SINGLE="$$($(APP) -update -module=consul_github_https -module=consul_github_ssh examples/main.tf | jq .)"\
-		EXAMPLE_UPDATES_SINGLE_PRETTY="$$($(APP) -pretty -update -module=consul_github_https -module=consul_github_ssh examples/main.tf)"\
+		EXAMPLES_MAIN_TF="$$(cat examples/main.tf examples/0.12.x.tf)"\
+		EXAMPLE_PRETTY="$$($(APP) -update -pretty examples)"\
+		EXAMPLE_LIST="$$($(APP) examples | jq .)"\
+		EXAMPLE_LIST_PRETTY="$$($(APP) -pretty examples)"\
+		EXAMPLE_UPDATES="$$($(APP) -update examples | jq .)"\
+		EXAMPLE_UPDATES_PRETTY="$$($(APP) -pretty -update examples)"\
+		EXAMPLE_UPDATES_SINGLE="$$($(APP) -update -module=consul_github_https -module=consul_github_ssh examples | jq .)"\
+		EXAMPLE_UPDATES_SINGLE_PRETTY="$$($(APP) -pretty -update -module=consul_github_https -module=consul_github_ssh examples)"\
 		VERSION="$(VERSION)" APP="$(APP)" USAGE="$$($(APP) -h 2>&1)" > README.md
 
 zip: release/$(APP)_$(VERSION)_osx_x86_64.tar.gz release/$(APP)_$(VERSION)_windows_x86_64.zip release/$(APP)_$(VERSION)_linux_x86_64.tar.gz release/$(APP)_$(VERSION)_osx_x86_32.tar.gz release/$(APP)_$(VERSION)_windows_x86_32.zip release/$(APP)_$(VERSION)_linux_x86_32.tar.gz release/$(APP)_$(VERSION)_linux_arm64.tar.gz

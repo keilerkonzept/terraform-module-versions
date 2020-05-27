@@ -1,1 +1,0 @@
-../glob_test.go
