@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 
-	"github.com/hashicorp/hcl"
+	"github.com/hashicorp/terraform-config-inspect/tfconfig"
 )
 
 type scanner struct {
@@ -16,18 +15,22 @@ type scanner struct {
 
 const terraformSourceFileExt = ".tf"
 
-func (s *scanner) ScanFile(path string) error {
-	hclSource, err := ioutil.ReadFile(path)
+func (s *scanner) ScanDir(path string) error {
+	module, err := tfconfig.LoadModule(path)
 	if err != nil {
-		return fmt.Errorf("read terraform source %q: %v", path, err)
+		return fmt.Errorf("read terraform module %q: %v", path, err)
 	}
-	var sourceFile struct{ Module map[string]*moduleReference }
-	if err := hcl.Unmarshal(hclSource, &sourceFile); err != nil {
-		return fmt.Errorf("process terraform source %q: %v", path, err)
+	modules := make(map[string]*moduleReference, len(module.ModuleCalls))
+	for k, m := range module.ModuleCalls {
+		modules[k] = &moduleReference{
+			Name:    m.Name,
+			Source:  m.Source,
+			Version: &m.Version,
+			Path:    m.Pos.Filename,
+		}
 	}
-	for k := range sourceFile.Module {
-		m := sourceFile.Module[k]
-		m.Path = path
+	for k := range modules {
+		m := modules[k]
 		m.Name = k
 		if err := m.ParseSource(); err != nil {
 			log.Printf("parse module source: %v", err)
