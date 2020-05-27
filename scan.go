@@ -20,18 +20,16 @@ func (s *scanner) ScanDir(path string) error {
 	if err != nil {
 		return fmt.Errorf("read terraform module %q: %v", path, err)
 	}
-	modules := make(map[string]*moduleReference, len(module.ModuleCalls))
-	for k, m := range module.ModuleCalls {
-		modules[k] = &moduleReference{
+	var modules []*moduleReference
+	for _, m := range module.ModuleCalls {
+		modules = append(modules, &moduleReference{
 			Name:    m.Name,
 			Source:  m.Source,
 			Version: &m.Version,
 			Path:    m.Pos.Filename,
-		}
+		})
 	}
-	for k := range modules {
-		m := modules[k]
-		m.Name = k
+	for _, m := range modules {
 		if err := m.ParseSource(); err != nil {
 			log.Printf("parse module source: %v", err)
 		}
