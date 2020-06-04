@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.13.11-alpine3.10
+    steps:
+      - name: Install pre-requisites (1)
+        run: |
+          apk add --no-cache make jq zip curl git npm
+      - name: Install pre-requisites (2)
+        run: |
+          curl -sSLO https://github.com/sgreben/subst/releases/download/1.1.1/subst_1.1.1_linux_x86_64.zip
+          unzip subst_1.1.1_linux_x86_64.zip
+          mv subst /usr/local/bin
+      - name: Install pre-requisites (3)
+        run: |
+          go get github.com/github/hub
+      - name: Checkout
+        uses: actions/checkout@master
+      - run: git config user.name "GitHub Actions" && git config user.email "actions@users.noreply.github.com"
+      - name: Build
+        run: make binaries
+      - name: Release
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          npm version patch
+          make release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
