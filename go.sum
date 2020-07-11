@@ -74,6 +74,8 @@ github.com/sgreben/flagvar v0.0.0-20190531173411-f77358616bad h1:/LtIjTwpeN7oWam
 github.com/sgreben/flagvar v0.0.0-20190531173411-f77358616bad/go.mod h1:Fb8FciZ5gk6PpUehj6eK5oGIbvYB0DXsYXtsqSJcFbk=
 github.com/sgreben/flagvar v0.0.0-20200103140453-77ac8eec431f h1:s1n/BFAfq4gMiEf9RV4aqb3wYCn6pbHQVz4HzgVwjJY=
 github.com/sgreben/flagvar v0.0.0-20200103140453-77ac8eec431f/go.mod h1:Fb8FciZ5gk6PpUehj6eK5oGIbvYB0DXsYXtsqSJcFbk=
+github.com/sgreben/flagvar v1.10.1 h1:ukN3zqVj9T9U7CiKG6owmejxswJYMbAg9Mxkhi1B4tw=
+github.com/sgreben/flagvar v1.10.1/go.mod h1:AxDmbFDIxZ4dHj2zg8LxuJn5CSwSS28iY/Wy56e+nhI=
 github.com/sgreben/versions v0.0.0-20190809110143-9ceea0b2fe0a h1:QtPZ5i5gEp8pdVk8QtVvVHsghPoPBYIzk4lsx1TTplo=
 github.com/sgreben/versions v0.0.0-20190809110143-9ceea0b2fe0a/go.mod h1:EQODekipbUEX7QG3pCx2JZaOfKj5i1u7NZ+xMbI0Uv0=
 github.com/spf13/pflag v1.0.2/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=

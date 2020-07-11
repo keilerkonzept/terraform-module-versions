@@ -60,7 +60,7 @@ github.com/mitchellh/go-wordwrap
 github.com/olekukonko/tablewriter
 # github.com/sergi/go-diff v1.0.0
 github.com/sergi/go-diff/diffmatchpatch
-# github.com/sgreben/flagvar v0.0.0-20200103140453-77ac8eec431f
+# github.com/sgreben/flagvar v1.10.1
 ## explicit
 github.com/sgreben/flagvar
 # github.com/sgreben/versions v0.0.0-20190809110143-9ceea0b2fe0a
