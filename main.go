@@ -201,7 +201,7 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 		var err error
 		currentVersion, err = semver.Parse(*currentVersionString)
 		if err != nil {
-			return fmt.Errorf("parse version %q: %v", *currentVersionString, err)
+			currentVersion = nil
 		}
 	}
 	switch {
@@ -234,6 +234,8 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 		latestString = latest.String()
 		if currentVersion != nil {
 			matchingUpdate = latest.GreaterThan(currentVersion)
+		} else {
+			matchingUpdate = true
 		}
 		oldest := versionConstraint.OldestMatching(versionsCollection)
 		if latest.GreaterThan(oldest) {
