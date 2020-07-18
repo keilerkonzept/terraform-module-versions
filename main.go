@@ -205,13 +205,13 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 		}
 	}
 	switch {
-	case r.Version == nil && currentVersion == nil:
+	case *r.Version == "" && currentVersion == nil:
 		versionConstraintString = "*"
-	case r.Version == nil && currentVersion != nil:
+	case *r.Version == "" && currentVersion != nil:
 		versionConstraintString = fmt.Sprintf(">=%s", currentVersion.String())
-	case r.Version != nil && currentVersion == nil:
+	case *r.Version != "" && currentVersion == nil:
 		versionConstraintString = *r.Version
-	case r.Version != nil && currentVersion != nil:
+	case *r.Version != "" && currentVersion != nil:
 		versionConstraintString = fmt.Sprintf("%s,>%s", *r.Version, currentVersion.String())
 	}
 	versionConstraint, err := semver.ParseConstraint(versionConstraintString)
