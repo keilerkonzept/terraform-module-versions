@@ -114,22 +114,6 @@ $ terraform-module-versions examples
 
 ```json
 {
-  "path": "examples/main.tf",
-  "name": "consul_github_ssh",
-  "type": "git",
-  "source": "git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0",
-  "constraint": "0.1.0",
-  "version": "0.1.0"
-}
-{
-  "path": "examples/main.tf",
-  "name": "example_git_ssh",
-  "type": "git",
-  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
-  "constraint": "~> 0.10",
-  "version": "0.10.0"
-}
-{
   "path": "examples/0.12.x.tf",
   "name": "consul_aws",
   "type": "registry",
@@ -149,6 +133,22 @@ $ terraform-module-versions examples
   "type": "git",
   "source": "github.com/hashicorp/terraform-aws-consul",
   "constraint": "0.7.3"
+}
+{
+  "path": "examples/main.tf",
+  "name": "consul_github_ssh",
+  "type": "git",
+  "source": "git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0",
+  "constraint": "0.1.0",
+  "version": "0.1.0"
+}
+{
+  "path": "examples/main.tf",
+  "name": "example_git_ssh",
+  "type": "git",
+  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
+  "constraint": "~> 0.10",
+  "version": "0.10.0"
 }
 ```
 
