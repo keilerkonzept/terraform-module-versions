@@ -15,6 +15,8 @@ release-exists:
 	hub release show "$(VERSION)"
 
 release: README.md zip
+	go mod tidy
+	git add go.mod go.sum vendor
 	git add package.json
 	git add README.md
 	git add Makefile

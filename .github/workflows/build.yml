@@ -28,10 +28,18 @@ jobs:
       - run: git config user.name "GitHub Actions" && git config user.email "actions@users.noreply.github.com"
       - name: Build
         run: make binaries
-      - name: Release
+      - name: Release (1)
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+          make release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release (2)
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           npm version patch
-          make release
+          git add package.json
+          git commit -am "Bump version" || true
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
