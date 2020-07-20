@@ -208,7 +208,7 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 	case r.Version == nil && currentVersion == nil:
 		versionConstraintString = "*"
 	case r.Version == nil && currentVersion != nil:
-		versionConstraintString = fmt.Sprintf(">%s", currentVersion.String())
+		versionConstraintString = fmt.Sprintf(">=%s", currentVersion.String())
 	case r.Version != nil && currentVersion == nil:
 		versionConstraintString = *r.Version
 	case r.Version != nil && currentVersion != nil:
