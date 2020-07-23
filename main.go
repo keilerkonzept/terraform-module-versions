@@ -29,6 +29,7 @@ var config struct {
 	Quiet               bool
 	Updates             bool
 	Pretty              bool
+	Exit                bool
 }
 
 func init() {
@@ -43,6 +44,8 @@ func init() {
 	flag.BoolVar(&config.Quiet, "q", config.Quiet, "(alias for -quiet)")
 	flag.BoolVar(&config.Pretty, "pretty", config.Pretty, "human-readable output")
 	flag.BoolVar(&config.Pretty, "p", config.Pretty, "(alias for -pretty)")
+	flag.BoolVar(&config.Exit, "e", config.Exit, "return exit code when updates found (in conduction with -updates)")
+	flag.BoolVar(&config.Exit, "exit", config.Exit, "(alias for -exit)")
 	flag.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
 	flag.Parse()
 
@@ -159,15 +162,24 @@ func updatesJSON(rs []*moduleReference) {
 			}
 		}(r)
 	}
+	var returnCode bool
 	go func() {
 		for o := range out {
 			enc.Encode(o)
+			if config.Exit {
+                		if o.MatchingUpdate {
+                    			returnCode = true
+                		}
+			}
 		}
 		outputDone <- true
 	}()
 	wg.Wait()
 	close(out)
 	<-outputDone
+	if returnCode {
+        	os.Exit(1)
+    	}
 }
 
 func updatesPretty(rs []*moduleReference) {
@@ -186,10 +198,19 @@ func updatesPretty(rs []*moduleReference) {
 	wg.Wait()
 	close(out)
 	var output []outputUpdates
+	var returnCode bool
 	for o := range out {
 		output = append(output, o)
+		if config.Exit {
+	        	if o.MatchingUpdate {
+	            		returnCode = true
+	        	}
+	    	}
 	}
 	updatePrettyPrint(os.Stdout, output)
+	if returnCode {
+	    os.Exit(1)
+	}
 }
 
 func updates(r *moduleReference, out chan outputUpdates) error {
