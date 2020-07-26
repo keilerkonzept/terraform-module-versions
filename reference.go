@@ -9,6 +9,7 @@ import (
 
 // Module source prefixes
 const (
+	ModuleSourceGitSSHPrefix        = "git::ssh://"
 	ModuleSourceGitPrefix           = "git::"
 	ModuleSourceGithubHTTPSPrefix   = "github.com/"
 	ModuleSourceGithubSSHPrefix     = "git@github.com:"
@@ -98,8 +99,12 @@ func (r *moduleReference) ParseSource() error {
 		strings.HasPrefix(r.Source, ModuleSourceLocalPathPrefix2):
 		r.parseLocalPath(r.Source)
 		return nil
-	case strings.HasPrefix(r.Source, ModuleSourceGitPrefix):
+	case strings.HasPrefix(r.Source, ModuleSourceGitSSHPrefix):
 		return r.parseGit(r.Source)
+	case strings.HasPrefix(r.Source, ModuleSourceGitPrefix):
+	    source := strings.TrimPrefix(r.Source, ModuleSourceGitPrefix)
+	    source = strings.Replace(source, ":", "/", 1)
+	    return r.parseGit("ssh://" + source)
 	case strings.HasPrefix(r.Source, ModuleSourceGithubHTTPSPrefix):
 		return r.parseGit("https://" + r.Source)
 	case strings.HasPrefix(r.Source, ModuleSourceGithubSSHPrefix):
