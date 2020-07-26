@@ -17,3 +17,8 @@ module "example_git_ssh" {
   source = "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0"
   version = "~> 0.10"
 }
+
+module "example_git_scp" {
+  source = "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0"
+  version = "~> 0.12"
+}
