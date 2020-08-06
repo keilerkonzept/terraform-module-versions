@@ -161,6 +161,9 @@ func updatesJSON(rs []*moduleReference) {
 	}
 	go func() {
 		for o := range out {
+			if o.Version == o.LatestWithoutConstraint {
+				continue
+			}
 			enc.Encode(o)
 		}
 		outputDone <- true
