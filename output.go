@@ -14,9 +14,9 @@ type outputUpdates struct {
 	Name                    string `json:"name,omitempty"`
 	VersionConstraint       string `json:"constraint,omitempty"`
 	Version                 string `json:"version,omitempty"`
-	ConstraintUpdate        bool   `json:"constraintUpdate,omitempty"`
+	ConstraintUpdate        bool   `json:"-"`
 	Latest                  string `json:"latestMatching,omitempty"`
 	MatchingUpdate          bool   `json:"matchingUpdate,omitempty"`
 	LatestWithoutConstraint string `json:"latestOverall,omitempty"`
-	NonMatchingUpdate       bool   `json:"nonMatchingUpdate,omitempty"`
+	NonMatchingUpdate       bool   `json:"-"`
 }
