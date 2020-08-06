@@ -23,12 +23,13 @@ var (
 )
 
 var config struct {
-	Paths               []string
-	ModuleNames         flagvar.StringSet
-	PrintVersionAndExit bool
-	Quiet               bool
-	Updates             bool
-	Pretty              bool
+	Paths                   []string
+	ModuleNames             flagvar.StringSet
+	PrintVersionAndExit     bool
+	Quiet                   bool
+	Updates                 bool
+	UpdatesFoundNonzeroExit bool
+	Pretty                  bool
 }
 
 func init() {
@@ -43,6 +44,8 @@ func init() {
 	flag.BoolVar(&config.Quiet, "q", config.Quiet, "(alias for -quiet)")
 	flag.BoolVar(&config.Pretty, "pretty", config.Pretty, "human-readable output")
 	flag.BoolVar(&config.Pretty, "p", config.Pretty, "(alias for -pretty)")
+	flag.BoolVar(&config.UpdatesFoundNonzeroExit, "e", config.UpdatesFoundNonzeroExit, "(alias for -updates-found-nonzero-exit, implies -updates)")
+	flag.BoolVar(&config.UpdatesFoundNonzeroExit, "updates-found-nonzero-exit", config.UpdatesFoundNonzeroExit, "exit with a nonzero code when modules with upates are found (implies -updates)")
 	flag.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
 	flag.Parse()
 
@@ -53,6 +56,10 @@ func init() {
 
 	if config.Quiet {
 		log.SetOutput(ioutil.Discard)
+	}
+
+	if config.UpdatesFoundNonzeroExit {
+		config.Updates = true
 	}
 
 	config.Paths = flag.Args()
@@ -159,15 +166,22 @@ func updatesJSON(rs []*moduleReference) {
 			}
 		}(r)
 	}
+	var matchingUpdatesFound bool
 	go func() {
 		for o := range out {
 			enc.Encode(o)
+			if o.MatchingUpdate {
+				matchingUpdatesFound = true
+			}
 		}
 		outputDone <- true
 	}()
 	wg.Wait()
 	close(out)
 	<-outputDone
+	if config.UpdatesFoundNonzeroExit && matchingUpdatesFound {
+		os.Exit(1)
+	}
 }
 
 func updatesPretty(rs []*moduleReference) {
@@ -186,10 +200,17 @@ func updatesPretty(rs []*moduleReference) {
 	wg.Wait()
 	close(out)
 	var output []outputUpdates
+	var matchingUpdatesFound bool
 	for o := range out {
 		output = append(output, o)
+		if o.MatchingUpdate {
+			matchingUpdatesFound = true
+		}
 	}
 	updatePrettyPrint(os.Stdout, output)
+	if config.UpdatesFoundNonzeroExit && matchingUpdatesFound {
+		os.Exit(1)
+	}
 }
 
 func updates(r *moduleReference, out chan outputUpdates) error {
