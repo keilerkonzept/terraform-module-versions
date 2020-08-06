@@ -27,11 +27,14 @@ func listPrettyPrint(w io.Writer, output []outputList) {
 
 func updatePrettyPrint(w io.Writer, output []outputUpdates) {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Update?", "Name", "Constraint", "Version", "Latest matching", "Latest"})
+	table.SetHeader([]string{"Update?", "Name", "Constraint", "Version", "Latest matching", "Latest overall"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	var rows [][]string
 	for _, o := range output {
+		if o.Version == o.LatestWithoutConstraint {
+			continue
+		}
 		var update = ""
 		switch {
 		case o.MatchingUpdate:
