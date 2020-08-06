@@ -20,9 +20,11 @@ $ terraform-module-versions -updates -pretty examples
 ```markdown
 | UPDATE? |        NAME         |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|-----------------|---------|-----------------|--------|
-| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.6           | 0.7.6  |
-| ?       | consul              | > 0.1.0         |         | 0.7.6           | 0.7.6  |
-| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.7.6  |
+| Y       | example_git_ssh     | ~> 0.10         | 0.10.0  | 0.11.2          | 2.0.6  |
+| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.7           | 0.7.7  |
+| ?       | consul              | > 0.1.0         |         | 0.7.7           | 0.7.7  |
+| (Y)     | consul_github_ssh   | 0.1.0           | 0.1.0   |                 | 0.7.7  |
+| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.7.7  |
 ```
 
 ## Contents
@@ -175,23 +177,42 @@ $ terraform-module-versions -updates examples
   "name": "consul_aws",
   "constraint": ">=0.5.0,<=1.0.0",
   "constraintUpdate": true,
-  "latestMatching": "0.7.6",
-  "latestOverall": "0.7.6"
+  "latestMatching": "0.7.7",
+  "latestOverall": "0.7.7"
 }
 {
   "path": "examples/main.tf",
   "name": "consul",
   "constraint": "> 0.1.0",
   "constraintUpdate": true,
-  "latestMatching": "0.7.6",
-  "latestOverall": "0.7.6"
+  "latestMatching": "0.7.7",
+  "latestOverall": "0.7.7"
 }
 {
   "path": "examples/main.tf",
   "name": "consul_github_https",
   "constraint": "0.7.3",
   "latestMatching": "0.7.3",
-  "latestOverall": "0.7.6",
+  "latestOverall": "0.7.7",
+  "nonMatchingUpdate": true
+}
+{
+  "path": "examples/main.tf",
+  "name": "example_git_ssh",
+  "constraint": "~> 0.10",
+  "version": "0.10.0",
+  "constraintUpdate": true,
+  "latestMatching": "0.11.2",
+  "matchingUpdate": true,
+  "latestOverall": "2.0.6",
+  "nonMatchingUpdate": true
+}
+{
+  "path": "examples/main.tf",
+  "name": "consul_github_ssh",
+  "constraint": "0.1.0",
+  "version": "0.1.0",
+  "latestOverall": "0.7.7",
   "nonMatchingUpdate": true
 }
 ```
@@ -200,9 +221,11 @@ with `-pretty`:
 
 | UPDATE? |        NAME         |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|-----------------|---------|-----------------|--------|
-| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.6           | 0.7.6  |
-| ?       | consul              | > 0.1.0         |         | 0.7.6           | 0.7.6  |
-| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.7.6  |
+| Y       | example_git_ssh     | ~> 0.10         | 0.10.0  | 0.11.2          | 2.0.6  |
+| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.7           | 0.7.7  |
+| ?       | consul              | > 0.1.0         |         | 0.7.7           | 0.7.7  |
+| (Y)     | consul_github_ssh   | 0.1.0           | 0.1.0   |                 | 0.7.7  |
+| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.7.7  |
 
 ### Check for updates of specific modules
 
@@ -217,7 +240,15 @@ $ terraform-module-versions -updates -module=consul_github_https -module=consul_
   "name": "consul_github_https",
   "constraint": "0.7.3",
   "latestMatching": "0.7.3",
-  "latestOverall": "0.7.6",
+  "latestOverall": "0.7.7",
+  "nonMatchingUpdate": true
+}
+{
+  "path": "examples/main.tf",
+  "name": "consul_github_ssh",
+  "constraint": "0.1.0",
+  "version": "0.1.0",
+  "latestOverall": "0.7.7",
   "nonMatchingUpdate": true
 }
 ```
@@ -226,7 +257,8 @@ with `-pretty`:
 
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
-| (Y)     | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.6  |
+| (Y)     | consul_github_ssh   | 0.1.0      | 0.1.0   |                 | 0.7.7  |
+| (Y)     | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.7  |
 
 ## Get it
 
@@ -244,6 +276,7 @@ Or [download the binary for your platform](https://github.com/keilerkonzept/terr
 terraform-module-versions [PATHS...]
 
 Usage of terraform-module-versions:
+  -e	(alias for -updates-found-nonzero-exit, implies -updates)
   -module value
     	include this module (may be specified repeatedly. by default, all modules are included)
   -p	(alias for -pretty)
@@ -257,6 +290,8 @@ Usage of terraform-module-versions:
     	(alias for -updates)
   -updates
     	check for updates
+  -updates-found-nonzero-exit
+    	exit with a nonzero code when modules with upates are found (implies -updates)
   -version
     	print version and exit
 ```
