@@ -41,7 +41,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform-config-inspect v0.0.0-20200526195750-d43f12b82861
+# github.com/hashicorp/terraform-config-inspect v0.0.0-20200806211835-c481b8bfa41e
 ## explicit
 github.com/hashicorp/terraform-config-inspect/tfconfig
 # github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99
