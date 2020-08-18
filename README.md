@@ -114,13 +114,6 @@ $ terraform-module-versions examples
 
 ```json
 {
-  "path": "examples/0.12.x.tf",
-  "name": "consul_aws",
-  "type": "registry",
-  "source": "hashicorp/consul/aws",
-  "constraint": ">=0.5.0,<=1.0.0"
-}
-{
   "path": "examples/main.tf",
   "name": "consul",
   "type": "registry",
@@ -150,6 +143,13 @@ $ terraform-module-versions examples
   "constraint": "~> 0.10",
   "version": "0.10.0"
 }
+{
+  "path": "examples/0.12.x.tf",
+  "name": "consul_aws",
+  "type": "registry",
+  "source": "hashicorp/consul/aws",
+  "constraint": ">=0.5.0,<=1.0.0"
+}
 ```
 
 with `-pretty`:
@@ -172,6 +172,14 @@ $ terraform-module-versions -updates examples
 ```json
 {
   "path": "examples/main.tf",
+  "name": "consul_github_https",
+  "constraint": "0.7.3",
+  "latestMatching": "0.7.3",
+  "latestOverall": "0.7.7",
+  "nonMatchingUpdate": true
+}
+{
+  "path": "examples/main.tf",
   "name": "consul",
   "constraint": "> 0.1.0",
   "constraintUpdate": true,
@@ -185,14 +193,6 @@ $ terraform-module-versions -updates examples
   "constraintUpdate": true,
   "latestMatching": "0.7.7",
   "latestOverall": "0.7.7"
-}
-{
-  "path": "examples/main.tf",
-  "name": "consul_github_https",
-  "constraint": "0.7.3",
-  "latestMatching": "0.7.3",
-  "latestOverall": "0.7.7",
-  "nonMatchingUpdate": true
 }
 ```
 
