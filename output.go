@@ -12,6 +12,7 @@ type outputList struct {
 type outputUpdates struct {
 	Path                    string `json:"path,omitempty"`
 	Name                    string `json:"name,omitempty"`
+	Source                  string `json:"source,omitempty"`
 	VersionConstraint       string `json:"constraint,omitempty"`
 	Version                 string `json:"version,omitempty"`
 	ConstraintUpdate        bool   `json:"constraintUpdate,omitempty"`
