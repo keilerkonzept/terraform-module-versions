@@ -284,6 +284,7 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 	out <- outputUpdates{
 		Path:                    r.Path,
 		Name:                    r.Name,
+		Source:                  r.Source,
 		Version:                 version,
 		VersionConstraint:       constraint,
 		ConstraintUpdate:        constraintUpdate,
