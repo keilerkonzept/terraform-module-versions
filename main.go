@@ -254,7 +254,7 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 	latest := versionConstraint.LatestMatching(versionsCollection)
 	var latestString string
 	if latest != nil {
-		latestString = latest.String()
+		latestString = latest.Original
 		if currentVersion != nil {
 			matchingUpdate = latest.GreaterThan(currentVersion)
 		}
@@ -268,7 +268,7 @@ func updates(r *moduleReference, out chan outputUpdates) error {
 	if len(versionsCollection) > 0 {
 		sort.Sort(versionsCollection)
 		latestOverall := versionsCollection[len(versionsCollection)-1]
-		latestOverallString = latestOverall.String()
+		latestOverallString = latestOverall.Original
 		if !versionConstraint.Check(latestOverall) {
 			nonMatchingUpdate = true
 		}
