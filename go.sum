@@ -35,6 +35,8 @@ github.com/hashicorp/hcl/v2 v2.0.0 h1:efQznTz+ydmQXq3BOnRa3AXzvCeTq1P4dKj/z5GLlY
 github.com/hashicorp/hcl/v2 v2.0.0/go.mod h1:oVVDG71tEinNGYCxinCYadcmKU9bglqW9pV3txagJ90=
 github.com/hashicorp/terraform-config-inspect v0.0.0-20200806211835-c481b8bfa41e h1:wIsEsIITggCC4FTO9PisDjy561UU7OPL6uTu7tnkHH8=
 github.com/hashicorp/terraform-config-inspect v0.0.0-20200806211835-c481b8bfa41e/go.mod h1:Z0Nnk4+3Cy89smEbrq+sl1bxc9198gIP4I7wcQF6Kqs=
+github.com/hashicorp/terraform-config-inspect v0.0.0-20201027163139-b04903638a05 h1:BUEsegkhjx+IMITZ2CSy3g81tWceXEyb3ui3FPCHdVE=
+github.com/hashicorp/terraform-config-inspect v0.0.0-20201027163139-b04903638a05/go.mod h1:Z0Nnk4+3Cy89smEbrq+sl1bxc9198gIP4I7wcQF6Kqs=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 h1:BQSFePA1RWJOlocH6Fxy8MmwDt+yVQYULKfN0RoTN8A=
 github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99/go.mod h1:1lJo3i6rXxKeerYnT8Nvf0QmHCRC1n8sfWVwXF2Frvo=
 github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
