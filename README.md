@@ -20,9 +20,9 @@ $ terraform-module-versions -updates -pretty examples
 ```markdown
 | UPDATE? |        NAME         |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|-----------------|---------|-----------------|--------|
-| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.7           | 0.7.7  |
-| ?       | consul              | > 0.1.0         |         | 0.7.7           | 0.7.7  |
-| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.7.7  |
+| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.8.0           | 0.8.0  |
+| ?       | consul              | > 0.1.0         |         | 0.8.0           | 0.8.0  |
+| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.8.0  |
 ```
 
 ## Contents
@@ -115,6 +115,21 @@ $ terraform-module-versions examples
 ```json
 {
   "path": "examples/main.tf",
+  "name": "example_git_ssh",
+  "type": "git",
+  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
+  "constraint": "~> 0.10",
+  "version": "0.10.0"
+}
+{
+  "path": "examples/0.12.x.tf",
+  "name": "consul_aws",
+  "type": "registry",
+  "source": "hashicorp/consul/aws",
+  "constraint": ">=0.5.0,<=1.0.0"
+}
+{
+  "path": "examples/main.tf",
   "name": "consul",
   "type": "registry",
   "source": "hashicorp/consul/aws",
@@ -134,21 +149,6 @@ $ terraform-module-versions examples
   "source": "git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0",
   "constraint": "0.1.0",
   "version": "0.1.0"
-}
-{
-  "path": "examples/main.tf",
-  "name": "example_git_ssh",
-  "type": "git",
-  "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=0.10.0",
-  "constraint": "~> 0.10",
-  "version": "0.10.0"
-}
-{
-  "path": "examples/0.12.x.tf",
-  "name": "consul_aws",
-  "type": "registry",
-  "source": "hashicorp/consul/aws",
-  "constraint": ">=0.5.0,<=1.0.0"
 }
 ```
 
@@ -171,28 +171,28 @@ $ terraform-module-versions -updates examples
 
 ```json
 {
-  "path": "examples/main.tf",
-  "name": "consul_github_https",
-  "constraint": "0.7.3",
-  "latestMatching": "0.7.3",
-  "latestOverall": "0.7.7",
-  "nonMatchingUpdate": true
+  "path": "examples/0.12.x.tf",
+  "name": "consul_aws",
+  "constraint": ">=0.5.0,<=1.0.0",
+  "constraintUpdate": true,
+  "latestMatching": "0.8.0",
+  "latestOverall": "0.8.0"
 }
 {
   "path": "examples/main.tf",
   "name": "consul",
   "constraint": "> 0.1.0",
   "constraintUpdate": true,
-  "latestMatching": "0.7.7",
-  "latestOverall": "0.7.7"
+  "latestMatching": "0.8.0",
+  "latestOverall": "0.8.0"
 }
 {
-  "path": "examples/0.12.x.tf",
-  "name": "consul_aws",
-  "constraint": ">=0.5.0,<=1.0.0",
-  "constraintUpdate": true,
-  "latestMatching": "0.7.7",
-  "latestOverall": "0.7.7"
+  "path": "examples/main.tf",
+  "name": "consul_github_https",
+  "constraint": "0.7.3",
+  "latestMatching": "0.7.3",
+  "latestOverall": "0.8.0",
+  "nonMatchingUpdate": true
 }
 ```
 
@@ -200,9 +200,9 @@ with `-pretty`:
 
 | UPDATE? |        NAME         |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|-----------------|---------|-----------------|--------|
-| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.7.7           | 0.7.7  |
-| ?       | consul              | > 0.1.0         |         | 0.7.7           | 0.7.7  |
-| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.7.7  |
+| ?       | consul_aws          | >=0.5.0,<=1.0.0 |         | 0.8.0           | 0.8.0  |
+| ?       | consul              | > 0.1.0         |         | 0.8.0           | 0.8.0  |
+| (Y)     | consul_github_https | 0.7.3           |         | 0.7.3           | 0.8.0  |
 
 ### Check for updates of specific modules
 
@@ -217,7 +217,7 @@ $ terraform-module-versions -updates -module=consul_github_https -module=consul_
   "name": "consul_github_https",
   "constraint": "0.7.3",
   "latestMatching": "0.7.3",
-  "latestOverall": "0.7.7",
+  "latestOverall": "0.8.0",
   "nonMatchingUpdate": true
 }
 ```
@@ -226,7 +226,7 @@ with `-pretty`:
 
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
-| (Y)     | consul_github_https | 0.7.3      |         | 0.7.3           | 0.7.7  |
+| (Y)     | consul_github_https | 0.7.3      |         | 0.7.3           | 0.8.0  |
 
 ## Get it
 
