@@ -3,7 +3,7 @@ module github.com/keilerkonzept/terraform-module-versions
 go 1.14
 
 require (
-	github.com/hashicorp/terraform-config-inspect v0.0.0-20201027163139-b04903638a05
+	github.com/hashicorp/terraform-config-inspect v0.0.0-20201102131242-0c45ba392e51
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/sgreben/flagvar v1.10.1
 	github.com/sgreben/versions v0.0.0-20190809110143-9ceea0b2fe0a
