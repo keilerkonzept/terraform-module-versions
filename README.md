@@ -20,11 +20,8 @@ $ terraform-module-versions -updates -pretty examples
 ```markdown
 | UPDATE? |              NAME               |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------------------|-----------------|---------|-----------------|--------|
-| Y       | consul_github_ssh               | ~0.1.0          | 0.1.0   | v0.1.2          | v0.8.0 |
 | ?       | consul_aws                      | >=0.5.0,<=1.0.0 |         | 0.8.0           | 0.8.0  |
 | ?       | consul                          | > 0.1.0         |         | 0.8.0           | 0.8.0  |
-| (Y)     | example_git_ssh_branch          |                 | master  |                 | 2.1.0  |
-| (Y)     | example_git_scp                 | ~> 0.12         | 0.12.0  |                 | 2.1.0  |
 | (Y)     | consul_github_https_no_ref      |                 |         |                 | v0.8.0 |
 | (Y)     | consul_github_https_missing_ref | 0.7.3           |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https             | 0.7.3           | v0.7.3  |                 | v0.8.0 |
@@ -137,14 +134,6 @@ $ terraform-module-versions examples
 
 ```json
 {
-  "path": "examples/main.tf",
-  "name": "example_git_scp",
-  "type": "git",
-  "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
-  "constraint": "~> 0.12",
-  "version": "0.12.0"
-}
-{
   "path": "examples/0.12.x.tf",
   "name": "consul_aws",
   "type": "registry",
@@ -194,6 +183,14 @@ $ terraform-module-versions examples
   "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master",
   "version": "master"
 }
+{
+  "path": "examples/main.tf",
+  "name": "example_git_scp",
+  "type": "git",
+  "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
+  "constraint": "~> 0.12",
+  "version": "0.12.0"
+}
 ```
 
 with `-pretty`:
@@ -217,6 +214,13 @@ $ terraform-module-versions -updates examples
 ```
 
 ```json
+{
+  "path": "examples/0.12.x.tf",
+  "name": "consul_aws",
+  "constraint": ">=0.5.0,<=1.0.0",
+  "latestMatching": "0.8.0",
+  "latestOverall": "0.8.0"
+}
 {
   "path": "examples/main.tf",
   "name": "consul",
@@ -246,49 +250,14 @@ $ terraform-module-versions -updates examples
   "latestOverall": "v0.8.0",
   "nonMatchingUpdate": true
 }
-{
-  "path": "examples/main.tf",
-  "name": "consul_github_ssh",
-  "constraint": "~0.1.0",
-  "version": "0.1.0",
-  "latestMatching": "v0.1.2",
-  "latestOverall": "v0.8.0",
-  "matchingUpdate": true,
-  "nonMatchingUpdate": true
-}
-{
-  "path": "examples/main.tf",
-  "name": "example_git_ssh_branch",
-  "version": "master",
-  "latestOverall": "2.1.0",
-  "nonMatchingUpdate": true
-}
-{
-  "path": "examples/main.tf",
-  "name": "example_git_scp",
-  "constraint": "~> 0.12",
-  "version": "0.12.0",
-  "latestOverall": "2.1.0",
-  "nonMatchingUpdate": true
-}
-{
-  "path": "examples/0.12.x.tf",
-  "name": "consul_aws",
-  "constraint": ">=0.5.0,<=1.0.0",
-  "latestMatching": "0.8.0",
-  "latestOverall": "0.8.0"
-}
 ```
 
 with `-pretty`:
 
 | UPDATE? |              NAME               |   CONSTRAINT    | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------------------|-----------------|---------|-----------------|--------|
-| Y       | consul_github_ssh               | ~0.1.0          | 0.1.0   | v0.1.2          | v0.8.0 |
 | ?       | consul_aws                      | >=0.5.0,<=1.0.0 |         | 0.8.0           | 0.8.0  |
 | ?       | consul                          | > 0.1.0         |         | 0.8.0           | 0.8.0  |
-| (Y)     | example_git_ssh_branch          |                 | master  |                 | 2.1.0  |
-| (Y)     | example_git_scp                 | ~> 0.12         | 0.12.0  |                 | 2.1.0  |
 | (Y)     | consul_github_https_no_ref      |                 |         |                 | v0.8.0 |
 | (Y)     | consul_github_https_missing_ref | 0.7.3           |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https             | 0.7.3           | v0.7.3  |                 | v0.8.0 |
@@ -309,23 +278,12 @@ $ terraform-module-versions -updates -module=consul_github_https -module=consul_
   "latestOverall": "v0.8.0",
   "nonMatchingUpdate": true
 }
-{
-  "path": "examples/main.tf",
-  "name": "consul_github_ssh",
-  "constraint": "~0.1.0",
-  "version": "0.1.0",
-  "latestMatching": "v0.1.2",
-  "latestOverall": "v0.8.0",
-  "matchingUpdate": true,
-  "nonMatchingUpdate": true
-}
 ```
 
 with `-pretty`:
 
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
-| Y       | consul_github_ssh   | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
 | (Y)     | consul_github_https | 0.7.3      | v0.7.3  |                 | v0.8.0 |
 
 ## Get it
