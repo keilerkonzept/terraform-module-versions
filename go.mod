@@ -5,7 +5,7 @@ go 1.15
 require (
 	cloud.google.com/go v0.74.0 // indirect
 	cloud.google.com/go/storage v1.12.0 // indirect
-	github.com/Masterminds/semver v1.5.0
+	github.com/Masterminds/semver/v3/v3 v3.1.1
 	github.com/Microsoft/go-winio v0.4.16 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be // indirect
