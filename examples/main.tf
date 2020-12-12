@@ -13,8 +13,8 @@ module "consul_github_https_no_ref" {
 }
 
 module "consul_github_https" {
-  source = "github.com/hashicorp/terraform-aws-consul?ref=v0.7.3"
-  version = "0.7.3"
+  source = "github.com/hashicorp/terraform-aws-consul?ref=v0.8.0"
+  version = "0.8.0"
 }
 
 module "consul_github_ssh" {

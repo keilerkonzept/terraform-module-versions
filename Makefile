@@ -27,14 +27,19 @@ release: README.md zip
 README.md:
 	go get github.com/keilerkonzept/$(APP) && <README.template.md subst \
 		EXAMPLES_MAIN_TF="$$(cat examples/main.tf examples/0.12.x.tf)"\
-		EXAMPLE_PRETTY="$$($(APP) -update -pretty examples)"\
-		EXAMPLE_LIST="$$($(APP) examples | jq .)"\
-		EXAMPLE_LIST_PRETTY="$$($(APP) -pretty examples)"\
-		EXAMPLE_UPDATES="$$($(APP) -update examples | jq .)"\
-		EXAMPLE_UPDATES_PRETTY="$$($(APP) -pretty -update examples)"\
-		EXAMPLE_UPDATES_SINGLE="$$($(APP) -update -module=consul_github_https -module=consul_github_ssh examples | jq .)"\
-		EXAMPLE_UPDATES_SINGLE_PRETTY="$$($(APP) -pretty -update -module=consul_github_https -module=consul_github_ssh examples)"\
-		VERSION="$(VERSION)" APP="$(APP)" USAGE="$$($(APP) -h 2>&1)" > README.md
+		EXAMPLE_PRETTY="$$($(APP) check examples)"\
+		EXAMPLE_LIST="$$($(APP) list -o json examples | jq .)"\
+		EXAMPLE_LIST_PRETTY="$$($(APP) list examples)"\
+		EXAMPLE_UPDATES="$$($(APP) check -o json examples | jq .)"\
+		EXAMPLE_UPDATES_PRETTY="$$($(APP) check examples)"\
+		EXAMPLE_UPDATES_ALL_PRETTY="$$($(APP) check -all examples)"\
+		EXAMPLE_UPDATES_SINGLE="$$($(APP) check -o json -module=consul_github_https -module=consul_github_ssh examples | jq .)"\
+		EXAMPLE_UPDATES_SINGLE_ALL_PRETTY="$$($(APP) check -all -module=consul_github_https -module=consul_github_ssh examples)"\
+		EXAMPLE_UPDATES_SINGLE_PRETTY="$$($(APP) check -module=consul_github_https -module=consul_github_ssh examples)"\
+		USAGE="$$($(APP) -h 2>&1)"\
+		USAGE_LIST="$$($(APP) list -h 2>&1)"\
+		USAGE_CHECK="$$($(APP) check -h 2>&1)"\
+		VERSION="$(VERSION)" APP="$(APP)"> README.md
 
 zip: release/$(APP)_$(VERSION)_osx_x86_64.tar.gz release/$(APP)_$(VERSION)_windows_x86_64.zip release/$(APP)_$(VERSION)_linux_x86_64.tar.gz release/$(APP)_$(VERSION)_windows_x86_32.zip release/$(APP)_$(VERSION)_linux_x86_32.tar.gz release/$(APP)_$(VERSION)_linux_arm64.tar.gz
 

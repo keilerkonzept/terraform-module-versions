@@ -3,7 +3,7 @@ package modulecall
 import (
 	"fmt"
 
-	"github.com/Masterminds/semver"
+	"github.com/Masterminds/semver/v3"
 	"github.com/hashicorp/terraform-config-inspect/tfconfig"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/source"
 )
