@@ -10,9 +10,9 @@ cloud.google.com/go/internal/version
 # cloud.google.com/go/storage v1.12.0
 ## explicit
 cloud.google.com/go/storage
-# github.com/Masterminds/semver v1.5.0
+# github.com/Masterminds/semver/v3 v3.1.1
 ## explicit
-github.com/Masterminds/semver
+github.com/Masterminds/semver/v3
 # github.com/Microsoft/go-winio v0.4.16
 ## explicit
 github.com/Microsoft/go-winio
@@ -211,6 +211,7 @@ github.com/jbenet/go-context/io
 # github.com/jmespath/go-jmespath v0.4.0
 github.com/jmespath/go-jmespath
 # github.com/jstemmer/go-junit-report v0.9.1
+## explicit
 github.com/jstemmer/go-junit-report
 github.com/jstemmer/go-junit-report/formatter
 github.com/jstemmer/go-junit-report/parser
@@ -231,6 +232,10 @@ github.com/mitchellh/go-wordwrap
 # github.com/olekukonko/tablewriter v0.0.4
 ## explicit
 github.com/olekukonko/tablewriter
+# github.com/peterbourgon/ff/v3 v3.0.0
+## explicit
+github.com/peterbourgon/ff/v3
+github.com/peterbourgon/ff/v3/ffcli
 # github.com/sergi/go-diff v1.1.0
 github.com/sergi/go-diff/diffmatchpatch
 # github.com/sgreben/flagvar v1.10.1

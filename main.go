@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
+	"sort"
 
 	"github.com/keilerkonzept/terraform-module-versions/pkg/modulecall"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/output"
@@ -15,66 +17,119 @@ import (
 	"github.com/keilerkonzept/terraform-module-versions/pkg/scan"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/update"
 
+	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/sgreben/flagvar"
 )
 
 var (
-	appName       = "terrafile-module-versions"
+	appName       = "terraform-module-versions"
 	version       = "2-SNAPSHOT"
 	updatesClient = update.Client{
 		Registry: registry.Client{
 			HTTP: http.DefaultClient,
 		},
 	}
+	config struct {
+		Paths                   []string
+		ModuleNames             flagvar.StringSet
+		Output                  flagvar.Enum
+		OutputFormat            output.Format
+		Quiet                   bool
+		UpdatesFoundNonzeroExit bool
+		All                     bool
+	}
 )
 
-var config struct {
-	Paths                   []string
-	ModuleNames             flagvar.StringSet
-	PrintVersionAndExit     bool
-	Quiet                   bool
-	Updates                 bool
-	UpdatesFoundNonzeroExit bool
-	Pretty                  bool
-}
-
-func init() {
+func main() {
 	log.SetFlags(0)
 	log.SetPrefix("[" + appName + "] ")
 	log.SetOutput(os.Stderr)
-	flag.BoolVar(&config.PrintVersionAndExit, "version", config.PrintVersionAndExit, "print version and exit")
-	flag.BoolVar(&config.Updates, "updates", config.Updates, "check for updates")
-	flag.BoolVar(&config.Updates, "update", config.Updates, "(alias for -updates)")
-	flag.BoolVar(&config.Updates, "u", config.Updates, "(alias for -updates)")
-	flag.BoolVar(&config.Quiet, "quiet", config.Quiet, "suppress log output (stderr)")
-	flag.BoolVar(&config.Quiet, "q", config.Quiet, "(alias for -quiet)")
-	flag.BoolVar(&config.Pretty, "pretty", config.Pretty, "human-readable output")
-	flag.BoolVar(&config.Pretty, "p", config.Pretty, "(alias for -pretty)")
-	flag.BoolVar(&config.UpdatesFoundNonzeroExit, "e", config.UpdatesFoundNonzeroExit, "(alias for -updates-found-nonzero-exit, implies -updates)")
-	flag.BoolVar(&config.UpdatesFoundNonzeroExit, "updates-found-nonzero-exit", config.UpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found (implies -updates)")
-	flag.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
-	flag.Parse()
 
-	if config.PrintVersionAndExit {
-		fmt.Println(version)
-		os.Exit(0)
+	config.Output.Choices = output.FormatNames
+	config.Output.Value = string(output.FormatMarkdown)
+	config.OutputFormat = output.FormatMarkdown
+
+	rootFlagSet := flag.NewFlagSet(appName, flag.ExitOnError)
+	listFlagSet := flag.NewFlagSet(appName+" list", flag.ExitOnError)
+	checkFlagSet := flag.NewFlagSet(appName+" check", flag.ExitOnError)
+
+	rootFlagSet.BoolVar(&config.Quiet, "quiet", false, "suppress log output (stderr)")
+	rootFlagSet.BoolVar(&config.Quiet, "q", false, "(alias for -quiet)")
+	rootFlagSet.Var(&config.Output, "output", "output format, "+config.Output.Help())
+	rootFlagSet.Var(&config.Output, "o", "(alias for -output)")
+	listFlagSet.Var(&config.Output, "output", "output format, "+config.Output.Help())
+	listFlagSet.Var(&config.Output, "o", "(alias for -output)")
+	checkFlagSet.Var(&config.Output, "output", "output format, "+config.Output.Help())
+	checkFlagSet.Var(&config.Output, "o", "(alias for -output)")
+	checkFlagSet.BoolVar(&config.UpdatesFoundNonzeroExit, "e", config.UpdatesFoundNonzeroExit, "(alias for -updates-found-nonzero-exit)")
+	checkFlagSet.BoolVar(&config.UpdatesFoundNonzeroExit, "updates-found-nonzero-exit", config.UpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found")
+	checkFlagSet.BoolVar(&config.All, "a", config.All, "(alias for -all)")
+	checkFlagSet.BoolVar(&config.All, "all", config.All, "include modules without updates")
+	listFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
+	checkFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
+
+	cmdList := &ffcli.Command{
+		Name:       "list",
+		ShortUsage: appName + " list [options] [<path> ...]",
+		ShortHelp:  "List referenced terraform modules with their detected versions",
+		FlagSet:    listFlagSet,
+		Exec: func(_ context.Context, args []string) error {
+			config.Paths = args
+			list(scanForModuleCalls())
+			return nil
+		},
+	}
+	cmdList.LongHelp = cmdList.ShortHelp
+
+	cmdCheck := &ffcli.Command{
+		Name:       "check",
+		ShortUsage: appName + " check [options] [<path> ...]",
+		ShortHelp:  "Check referenced terraform modules' sources for newer versions",
+		FlagSet:    checkFlagSet,
+		Exec: func(_ context.Context, args []string) error {
+			config.Paths = args
+			updates(scanForModuleCalls())
+			return nil
+		},
+	}
+	cmdCheck.LongHelp = cmdCheck.ShortHelp
+
+	cmdVersion := &ffcli.Command{
+		Name:       "version",
+		ShortUsage: appName + " version",
+		ShortHelp:  "Print version and exit",
+		Exec: func(_ context.Context, args []string) error {
+			fmt.Println(version)
+			os.Exit(0)
+			return nil
+		},
+	}
+	cmdVersion.LongHelp = cmdVersion.ShortHelp
+
+	cmdRoot := &ffcli.Command{
+		ShortUsage:  appName + " [options] <subcommand>",
+		FlagSet:     rootFlagSet,
+		Subcommands: []*ffcli.Command{cmdList, cmdCheck, cmdVersion},
+		Exec: func(_ context.Context, args []string) error {
+			return flag.ErrHelp
+		},
 	}
 
+	if err := cmdRoot.Parse(os.Args[1:]); err != nil {
+		log.Fatal(err)
+	}
 	if config.Quiet {
 		log.SetOutput(ioutil.Discard)
 	}
-
-	if config.UpdatesFoundNonzeroExit {
-		config.Updates = true
+	if f, ok := output.ParseFormatName(config.Output.Value); ok {
+		config.OutputFormat = f
 	}
-
-	config.Paths = flag.Args()
+	if err := cmdRoot.Run(context.Background()); err != nil && !errors.Is(err, flag.ErrHelp) {
+		log.Fatal(err)
+	}
 }
 
-func main() {
-	if len(config.Paths) == 0 {
-		config.Paths, _ = filepath.Glob("*.tf")
-	}
+func scanForModuleCalls() []scan.Result {
 	scanResults, err := scan.Scan(config.Paths)
 	if err != nil {
 		log.Fatal(err)
@@ -89,13 +144,7 @@ func main() {
 		}
 		scanResultsFiltered = append(scanResultsFiltered, r)
 	}
-	scanResults = scanResultsFiltered
-
-	if !config.Updates {
-		list(scanResults)
-		return
-	}
-	updates(scanResults)
+	return scanResultsFiltered
 }
 
 func list(scanResults []scan.Result) {
@@ -121,19 +170,16 @@ func list(scanResults []scan.Result) {
 			Type:              parsed.Source.Type(),
 		})
 	}
-	switch {
-	case config.Pretty:
-		out.WriteTable(os.Stdout)
-	default:
-		_ = out.WriteJSONL(os.Stdout)
+	sort.Sort(out)
+	if err := out.Write(os.Stdout, config.OutputFormat); err != nil {
+		log.Fatal(err)
 	}
 }
 
 func updates(scanResults []scan.Result) {
 	var (
-		out                     output.Updates
-		foundMatchingUpdates    bool
-		foundNonMatchingUpdates bool
+		out                  output.Updates
+		foundMatchingUpdates bool
 	)
 	for _, m := range scanResults {
 		parsed, err := modulecall.Parse(m.ModuleCall)
@@ -156,22 +202,25 @@ func updates(scanResults []scan.Result) {
 			LatestOverall:     update.LatestOverallVersion,
 			NonMatchingUpdate: update.LatestOverallUpdate != "" && update.LatestOverallUpdate != update.LatestMatchingVersion,
 		}
+		hasUpdate := false
 		if updateOutput.MatchingUpdate {
 			foundMatchingUpdates = true
+			hasUpdate = true
 		}
 		if updateOutput.NonMatchingUpdate {
-			foundNonMatchingUpdates = true
+			hasUpdate = true
+		}
+		if !config.All && !hasUpdate {
+			continue
 		}
 		out = append(out, updateOutput)
 	}
-	switch {
-	case config.Pretty:
-		out.WriteTable(os.Stdout)
-	default:
-		_ = out.WriteJSONL(os.Stdout)
+	sort.Sort(out)
+	if err := out.Format(os.Stdout, config.OutputFormat); err != nil {
+		log.Fatal(err)
 	}
 	if config.UpdatesFoundNonzeroExit {
-		if foundMatchingUpdates || foundNonMatchingUpdates { // not distinguishing between these for now
+		if foundMatchingUpdates {
 			os.Exit(1)
 		}
 	}
