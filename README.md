@@ -24,8 +24,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.8.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.0  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.0  |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.1  |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.1  |
 ```
 
 ## Contents
@@ -223,8 +223,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.8.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.0  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.0  |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.1  |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.1  |
 
 with `-o json`:
 
@@ -259,14 +259,14 @@ with `-o json`:
     "name": "example_git_scp",
     "constraint": "~> 0.12",
     "version": "0.12.0",
-    "latestOverall": "3.0.0",
+    "latestOverall": "3.0.1",
     "nonMatchingUpdate": true
   },
   {
     "path": "examples/main.tf",
     "name": "example_git_ssh_branch",
     "version": "master",
-    "latestOverall": "3.0.0",
+    "latestOverall": "3.0.1",
     "nonMatchingUpdate": true
   }
 ]
@@ -285,8 +285,8 @@ $ terraform-module-versions check -all examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3           |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https_no_ref      |                 |         |                 | v0.8.0 |
 | Y       | consul_github_ssh               | ~0.1.0          | 0.1.0   | v0.1.2          | v0.8.0 |
-| (Y)     | example_git_scp                 | ~> 0.12         | 0.12.0  |                 | 3.0.0  |
-| (Y)     | example_git_ssh_branch          |                 | master  |                 | 3.0.0  |
+| (Y)     | example_git_scp                 | ~> 0.12         | 0.12.0  |                 | 3.0.1  |
+| (Y)     | example_git_ssh_branch          |                 | master  |                 | 3.0.1  |
 
 ### Check for updates of specific modules
 
@@ -349,7 +349,7 @@ SUBCOMMANDS
 
 FLAGS
   -o markdown       (alias for -output)
-  -output markdown  output format, one of [jsonl markdown markdown-wide junit json]
+  -output markdown  output format, one of [json jsonl markdown markdown-wide junit]
   -q false          (alias for -quiet)
   -quiet false      suppress log output (stderr)
 ```
@@ -365,7 +365,7 @@ List referenced terraform modules with their detected versions
 FLAGS
   -module ...       include this module (may be specified repeatedly. by default, all modules are included)
   -o markdown       (alias for -output)
-  -output markdown  output format, one of [junit json jsonl markdown markdown-wide]
+  -output markdown  output format, one of [json jsonl markdown markdown-wide junit]
 ```
 
 ### `check`
@@ -377,11 +377,13 @@ USAGE
 Check referenced terraform modules' sources for newer versions
 
 FLAGS
+  -H ...                             (alias for -registry-header)
   -a false                           (alias for -all)
   -all false                         include modules without updates
   -e false                           (alias for -updates-found-nonzero-exit)
   -module ...                        include this module (may be specified repeatedly. by default, all modules are included)
   -o markdown                        (alias for -output)
-  -output markdown                   output format, one of [json jsonl markdown markdown-wide junit]
+  -output markdown                   output format, one of [junit json jsonl markdown markdown-wide]
+  -registry-header ...               extra HTTP headers for requests to Terraform module registries (a key/value pair KEY:VALUE, may be specified repeatedly)
   -updates-found-nonzero-exit false  exit with a nonzero code when modules with updates are found
 ```

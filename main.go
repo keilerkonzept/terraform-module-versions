@@ -10,7 +10,10 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strings"
+	"unicode"
 
+	"github.com/keilerkonzept/terraform-module-versions/pkg/httputil"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/modulecall"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/output"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/registry"
@@ -34,6 +37,7 @@ var (
 		ModuleNames             flagvar.StringSet
 		Output                  flagvar.Enum
 		OutputFormat            output.Format
+		RegistryHeaders         flagvar.Assignments
 		Quiet                   bool
 		UpdatesFoundNonzeroExit bool
 		All                     bool
@@ -48,6 +52,7 @@ func main() {
 	config.Output.Choices = output.FormatNames
 	config.Output.Value = string(output.FormatMarkdown)
 	config.OutputFormat = output.FormatMarkdown
+	config.RegistryHeaders.Separator = ":"
 
 	rootFlagSet := flag.NewFlagSet(appName, flag.ExitOnError)
 	listFlagSet := flag.NewFlagSet(appName+" list", flag.ExitOnError)
@@ -67,6 +72,8 @@ func main() {
 	checkFlagSet.BoolVar(&config.All, "all", config.All, "include modules without updates")
 	listFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
 	checkFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
+	checkFlagSet.Var(&config.RegistryHeaders, "H", "(alias for -registry-header)")
+	checkFlagSet.Var(&config.RegistryHeaders, "registry-header", fmt.Sprintf("extra HTTP headers for requests to Terraform module registries (%s, may be specified repeatedly)", config.RegistryHeaders.Help()))
 
 	cmdList := &ffcli.Command{
 		Name:       "list",
@@ -123,6 +130,16 @@ func main() {
 	}
 	if f, ok := output.ParseFormatName(config.Output.Value); ok {
 		config.OutputFormat = f
+	}
+	if len(config.RegistryHeaders.Values) > 0 {
+		headers := make(http.Header, len(config.RegistryHeaders.Values))
+		for _, kv := range config.RegistryHeaders.Values {
+			headers.Add(kv.Key, strings.TrimLeftFunc(kv.Value, unicode.IsSpace))
+		}
+		updatesClient.Registry.HTTP.Transport = httputil.AddHeadersRoundtripper{
+			Headers: headers,
+			Nested:  http.DefaultTransport,
+		}
 	}
 	if err := cmdRoot.Run(context.Background()); err != nil && !errors.Is(err, flag.ErrHelp) {
 		log.Fatal(err)
