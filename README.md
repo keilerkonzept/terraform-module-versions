@@ -23,9 +23,6 @@ $ terraform-module-versions check examples
 |---------|---------------------------------|------------|---------|-----------------|--------|
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.8.0 |
-| Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 2.1.1  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 2.1.1  |
 ```
 
 ## Contents
@@ -222,9 +219,6 @@ $ terraform-module-versions check examples
 |---------|---------------------------------|------------|---------|-----------------|--------|
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.8.0 |
-| Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 2.1.1  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 2.1.1  |
 
 with `-o json`:
 
@@ -243,31 +237,6 @@ with `-o json`:
     "name": "consul_github_https_no_ref",
     "latestOverall": "v0.8.0",
     "nonMatchingUpdate": true
-  },
-  {
-    "path": "examples/main.tf",
-    "name": "consul_github_ssh",
-    "constraint": "~0.1.0",
-    "version": "0.1.0",
-    "latestMatching": "v0.1.2",
-    "latestOverall": "v0.8.0",
-    "matchingUpdate": true,
-    "nonMatchingUpdate": true
-  },
-  {
-    "path": "examples/main.tf",
-    "name": "example_git_scp",
-    "constraint": "~> 0.12",
-    "version": "0.12.0",
-    "latestOverall": "2.1.1",
-    "nonMatchingUpdate": true
-  },
-  {
-    "path": "examples/main.tf",
-    "name": "example_git_ssh_branch",
-    "version": "master",
-    "latestOverall": "2.1.1",
-    "nonMatchingUpdate": true
   }
 ]
 ```
@@ -284,9 +253,6 @@ $ terraform-module-versions check -all examples
 |         | consul_github_https             | 0.8.0           | v0.8.0  |                 | v0.8.0 |
 | (Y)     | consul_github_https_missing_ref | 0.7.3           |         | v0.7.3          | v0.8.0 |
 | (Y)     | consul_github_https_no_ref      |                 |         |                 | v0.8.0 |
-| Y       | consul_github_ssh               | ~0.1.0          | 0.1.0   | v0.1.2          | v0.8.0 |
-| (Y)     | example_git_scp                 | ~> 0.12         | 0.12.0  |                 | 2.1.1  |
-| (Y)     | example_git_ssh_branch          |                 | master  |                 | 2.1.1  |
 
 ### Check for updates of specific modules
 
@@ -298,32 +264,19 @@ $ terraform-module-versions check -all -module=consul_github_https -module=consu
 | UPDATE? |        NAME         | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
 |---------|---------------------|------------|---------|-----------------|--------|
 |         | consul_github_https | 0.8.0      | v0.8.0  |                 | v0.8.0 |
-| Y       | consul_github_ssh   | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
 
 ```sh
 # check -module: check for updates of specific modules
 $ terraform-module-versions check -module=consul_github_https -module=consul_github_ssh examples
 ```
 
-| UPDATE? |       NAME        | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
-|---------|-------------------|------------|---------|-----------------|--------|
-| Y       | consul_github_ssh | ~0.1.0     | 0.1.0   | v0.1.2          | v0.8.0 |
+| UPDATE? | NAME | CONSTRAINT | VERSION | LATEST MATCHING | LATEST |
+|---------|------|------------|---------|-----------------|--------|
 
 with `-o json`:
 
 ```json
-[
-  {
-    "path": "examples/main.tf",
-    "name": "consul_github_ssh",
-    "constraint": "~0.1.0",
-    "version": "0.1.0",
-    "latestMatching": "v0.1.2",
-    "latestOverall": "v0.8.0",
-    "matchingUpdate": true,
-    "nonMatchingUpdate": true
-  }
-]
+null
 ```
 
 ## Get it
@@ -349,7 +302,7 @@ SUBCOMMANDS
 
 FLAGS
   -o markdown       (alias for -output)
-  -output markdown  output format, one of [markdown-wide junit json jsonl markdown]
+  -output markdown  output format, one of [junit json jsonl markdown markdown-wide]
   -q false          (alias for -quiet)
   -quiet false      suppress log output (stderr)
 ```
@@ -382,6 +335,6 @@ FLAGS
   -e false                           (alias for -updates-found-nonzero-exit)
   -module ...                        include this module (may be specified repeatedly. by default, all modules are included)
   -o markdown                        (alias for -output)
-  -output markdown                   output format, one of [markdown-wide junit json jsonl markdown]
+  -output markdown                   output format, one of [json jsonl markdown markdown-wide junit]
   -updates-found-nonzero-exit false  exit with a nonzero code when modules with updates are found
 ```
