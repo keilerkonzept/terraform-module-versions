@@ -1,5 +1,7 @@
 package output
 
+import "sort"
+
 type format string
 type Format format
 
@@ -26,6 +28,7 @@ func init() {
 	for k := range formats {
 		FormatNames = append(FormatNames, k)
 	}
+	sort.Strings(FormatNames)
 }
 
 func ParseFormatName(s string) (Format, bool) {
