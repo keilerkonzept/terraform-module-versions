@@ -1,6 +1,6 @@
 module "consul" {
   source = "hashicorp/consul/aws"
-  version = "> 0.1.0"
+  version = "~0.7.3"
 }
 
 module "consul_github_https_missing_ref" {
@@ -31,7 +31,6 @@ module "example_git_scp" {
   version = "~> 0.12"
 }
 
-module "example_git_scp" {
-  source = "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0"
-  version = "~> 0.12"
+module "local" {
+  source = "./local"
 }

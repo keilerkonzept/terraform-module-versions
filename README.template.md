@@ -36,7 +36,7 @@ ${EXAMPLE_PRETTY}
 ## Examples
 
 ```sh
-$ cat examples/main.tf examples/0.12.x.tf
+$ cat examples/main.tf
 ```
 
 ```terraform

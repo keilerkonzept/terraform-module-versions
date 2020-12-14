@@ -110,6 +110,9 @@ func (m Modules) WriteJUnit(w io.Writer) error {
 		if module.Type == "git" && module.Version == "" { // special case for git modules: the version annotation is ineffective
 			success = false
 		}
+		if module.Type == "local" { // local modules can't specify versions or constraints
+			success = true
+		}
 		if !success {
 			failures++
 			testCase.Failure = &junit.JUnitFailure{

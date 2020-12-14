@@ -50,7 +50,6 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 		if err == nil { // interpret a single-version constraint as a pinned version
 			out.Version = version
 			out.VersionString = raw.Version
-			return &out, nil
 		}
 		constraints, err := semver.NewConstraint(raw.Version)
 		if err != nil {

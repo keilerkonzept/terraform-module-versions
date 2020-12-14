@@ -71,6 +71,8 @@ func (c *Client) Versions(s source.Source) ([]*semver.Version, error) {
 		}
 		c.VersionsCache[s.URI()] = versions
 		return versions, nil
+	case s.Local != nil:
+		return nil, nil
 	default:
 		return nil, source.ErrSourceNotSupported
 	}

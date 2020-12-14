@@ -21,7 +21,7 @@ var goGetterDetectors = []getter.Detector{
 var forcedGetterRegexp = regexp.MustCompile(`^([A-Za-z0-9]+)::(.+)$`)
 
 func detect(raw string) (string, string, error) {
-	detected, err := getter.Detect(raw, "", goGetterDetectors)
+	detected, err := getter.Detect(raw, ".", goGetterDetectors)
 	if err != nil {
 		return "", "", fmt.Errorf("detect source type: %w", err)
 	}

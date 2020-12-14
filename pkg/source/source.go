@@ -10,6 +10,7 @@ import (
 type Source struct {
 	Git      *Git
 	Registry *Registry
+	Local    *string
 }
 
 func (s Source) Type() string {
@@ -18,6 +19,8 @@ func (s Source) Type() string {
 		return "git"
 	case s.Registry != nil:
 		return "registry"
+	case s.Local != nil:
+		return "local"
 	}
 	return ""
 }
@@ -28,6 +31,8 @@ func (s Source) URI() string {
 		return s.Git.Remote
 	case s.Registry != nil:
 		return s.Registry.Normalized
+	case s.Local != nil:
+		return *s.Local
 	}
 	return ""
 }
@@ -58,6 +63,8 @@ func Parse(raw string) (*Source, error) {
 			return nil, err
 		}
 		return &Source{Git: git}, nil
+	case "file":
+		return &Source{Local: &detected}, nil
 	default:
 		return nil, fmt.Errorf("%w: %v (%v)", ErrSourceNotSupported, proto, raw)
 	}

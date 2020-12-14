@@ -25,7 +25,7 @@ release: zip
 
 README.md:
 	go get github.com/keilerkonzept/$(APP) && <README.template.md subst \
-		EXAMPLES_MAIN_TF="$$(cat examples/main.tf examples/0.12.x.tf)"\
+		EXAMPLES_MAIN_TF="$$(cat examples/main.tf)"\
 		EXAMPLE_PRETTY="$$($(APP) check examples)"\
 		EXAMPLE_LIST="$$($(APP) list -o json examples | jq .)"\
 		EXAMPLE_LIST_PRETTY="$$($(APP) list examples)"\
