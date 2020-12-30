@@ -317,13 +317,17 @@ func (e *FunctionCallExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnosti
 				return cty.DynamicVal, diags
 			}
 
+			// When expanding arguments from a collection, we must first unmark
+			// the collection itself, and apply any marks directly to the
+			// elements. This ensures that marks propagate correctly.
+			expandVal, marks := expandVal.Unmark()
 			newArgs := make([]Expression, 0, (len(args)-1)+expandVal.LengthInt())
 			newArgs = append(newArgs, args[:len(args)-1]...)
 			it := expandVal.ElementIterator()
 			for it.Next() {
 				_, val := it.Element()
 				newArgs = append(newArgs, &LiteralValueExpr{
-					Val:      val,
+					Val:      val.WithMarks(marks),
 					SrcRange: expandExpr.Range(),
 				})
 			}
@@ -821,6 +825,19 @@ func (e *ObjectConsExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics
 			continue
 		}
 
+		if key.IsMarked() {
+			diags = append(diags, &hcl.Diagnostic{
+				Severity:    hcl.DiagError,
+				Summary:     "Marked value as key",
+				Detail:      "Can't use a marked value as a key.",
+				Subject:     item.ValueExpr.Range().Ptr(),
+				Expression:  item.KeyExpr,
+				EvalContext: ctx,
+			})
+			known = false
+			continue
+		}
+
 		var err error
 		key, err = convert.Convert(key, cty.String)
 		if err != nil {
@@ -1168,6 +1185,19 @@ func (e *ForExpr) Value(ctx *hcl.EvalContext) (cty.Value, hcl.Diagnostics) {
 					})
 				}
 				known = false
+				continue
+			}
+
+			if key.IsMarked() {
+				diags = append(diags, &hcl.Diagnostic{
+					Severity:    hcl.DiagError,
+					Summary:     "Invalid object key",
+					Detail:      "Marked values cannot be used as object keys.",
+					Subject:     e.KeyExpr.Range().Ptr(),
+					Context:     &e.SrcRange,
+					Expression:  e.KeyExpr,
+					EvalContext: childCtx,
+				})
 				continue
 			}
 
