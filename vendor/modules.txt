@@ -187,7 +187,7 @@ github.com/hashicorp/hcl/hcl/token
 github.com/hashicorp/hcl/json/parser
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
-# github.com/hashicorp/hcl/v2 v2.8.1
+# github.com/hashicorp/hcl/v2 v2.8.2
 github.com/hashicorp/hcl/v2
 github.com/hashicorp/hcl/v2/ext/customdecode
 github.com/hashicorp/hcl/v2/gohcl
@@ -195,7 +195,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform v0.14.3
+# github.com/hashicorp/terraform v0.14.4
 ## explicit
 github.com/hashicorp/terraform/registry/regsrc
 # github.com/hashicorp/terraform-config-inspect v0.0.0-20201102131242-0c45ba392e51
