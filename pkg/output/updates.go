@@ -19,6 +19,7 @@ func (u Updates) Swap(i, j int)      { u[i], u[j] = u[j], u[i] }
 type Update struct {
 	Path              string `json:"path,omitempty"`
 	Name              string `json:"name,omitempty"`
+	Source            string `json:"source,omitempty"`
 	VersionConstraint string `json:"constraint,omitempty"`
 	Version           string `json:"version,omitempty"`
 	LatestMatching    string `json:"latestMatching,omitempty"`
@@ -66,7 +67,7 @@ func (u Updates) WriteJSON(w io.Writer) error {
 
 func (u Updates) WriteMarkdownWide(w io.Writer) error {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Update?", "Name", "Path", "Constraint", "Version", "Latest matching", "Latest"})
+	table.SetHeader([]string{"Update?", "Name", "Path", "Source", "Constraint", "Version", "Latest matching", "Latest"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	rows := make([][]string, 0, len(u))
@@ -80,7 +81,7 @@ func (u Updates) WriteMarkdownWide(w io.Writer) error {
 		case item.Version == "":
 			update = "?"
 		}
-		row := []string{update, item.Name, item.Path, item.VersionConstraint, item.Version, item.LatestMatching, item.LatestOverall}
+		row := []string{update, item.Name, item.Path, item.Source, item.VersionConstraint, item.Version, item.LatestMatching, item.LatestOverall}
 		rows = append(rows, row)
 	}
 	table.AppendBulk(rows)
