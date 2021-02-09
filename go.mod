@@ -13,11 +13,12 @@ require (
 	github.com/gliderlabs/ssh v0.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/go-test/deep v1.0.7 // indirect
+	github.com/gruntwork-io/terragrunt v0.28.2
 	github.com/hashicorp/go-getter v1.5.2
 	github.com/hashicorp/go-version v1.2.1 // indirect
-	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/terraform v0.14.5
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20201102131242-0c45ba392e51
+	github.com/hashicorp/terraform/helper/pathorcontents v0.14.6 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/jstemmer/go-junit-report v0.9.1
 	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect
@@ -37,3 +38,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
+
+replace github.com/hashicorp/terraform/helper/pathorcontents v0.14.6 => ./internal/terraform-helper-pathorcontents

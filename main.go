@@ -38,6 +38,7 @@ var (
 		Output                  flagvar.Enum
 		OutputFormat            output.Format
 		RegistryHeaders         flagvar.Assignments
+		Terragrunt              bool
 		Quiet                   bool
 		UpdatesFoundNonzeroExit bool
 		All                     bool
@@ -59,6 +60,7 @@ func main() {
 	checkFlagSet := flag.NewFlagSet(appName+" check", flag.ExitOnError)
 
 	rootFlagSet.BoolVar(&config.Quiet, "quiet", false, "suppress log output (stderr)")
+	rootFlagSet.BoolVar(&config.Terragrunt, "terragrunt", false, "include Terragrunt configurations")
 	rootFlagSet.BoolVar(&config.Quiet, "q", false, "(alias for -quiet)")
 	rootFlagSet.Var(&config.Output, "output", "output format, "+config.Output.Help())
 	rootFlagSet.Var(&config.Output, "o", "(alias for -output)")
@@ -150,6 +152,13 @@ func scanForModuleCalls() []scan.Result {
 	scanResults, err := scan.Scan(config.Paths)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if config.Terragrunt {
+		scanResultsTerragrunt, err := scan.ScanTerragrunt(config.Paths)
+		if err != nil {
+			log.Fatal(err)
+		}
+		scanResults = append(scanResults, scanResultsTerragrunt...)
 	}
 	moduleNamesFilter := config.ModuleNames.Value
 	moduleNamesFilterEmpty := len(moduleNamesFilter) == 0
