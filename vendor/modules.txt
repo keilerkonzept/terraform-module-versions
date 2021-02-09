@@ -198,7 +198,7 @@ github.com/hashicorp/hcl/v2/json
 # github.com/hashicorp/terraform v0.14.5
 ## explicit
 github.com/hashicorp/terraform/registry/regsrc
-# github.com/hashicorp/terraform-config-inspect v0.0.0-20201102131242-0c45ba392e51
+# github.com/hashicorp/terraform-config-inspect v0.0.0-20210209133302-4fd17a0faac2
 ## explicit
 github.com/hashicorp/terraform-config-inspect/tfconfig
 # github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
