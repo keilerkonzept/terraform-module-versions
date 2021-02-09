@@ -14,7 +14,6 @@ type Parsed struct {
 	VersionString     string
 	Constraints       *semver.Constraints
 	ConstraintsString string
-	Raw               tfconfig.ModuleCall
 }
 
 func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
@@ -22,7 +21,7 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parse module call source: %w", err)
 	}
-	out := Parsed{Source: src, Raw: raw}
+	out := Parsed{Source: src}
 	switch {
 	case src.Git != nil:
 		if ref := src.Git.RefValue; ref != nil {
