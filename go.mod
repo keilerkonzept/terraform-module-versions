@@ -9,14 +9,13 @@ require (
 	github.com/Microsoft/go-winio v0.4.16 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be // indirect
-	github.com/aws/aws-sdk-go v1.36.6 // indirect
 	github.com/gliderlabs/ssh v0.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/go-test/deep v1.0.7 // indirect
 	github.com/hashicorp/go-getter v1.5.2
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hashicorp/terraform v0.14.5
+	github.com/hashicorp/terraform v0.14.6
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20210209133302-4fd17a0faac2
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/jstemmer/go-junit-report v0.9.1
