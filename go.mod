@@ -20,7 +20,6 @@ require (
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/jstemmer/go-junit-report v0.9.1
 	github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.5
