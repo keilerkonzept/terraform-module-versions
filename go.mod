@@ -23,7 +23,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
-	github.com/olekukonko/tablewriter v0.0.4
+	github.com/olekukonko/tablewriter v0.0.5
 	github.com/peterbourgon/ff/v3 v3.0.0
 	github.com/sgreben/flagvar v1.10.1
 	github.com/stretchr/testify v1.6.1 // indirect
