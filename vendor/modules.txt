@@ -199,7 +199,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform v0.14.6
+# github.com/hashicorp/terraform v0.14.7
 ## explicit
 github.com/hashicorp/terraform/registry/regsrc
 # github.com/hashicorp/terraform-config-inspect v0.0.0-20210209133302-4fd17a0faac2
@@ -229,7 +229,6 @@ github.com/klauspost/compress/snappy
 github.com/klauspost/compress/zstd
 github.com/klauspost/compress/zstd/internal/xxhash
 # github.com/mattn/go-runewidth v0.0.9
-## explicit
 github.com/mattn/go-runewidth
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
