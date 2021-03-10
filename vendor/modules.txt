@@ -22,8 +22,8 @@ github.com/Microsoft/go-winio/pkg/guid
 github.com/agext/levenshtein
 # github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be
 ## explicit
-# github.com/apparentlymart/go-textseg/v12 v12.0.0
-github.com/apparentlymart/go-textseg/v12/textseg
+# github.com/apparentlymart/go-textseg/v13 v13.0.0
+github.com/apparentlymart/go-textseg/v13/textseg
 # github.com/aws/aws-sdk-go v1.37.0
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
@@ -191,7 +191,7 @@ github.com/hashicorp/hcl/hcl/token
 github.com/hashicorp/hcl/json/parser
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
-# github.com/hashicorp/hcl/v2 v2.8.2
+# github.com/hashicorp/hcl/v2 v2.9.1
 github.com/hashicorp/hcl/v2
 github.com/hashicorp/hcl/v2/ext/customdecode
 github.com/hashicorp/hcl/v2/gohcl
@@ -199,7 +199,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform v0.14.7
+# github.com/hashicorp/terraform v0.14.8
 ## explicit
 github.com/hashicorp/terraform/registry/regsrc
 # github.com/hashicorp/terraform-config-inspect v0.0.0-20210209133302-4fd17a0faac2
@@ -260,7 +260,7 @@ github.com/ulikunitz/xz/lzma
 # github.com/xanzy/ssh-agent v0.3.0
 ## explicit
 github.com/xanzy/ssh-agent
-# github.com/zclconf/go-cty v1.7.1
+# github.com/zclconf/go-cty v1.8.0
 github.com/zclconf/go-cty/cty
 github.com/zclconf/go-cty/cty/convert
 github.com/zclconf/go-cty/cty/function
@@ -336,7 +336,7 @@ golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf
 ## explicit
-# golang.org/x/text v0.3.4
+# golang.org/x/text v0.3.5
 golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
