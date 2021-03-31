@@ -11,7 +11,7 @@ require (
 	github.com/gliderlabs/ssh v0.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.3.0
 	github.com/go-test/deep v1.0.7 // indirect
-	github.com/hashicorp/go-getter v1.5.2
+	github.com/hashicorp/go-getter v1.5.3
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/terraform v0.14.9
