@@ -14,7 +14,6 @@ cloud.google.com/go/storage
 ## explicit
 github.com/Masterminds/semver/v3
 # github.com/Microsoft/go-winio v0.4.16
-## explicit
 github.com/Microsoft/go-winio
 github.com/Microsoft/go-winio/pkg/guid
 # github.com/agext/levenshtein v1.2.3
@@ -169,9 +168,9 @@ github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
 # github.com/googleapis/gax-go/v2 v2.0.5
 github.com/googleapis/gax-go/v2
-# github.com/hashicorp/go-cleanhttp v0.5.1
+# github.com/hashicorp/go-cleanhttp v0.5.2
 github.com/hashicorp/go-cleanhttp
-# github.com/hashicorp/go-getter v1.5.2
+# github.com/hashicorp/go-getter v1.5.3
 ## explicit
 github.com/hashicorp/go-getter
 github.com/hashicorp/go-getter/helper/url
@@ -219,7 +218,6 @@ github.com/jstemmer/go-junit-report
 github.com/jstemmer/go-junit-report/formatter
 github.com/jstemmer/go-junit-report/parser
 # github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351
-## explicit
 github.com/kevinburke/ssh_config
 # github.com/klauspost/compress v1.11.2
 github.com/klauspost/compress/fse
@@ -257,7 +255,6 @@ github.com/ulikunitz/xz/internal/hash
 github.com/ulikunitz/xz/internal/xlog
 github.com/ulikunitz/xz/lzma
 # github.com/xanzy/ssh-agent v0.3.0
-## explicit
 github.com/xanzy/ssh-agent
 # github.com/zclconf/go-cty v1.8.0
 github.com/zclconf/go-cty/cty
@@ -466,8 +463,6 @@ google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/pluginpb
-# gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
-## explicit
 # gopkg.in/warnings.v0 v0.1.2
 gopkg.in/warnings.v0
 # gopkg.in/yaml.v2 v2.4.0
