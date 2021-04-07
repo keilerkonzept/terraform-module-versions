@@ -198,7 +198,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform v0.14.9
+# github.com/hashicorp/terraform v0.14.10
 ## explicit
 github.com/hashicorp/terraform/registry/regsrc
 # github.com/hashicorp/terraform-config-inspect v0.0.0-20210318070130-9a80970d6b34
