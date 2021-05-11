@@ -177,7 +177,6 @@ github.com/hashicorp/go-getter/helper/url
 # github.com/hashicorp/go-safetemp v1.0.0
 github.com/hashicorp/go-safetemp
 # github.com/hashicorp/go-version v1.2.1
-## explicit
 github.com/hashicorp/go-version
 # github.com/hashicorp/hcl v1.0.0
 ## explicit
@@ -190,7 +189,7 @@ github.com/hashicorp/hcl/hcl/token
 github.com/hashicorp/hcl/json/parser
 github.com/hashicorp/hcl/json/scanner
 github.com/hashicorp/hcl/json/token
-# github.com/hashicorp/hcl/v2 v2.9.1
+# github.com/hashicorp/hcl/v2 v2.10.0
 github.com/hashicorp/hcl/v2
 github.com/hashicorp/hcl/v2/ext/customdecode
 github.com/hashicorp/hcl/v2/gohcl
@@ -198,7 +197,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform v0.15.0
+# github.com/hashicorp/terraform v0.15.3
 ## explicit
 github.com/hashicorp/terraform/registry/regsrc
 # github.com/hashicorp/terraform-config-inspect v0.0.0-20210318070130-9a80970d6b34
@@ -247,8 +246,6 @@ github.com/sergi/go-diff/diffmatchpatch
 # github.com/sgreben/flagvar v1.10.1
 ## explicit
 github.com/sgreben/flagvar
-# github.com/stretchr/testify v1.6.1
-## explicit
 # github.com/ulikunitz/xz v0.5.8
 github.com/ulikunitz/xz
 github.com/ulikunitz/xz/internal/hash
@@ -256,7 +253,7 @@ github.com/ulikunitz/xz/internal/xlog
 github.com/ulikunitz/xz/lzma
 # github.com/xanzy/ssh-agent v0.3.0
 github.com/xanzy/ssh-agent
-# github.com/zclconf/go-cty v1.8.1
+# github.com/zclconf/go-cty v1.8.3
 github.com/zclconf/go-cty/cty
 github.com/zclconf/go-cty/cty/convert
 github.com/zclconf/go-cty/cty/function
@@ -328,8 +325,6 @@ golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf
-## explicit
 # golang.org/x/text v0.3.5
 golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
