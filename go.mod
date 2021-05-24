@@ -9,7 +9,7 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be // indirect
 	github.com/gliderlabs/ssh v0.3.1 // indirect
-	github.com/go-git/go-git/v5 v5.4.0
+	github.com/go-git/go-git/v5 v5.4.1
 	github.com/go-test/deep v1.0.7 // indirect
 	github.com/hashicorp/go-getter v1.5.1
 	github.com/hashicorp/hcl v1.0.0 // indirect
