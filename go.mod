@@ -14,7 +14,7 @@ require (
 	github.com/hashicorp/go-getter v1.5.1
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/terraform v0.15.3
-	github.com/hashicorp/terraform-config-inspect v0.0.0-20210511202847-ad33d83d7650
+	github.com/hashicorp/terraform-config-inspect v0.0.0-20210625153042-09f34846faab
 	github.com/jstemmer/go-junit-report v0.9.1
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
