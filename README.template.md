@@ -24,14 +24,18 @@ ${EXAMPLE_PRETTY}
 
 ## Contents
 
-- [Examples](#examples)
-  - [List modules with their current versions](#list-modules-with-their-current-versions)
-  - [Check for module updates](#check-for-module-updates)
-  - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
-- [Get it](#get-it)
-- [Usage](#usage)
-  - [`list`](#list)
-  - [`check`](#check)
+- [${APP}](#app)
+  - [Example](#example)
+  - [Contents](#contents)
+  - [Examples](#examples)
+    - [List modules with their current versions](#list-modules-with-their-current-versions)
+    - [Check for module updates](#check-for-module-updates)
+    - [Check for module updates using Github Token authentication](#check-for-module-updates-using-github-token-authentication)
+    - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
+  - [Get it](#get-it)
+  - [Usage](#usage)
+    - [`list`](#list)
+    - [`check`](#check)
 
 ## Examples
 
@@ -79,6 +83,13 @@ $ ${APP} check -all examples
 ```
 
 ${EXAMPLE_UPDATES_ALL_PRETTY}
+
+### Check for module updates using Github Token authentication
+
+```sh
+$ export GITHUB_TOKEN="<your Github PAT>"
+$ ${APP} check examples
+```
 
 ### Check for updates of specific modules
 
