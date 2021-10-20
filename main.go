@@ -33,14 +33,15 @@ var (
 		},
 	}
 	config struct {
-		Paths                   []string
-		ModuleNames             flagvar.StringSet
-		Output                  flagvar.Enum
-		OutputFormat            output.Format
-		RegistryHeaders         flagvar.Assignments
-		Quiet                   bool
-		UpdatesFoundNonzeroExit bool
-		All                     bool
+		Paths                           []string
+		ModuleNames                     flagvar.StringSet
+		Output                          flagvar.Enum
+		OutputFormat                    output.Format
+		RegistryHeaders                 flagvar.Assignments
+		Quiet                           bool
+		MatchingUpdatesFoundNonzeroExit bool
+		AnyUpdatesFoundNonzeroExit      bool
+		All                             bool
 	}
 )
 
@@ -66,8 +67,10 @@ func main() {
 	listFlagSet.Var(&config.Output, "o", "(alias for -output)")
 	checkFlagSet.Var(&config.Output, "output", "output format, "+config.Output.Help())
 	checkFlagSet.Var(&config.Output, "o", "(alias for -output)")
-	checkFlagSet.BoolVar(&config.UpdatesFoundNonzeroExit, "e", config.UpdatesFoundNonzeroExit, "(alias for -updates-found-nonzero-exit)")
-	checkFlagSet.BoolVar(&config.UpdatesFoundNonzeroExit, "updates-found-nonzero-exit", config.UpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found")
+	checkFlagSet.BoolVar(&config.MatchingUpdatesFoundNonzeroExit, "e", config.MatchingUpdatesFoundNonzeroExit, "(alias for -updates-found-nonzero-exit)")
+	checkFlagSet.BoolVar(&config.MatchingUpdatesFoundNonzeroExit, "updates-found-nonzero-exit", config.MatchingUpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found")
+	checkFlagSet.BoolVar(&config.AnyUpdatesFoundNonzeroExit, "n", config.AnyUpdatesFoundNonzeroExit, "(alias for -any-updates-found-nonzero-exit)")
+	checkFlagSet.BoolVar(&config.AnyUpdatesFoundNonzeroExit, "any-updates-found-nonzero-exit", config.AnyUpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found")
 	checkFlagSet.BoolVar(&config.All, "a", config.All, "(alias for -all)")
 	checkFlagSet.BoolVar(&config.All, "all", config.All, "include modules without updates")
 	listFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
@@ -197,6 +200,7 @@ func updates(scanResults []scan.Result) {
 	var (
 		out                  output.Updates
 		foundMatchingUpdates bool
+		foundAnyUpdates      bool
 	)
 	for _, m := range scanResults {
 		parsed, err := modulecall.Parse(m.ModuleCall)
@@ -223,9 +227,11 @@ func updates(scanResults []scan.Result) {
 		hasUpdate := false
 		if updateOutput.MatchingUpdate {
 			foundMatchingUpdates = true
+			foundAnyUpdates = true
 			hasUpdate = true
 		}
 		if updateOutput.NonMatchingUpdate {
+			foundAnyUpdates = true
 			hasUpdate = true
 		}
 		if !config.All && !hasUpdate {
@@ -237,8 +243,13 @@ func updates(scanResults []scan.Result) {
 	if err := out.Format(os.Stdout, config.OutputFormat); err != nil {
 		log.Fatal(err)
 	}
-	if config.UpdatesFoundNonzeroExit {
+	if config.MatchingUpdatesFoundNonzeroExit {
 		if foundMatchingUpdates {
+			os.Exit(1)
+		}
+	}
+	if config.AnyUpdatesFoundNonzeroExit {
+		if foundAnyUpdates {
 			os.Exit(1)
 		}
 	}
