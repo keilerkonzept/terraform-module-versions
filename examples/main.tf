@@ -34,3 +34,17 @@ module "example_git_scp" {
 module "local" {
   source = "./local"
 }
+
+variable "_0_15_sensitive_example" {
+  type      = string
+  sensitive = true
+}
+
+output "0_15_sensitive_example" {
+  value = "foo-${var._0_15_sensitive_example}"
+  sensitive = true
+}
+
+output "0_15_nonsensitive_example" {
+  value = nonsensitive(var._0_15_sensitive_example)
+}
