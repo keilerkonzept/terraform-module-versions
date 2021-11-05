@@ -22,8 +22,8 @@ jobs:
           mv subst /usr/local/bin
       - name: Check pre-requisites
         run: |
-          subst --help
-          hub --help
+          which subst
+          which hub
       - name: Checkout
         uses: actions/checkout@master
       - run: git config user.name "GitHub Actions" && git config user.email "actions@users.noreply.github.com"
