@@ -42,6 +42,7 @@ var (
 		MatchingUpdatesFoundNonzeroExit bool
 		AnyUpdatesFoundNonzeroExit      bool
 		All                             bool
+		GenerateSed                     bool
 	}
 )
 
@@ -77,6 +78,7 @@ func main() {
 	checkFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
 	checkFlagSet.Var(&config.RegistryHeaders, "H", "(alias for -registry-header)")
 	checkFlagSet.Var(&config.RegistryHeaders, "registry-header", fmt.Sprintf("extra HTTP headers for requests to Terraform module registries (%s, may be specified repeatedly)", config.RegistryHeaders.Help()))
+	checkFlagSet.BoolVar(&config.GenerateSed, "sed", config.GenerateSed, "generate sed statements for upgrade")
 
 	cmdList := &ffcli.Command{
 		Name:       "list",
@@ -243,6 +245,11 @@ func updates(scanResults []scan.Result) {
 	if err := out.Format(os.Stdout, config.OutputFormat); err != nil {
 		log.Fatal(err)
 	}
+
+	if config.GenerateSed {
+		out.GenerateSed()
+	}
+
 	if config.MatchingUpdatesFoundNonzeroExit {
 		if foundMatchingUpdates {
 			os.Exit(1)

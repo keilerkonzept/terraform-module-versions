@@ -5,6 +5,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"os"
+	"runtime"
+	"strings"
 
 	junit "github.com/jstemmer/go-junit-report/formatter"
 	"github.com/olekukonko/tablewriter"
@@ -63,6 +66,18 @@ func (u Updates) WriteJSON(w io.Writer) error {
 	enc := json.NewEncoder(w)
 	enc.SetEscapeHTML(false)
 	return enc.Encode(u)
+}
+
+func (u Updates) GenerateSed() {
+	io.WriteString(os.Stdout, "\nTo upgrade modules to the latest version, run the following commands:\n\n")
+	for _, item := range u {
+		sed := "sed"
+		if runtime.GOOS == "darwin" {
+			sed = "gsed"
+		}
+		newversion := strings.Replace(item.Source, item.Version, item.LatestOverall, -1)
+		io.WriteString(os.Stdout, fmt.Sprintf("%s -i 's#%s#%s#g' %s\n", sed, item.Source, newversion, item.Path))
+	}
 }
 
 func (u Updates) WriteMarkdownWide(w io.Writer) error {
