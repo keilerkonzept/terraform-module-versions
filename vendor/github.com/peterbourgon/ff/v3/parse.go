@@ -66,15 +66,20 @@ func Parse(fs *flag.FlagSet, args []string, options ...Option) error {
 		provided[f.Name] = true
 	})
 
+	var configFile string
+	if c.configFileVia != nil {
+		configFile = *c.configFileVia
+	}
+
 	// Third priority: config file (host).
-	if c.configFile == "" && c.configFileFlagName != "" {
+	if configFile == "" && c.configFileFlagName != "" {
 		if f := fs.Lookup(c.configFileFlagName); f != nil {
-			c.configFile = f.Value.String()
+			configFile = f.Value.String()
 		}
 	}
 
-	if parseConfig := c.configFile != "" && c.configFileParser != nil; parseConfig {
-		f, err := os.Open(c.configFile)
+	if parseConfig := configFile != "" && c.configFileParser != nil; parseConfig {
+		f, err := os.Open(configFile)
 		switch {
 		case err == nil:
 			defer f.Close()
@@ -117,7 +122,7 @@ func Parse(fs *flag.FlagSet, args []string, options ...Option) error {
 
 // Context contains private fields used during parsing.
 type Context struct {
-	configFile             string
+	configFileVia          *string
 	configFileFlagName     string
 	configFileParser       ConfigFileParser
 	allowMissingConfigFile bool
@@ -132,15 +137,29 @@ type Option func(*Context)
 
 // WithConfigFile tells Parse to read the provided filename as a config file.
 // Requires WithConfigFileParser, and overrides WithConfigFileFlag.
+// Because config files should generally be user-specifiable, this option
+// should be rarely used. Prefer WithConfigFileFlag.
 func WithConfigFile(filename string) Option {
+	return WithConfigFileVia(&filename)
+}
+
+// WithConfigFileVia tells Parse to read the provided filename as a config file.
+// Requires WithConfigFileParser, and overrides WithConfigFileFlag.
+// This is useful for sharing a single root level flag for config files among
+// multiple ffcli subcommands.
+func WithConfigFileVia(filename *string) Option {
 	return func(c *Context) {
-		c.configFile = filename
+		c.configFileVia = filename
 	}
 }
 
 // WithConfigFileFlag tells Parse to treat the flag with the given name as a
 // config file. Requires WithConfigFileParser, and is overridden by
 // WithConfigFile.
+//
+// To specify a default config file, provide it as the default value of the
+// corresponding flag -- and consider also using the WithAllowMissingConfigFile
+// option.
 func WithConfigFileFlag(flagname string) Option {
 	return func(c *Context) {
 		c.configFileFlagName = flagname
@@ -195,8 +214,10 @@ func WithEnvVarSplit(delimiter string) Option {
 	}
 }
 
-// WithIgnoreUndefined tells Parse to ignore undefined flags that it encounters.
-// By default, undefined flags result in an error.
+// WithIgnoreUndefined tells Parse to ignore undefined flags that it encounters
+// in config files. By default, if Parse encounters an undefined flag in a
+// config file, it will return an error. Note that this setting does not apply
+// to undefined flags passed as arguments.
 func WithIgnoreUndefined(ignore bool) Option {
 	return func(c *Context) {
 		c.ignoreUndefined = ignore

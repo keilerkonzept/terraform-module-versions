@@ -19,7 +19,7 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/peterbourgon/ff/v3 v3.0.0
+	github.com/peterbourgon/ff/v3 v3.1.2
 	github.com/sgreben/flagvar v1.10.1
 	golang.org/x/tools v0.0.0-20201211025543-abf6a1d87e11 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
