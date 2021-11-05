@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Install pre-requisites (1)
         run: |
-          apk add --no-cache make jq zip curl git npm
+          apk add --no-cache make jq zip curl git npm libc6-compat
       - name: Install pre-requisites (2)
         run: |
           curl -sSLO https://github.com/sgreben/subst/releases/download/1.1.1/subst_1.1.1_linux_x86_64.zip
@@ -22,7 +22,12 @@ jobs:
           mv subst /usr/local/bin
       - name: Install pre-requisites (3)
         run: |
-          go get github.com/github/hub
+          curl -sL "https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz" | tar xz hub-linux-amd64-2.14.2/bin/hub;
+          mv hub-linux-amd64-2.14.2/bin/hub /usr/local/bin
+      - name: Check pre-requisites
+        run: |
+          which subst;
+          hub --help;
       - name: Checkout
         uses: actions/checkout@master
       - run: git config user.name "GitHub Actions" && git config user.email "actions@users.noreply.github.com"
