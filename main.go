@@ -20,6 +20,7 @@ import (
 	"github.com/keilerkonzept/terraform-module-versions/pkg/scan"
 	"github.com/keilerkonzept/terraform-module-versions/pkg/update"
 
+	githttp "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/sgreben/flagvar"
 )
@@ -144,6 +145,11 @@ func main() {
 		updatesClient.Registry.HTTP.Transport = httputil.AddHeadersRoundtripper{
 			Headers: headers,
 			Nested:  http.DefaultTransport,
+		}
+	}
+	if githubToken := os.Getenv("GITHUB_TOKEN"); githubToken != "" {
+		updatesClient.GitAuth = &githttp.BasicAuth{
+			Username: githubToken,
 		}
 	}
 	if err := cmdRoot.Run(context.Background()); err != nil && !errors.Is(err, flag.ErrHelp) {

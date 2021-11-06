@@ -2,14 +2,12 @@ package versions
 
 import (
 	"fmt"
-	"os"
 	"sort"
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing/transport"
-	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/go-git/go-git/v5/storage/memory"
 )
 
@@ -24,11 +22,6 @@ func Git(remoteURL string, auth transport.AuthMethod) ([]*semver.Version, error)
 	})
 	if err != nil {
 		return nil, fmt.Errorf("git remote: %w", err)
-	}
-	if githubToken := os.Getenv("GITHUB_TOKEN"); githubToken != "" {
-		auth = &http.BasicAuth{
-			Username: githubToken,
-		}
 	}
 	refs, err := remote.List(&git.ListOptions{Auth: auth})
 	if err != nil {
