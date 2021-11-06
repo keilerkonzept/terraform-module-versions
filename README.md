@@ -1,6 +1,6 @@
 # terraform-module-versions
 
-Checks for updates of external terraform modules referenced in given Terraform (0.10.x - 0.12.x) modules. Outputs Markdown tables by default, as well as JSONL (`-o jsonl`, one JSON object per line), JSON (`-o json`), and JUnit XML (`-o junit`).
+Checks for updates of external terraform modules referenced in given Terraform source. Outputs Markdown tables by default, as well as JSONL (`-o jsonl`, one JSON object per line), JSON (`-o json`), and JUnit XML (`-o junit`).
 
 Supported module sources:
 
@@ -26,20 +26,24 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.1   |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.1   |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.3   |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.3   |
 ```
 
 ## Contents
 
-- [Examples](#examples)
-  - [List modules with their current versions](#list-modules-with-their-current-versions)
-  - [Check for module updates](#check-for-module-updates)
-  - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
-- [Get it](#get-it)
-- [Usage](#usage)
-  - [`list`](#list)
-  - [`check`](#check)
+- [terraform-module-versions](#app)
+  - [Example](#example)
+  - [Contents](#contents)
+  - [Examples](#examples)
+    - [List modules with their current versions](#list-modules-with-their-current-versions)
+    - [Check for module updates](#check-for-module-updates)
+    - [Check for module updates using Github Token authentication](#check-for-module-updates-using-github-token-authentication)
+    - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
+  - [Get it](#get-it)
+  - [Usage](#usage)
+    - [`list`](#list)
+    - [`check`](#check)
 
 ## Examples
 
@@ -196,8 +200,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.1   |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.1   |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.3   |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.3   |
 
 with `-o json`:
 
@@ -254,7 +258,7 @@ with `-o json`:
     "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
     "constraint": "~> 0.12",
     "version": "0.12.0",
-    "latestOverall": "3.1.1",
+    "latestOverall": "3.1.3",
     "nonMatchingUpdate": true
   },
   {
@@ -262,7 +266,7 @@ with `-o json`:
     "name": "example_git_ssh_branch",
     "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master",
     "version": "master",
-    "latestOverall": "3.1.1",
+    "latestOverall": "3.1.3",
     "nonMatchingUpdate": true
   }
 ]
@@ -280,9 +284,16 @@ $ terraform-module-versions check -all examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.1   |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.1   |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.3   |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.3   |
 | ?       | local                           |            |         |                 |         |
+
+### Check for module updates using Github Token authentication
+
+```sh
+$ export GITHUB_TOKEN="<your Github PAT>"
+$ terraform-module-versions check examples
+```
 
 ### Check for updates of specific modules
 

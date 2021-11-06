@@ -1,6 +1,6 @@
 # ${APP}
 
-Checks for updates of external terraform modules referenced in given Terraform (0.10.x - 0.12.x) modules. Outputs Markdown tables by default, as well as JSONL (`-o jsonl`, one JSON object per line), JSON (`-o json`), and JUnit XML (`-o junit`).
+Checks for updates of external terraform modules referenced in given Terraform source. Outputs Markdown tables by default, as well as JSONL (`-o jsonl`, one JSON object per line), JSON (`-o json`), and JUnit XML (`-o junit`).
 
 Supported module sources:
 
