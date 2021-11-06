@@ -26,8 +26,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.29  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.29  |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.1   |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.1   |
 ```
 
 ## Contents
@@ -83,6 +83,20 @@ module "example_git_scp" {
 
 module "local" {
   source = "./local"
+}
+
+variable "_0_15_sensitive_example" {
+  type      = string
+  sensitive = true
+}
+
+output "0_15_sensitive_example" {
+  value = "foo-${var._0_15_sensitive_example}"
+  sensitive = true
+}
+
+output "0_15_nonsensitive_example" {
+  value = nonsensitive(var._0_15_sensitive_example)
 }
 ```
 
@@ -182,8 +196,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.29  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.29  |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.1   |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.1   |
 
 with `-o json`:
 
@@ -240,7 +254,7 @@ with `-o json`:
     "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
     "constraint": "~> 0.12",
     "version": "0.12.0",
-    "latestOverall": "3.0.29",
+    "latestOverall": "3.1.1",
     "nonMatchingUpdate": true
   },
   {
@@ -248,7 +262,7 @@ with `-o json`:
     "name": "example_git_ssh_branch",
     "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master",
     "version": "master",
-    "latestOverall": "3.0.29",
+    "latestOverall": "3.1.1",
     "nonMatchingUpdate": true
   }
 ]
@@ -266,8 +280,8 @@ $ terraform-module-versions check -all examples
 | (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.0.29  |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.0.29  |
+| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.1   |
+| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.1   |
 | ?       | local                           |            |         |                 |         |
 
 ### Check for updates of specific modules
@@ -343,8 +357,8 @@ SUBCOMMANDS
 FLAGS
   -o markdown       (alias for -output)
   -output markdown  output format, one of [json jsonl junit markdown markdown-wide]
-  -q false          (alias for -quiet)
-  -quiet false      suppress log output (stderr)
+  -q=false          (alias for -quiet)
+  -quiet=false      suppress log output (stderr)
 ```
 
 ### `list`
@@ -371,15 +385,15 @@ Check referenced terraform modules' sources for newer versions
 
 FLAGS
   -H ...                                 (alias for -registry-header)
-  -a false                               (alias for -all)
-  -all false                             include modules without updates
-  -any-updates-found-nonzero-exit false  exit with a nonzero code when modules with updates are found
-  -e false                               (alias for -updates-found-nonzero-exit)
+  -a=false                               (alias for -all)
+  -all=false                             include modules without updates
+  -any-updates-found-nonzero-exit=false  exit with a nonzero code when modules with updates are found (ignoring version constraints)
+  -e=false                               (alias for -updates-found-nonzero-exit)
   -module ...                            include this module (may be specified repeatedly. by default, all modules are included)
-  -n false                               (alias for -any-updates-found-nonzero-exit)
+  -n=false                               (alias for -any-updates-found-nonzero-exit)
   -o markdown                            (alias for -output)
   -output markdown                       output format, one of [json jsonl junit markdown markdown-wide]
   -registry-header ...                   extra HTTP headers for requests to Terraform module registries (a key/value pair KEY:VALUE, may be specified repeatedly)
-  -sed false                             generate sed statements for upgrade
-  -updates-found-nonzero-exit false      exit with a nonzero code when modules with updates are found
+  -sed=false                             generate sed statements for upgrade
+  -updates-found-nonzero-exit=false      exit with a nonzero code when modules with updates matching are found (respecting version constraints)
 ```
