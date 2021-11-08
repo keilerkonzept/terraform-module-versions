@@ -11,7 +11,7 @@ import (
 
 type Parsed struct {
 	Source            *source.Source
-	ModuleName        string
+	SourceBaseName    string
 	Version           *semver.Version
 	VersionString     string
 	Constraints       *semver.Constraints
@@ -20,14 +20,16 @@ type Parsed struct {
 }
 
 func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
+	var sourceBase string
 	src, err := source.Parse(raw.Source)
 	if err != nil {
 		return nil, fmt.Errorf("parse module call source: %w", err)
 	}
-	name := src.Git.Remote[strings.LastIndex(src.Git.Remote, "/")+1:]
-	out := Parsed{Source: src, Raw: raw, ModuleName: name}
+	out := Parsed{Source: src, Raw: raw}
 	switch {
 	case src.Git != nil:
+		sourceBase = src.Git.Remote[strings.LastIndex(src.Git.Remote, "/")+1:]
+		sourceBase = strings.TrimRight(sourceBase, ".git")
 		if ref := src.Git.RefValue; ref != nil {
 			version, err := semver.NewVersion(*ref)
 			if err == nil {
@@ -36,6 +38,7 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 			out.VersionString = *ref
 		}
 		if raw.Version == "" {
+			out.SourceBaseName = sourceBase
 			return &out, nil
 		}
 		// this adds (non-terraform-standard..) support for version constraints to Git sources
@@ -46,6 +49,7 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 		out.Constraints = constraints
 		out.ConstraintsString = raw.Version
 	case src.Registry != nil:
+		sourceBase = src.Registry.Name
 		if raw.Version == "" {
 			return &out, nil
 		}
@@ -61,5 +65,6 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 		out.Constraints = constraints
 		out.ConstraintsString = raw.Version
 	}
+	out.SourceBaseName = sourceBase
 	return &out, nil
 }

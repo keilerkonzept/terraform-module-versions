@@ -83,7 +83,7 @@ func (u Updates) GenerateSed() {
 
 func (u Updates) WriteMarkdownWide(w io.Writer) error {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Update?", "Name", "Module Name", "Path", "Source", "Constraint", "Version", "Latest matching", "Latest"})
+	table.SetHeader([]string{"Update?", "Name", "Source basename", "Path", "Source", "Constraint", "Version", "Latest matching", "Latest"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	rows := make([][]string, 0, len(u))
@@ -107,7 +107,7 @@ func (u Updates) WriteMarkdownWide(w io.Writer) error {
 
 func (u Updates) WriteMarkdown(w io.Writer) error {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Update?", "Name", "Module Name", "Constraint", "Version", "Latest matching", "Latest"})
+	table.SetHeader([]string{"Update?", "Name", "Source basename", "Constraint", "Version", "Latest matching", "Latest"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	rows := make([][]string, 0, len(u))
