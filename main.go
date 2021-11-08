@@ -224,6 +224,7 @@ func updates(scanResults []scan.Result) {
 		updateOutput := output.Update{
 			Path:              m.Path,
 			Name:              m.ModuleCall.Name,
+			ModuleName:        parsed.ModuleName,
 			Source:            m.ModuleCall.Source,
 			VersionConstraint: parsed.ConstraintsString,
 			Version:           parsed.VersionString,

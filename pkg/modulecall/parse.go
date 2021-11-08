@@ -2,6 +2,7 @@ package modulecall
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/hashicorp/terraform-config-inspect/tfconfig"
@@ -10,6 +11,7 @@ import (
 
 type Parsed struct {
 	Source            *source.Source
+	ModuleName        string
 	Version           *semver.Version
 	VersionString     string
 	Constraints       *semver.Constraints
@@ -22,7 +24,8 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parse module call source: %w", err)
 	}
-	out := Parsed{Source: src, Raw: raw}
+	name := src.Git.Remote[strings.LastIndex(src.Git.Remote, "/")+1:]
+	out := Parsed{Source: src, Raw: raw, ModuleName: name}
 	switch {
 	case src.Git != nil:
 		if ref := src.Git.RefValue; ref != nil {

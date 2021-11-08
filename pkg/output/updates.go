@@ -22,6 +22,7 @@ func (u Updates) Swap(i, j int)      { u[i], u[j] = u[j], u[i] }
 type Update struct {
 	Path              string `json:"path,omitempty"`
 	Name              string `json:"name,omitempty"`
+	ModuleName        string `json:"modulename,omitempty"`
 	Source            string `json:"source,omitempty"`
 	VersionConstraint string `json:"constraint,omitempty"`
 	Version           string `json:"version,omitempty"`
@@ -82,7 +83,7 @@ func (u Updates) GenerateSed() {
 
 func (u Updates) WriteMarkdownWide(w io.Writer) error {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Update?", "Name", "Path", "Source", "Constraint", "Version", "Latest matching", "Latest"})
+	table.SetHeader([]string{"Update?", "Name", "Module Name", "Path", "Source", "Constraint", "Version", "Latest matching", "Latest"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	rows := make([][]string, 0, len(u))
@@ -96,7 +97,7 @@ func (u Updates) WriteMarkdownWide(w io.Writer) error {
 		case item.Version == "":
 			update = "?"
 		}
-		row := []string{update, item.Name, item.Path, item.Source, item.VersionConstraint, item.Version, item.LatestMatching, item.LatestOverall}
+		row := []string{update, item.Name, item.ModuleName, item.Path, item.Source, item.VersionConstraint, item.Version, item.LatestMatching, item.LatestOverall}
 		rows = append(rows, row)
 	}
 	table.AppendBulk(rows)
@@ -106,7 +107,7 @@ func (u Updates) WriteMarkdownWide(w io.Writer) error {
 
 func (u Updates) WriteMarkdown(w io.Writer) error {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Update?", "Name", "Constraint", "Version", "Latest matching", "Latest"})
+	table.SetHeader([]string{"Update?", "Name", "Module Name", "Constraint", "Version", "Latest matching", "Latest"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	rows := make([][]string, 0, len(u))
@@ -120,7 +121,7 @@ func (u Updates) WriteMarkdown(w io.Writer) error {
 		case item.Version == "":
 			update = "?"
 		}
-		row := []string{update, item.Name, item.VersionConstraint, item.Version, item.LatestMatching, item.LatestOverall}
+		row := []string{update, item.Name, item.ModuleName, item.VersionConstraint, item.Version, item.LatestMatching, item.LatestOverall}
 		rows = append(rows, row)
 	}
 	table.AppendBulk(rows)
