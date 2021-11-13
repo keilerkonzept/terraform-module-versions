@@ -19,15 +19,16 @@ $ terraform-module-versions check examples
 ```
 
 ```markdown
-| UPDATE? |              NAME               | CONSTRAINT | VERSION | LATEST MATCHING | LATEST  |
-|---------|---------------------------------|------------|---------|-----------------|---------|
-| (Y)     | consul                          | ~0.7.3     |         | 0.7.11          | 0.11.0  |
-| (Y)     | consul_github_https             | 0.8.0      | v0.8.0  |                 | v0.11.0 |
-| (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
-| (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
-| Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.3   |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.3   |
+| UPDATE? |               NAME               | CONSTRAINT | VERSION | LATEST MATCHING | LATEST  |
+|---------|----------------------------------|------------|---------|-----------------|---------|
+| (Y)     | consul                           | ~0.7.3     |         | 0.7.11          | 0.11.0  |
+| (Y)     | consul_github_https              | 0.8.0      | v0.8.0  |                 | v0.11.0 |
+| (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
+| (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
+| Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | 3.1.5   |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | 3.1.5   |
+| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.22.3 |
 ```
 
 ## Contents
@@ -85,6 +86,10 @@ module "example_git_scp" {
   version = "~> 0.12"
 }
 
+module "example_with_prerelease_versions" {
+  source = "git@github.com:kubernetes/api.git?ref=v0.22.2"
+}
+
 module "local" {
   source = "./local"
 }
@@ -111,16 +116,17 @@ output "0_15_nonsensitive_example" {
 $ terraform-module-versions list examples
 ```
 
-|   TYPE   |              NAME               | CONSTRAINT | VERSION |                                    SOURCE                                    |
-|----------|---------------------------------|------------|---------|------------------------------------------------------------------------------|
-| registry | consul                          | ~0.7.3     |         | hashicorp/consul/aws                                                         |
-| local    | local                           |            |         | ./local                                                                      |
-| git      | example_git_ssh_branch          |            | master  | git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master |
-| git      | example_git_scp                 | ~> 0.12    | 0.12.0  | git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0       |
-| git      | consul_github_ssh               | ~0.1.0     | 0.1.0   | git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0                      |
-| git      | consul_github_https_no_ref      |            |         | github.com/hashicorp/terraform-aws-consul                                    |
-| git      | consul_github_https_missing_ref | 0.7.3      |         | github.com/hashicorp/terraform-aws-consul                                    |
-| git      | consul_github_https             | 0.8.0      | v0.8.0  | github.com/hashicorp/terraform-aws-consul?ref=v0.8.0                         |
+|   TYPE   |               NAME               | CONSTRAINT | VERSION |                                    SOURCE                                    |
+|----------|----------------------------------|------------|---------|------------------------------------------------------------------------------|
+| registry | consul                           | ~0.7.3     |         | hashicorp/consul/aws                                                         |
+| local    | local                            |            |         | ./local                                                                      |
+| git      | example_with_prerelease_versions |            | v0.22.2 | git@github.com:kubernetes/api.git?ref=v0.22.2                                |
+| git      | example_git_ssh_branch           |            | master  | git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master |
+| git      | example_git_scp                  | ~> 0.12    | 0.12.0  | git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0       |
+| git      | consul_github_ssh                | ~0.1.0     | 0.1.0   | git@github.com:hashicorp/terraform-aws-consul?ref=0.1.0                      |
+| git      | consul_github_https_no_ref       |            |         | github.com/hashicorp/terraform-aws-consul                                    |
+| git      | consul_github_https_missing_ref  | 0.7.3      |         | github.com/hashicorp/terraform-aws-consul                                    |
+| git      | consul_github_https              | 0.8.0      | v0.8.0  | github.com/hashicorp/terraform-aws-consul?ref=v0.8.0                         |
 
 with `-o json`:
 
@@ -179,6 +185,13 @@ with `-o json`:
   },
   {
     "path": "examples/main.tf",
+    "name": "example_with_prerelease_versions",
+    "type": "git",
+    "source": "git@github.com:kubernetes/api.git?ref=v0.22.2",
+    "version": "v0.22.2"
+  },
+  {
+    "path": "examples/main.tf",
     "name": "local",
     "type": "local",
     "source": "./local"
@@ -193,15 +206,16 @@ with `-o json`:
 $ terraform-module-versions check examples
 ```
 
-| UPDATE? |              NAME               | CONSTRAINT | VERSION | LATEST MATCHING | LATEST  |
-|---------|---------------------------------|------------|---------|-----------------|---------|
-| (Y)     | consul                          | ~0.7.3     |         | 0.7.11          | 0.11.0  |
-| (Y)     | consul_github_https             | 0.8.0      | v0.8.0  |                 | v0.11.0 |
-| (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
-| (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
-| Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.3   |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.3   |
+| UPDATE? |               NAME               | CONSTRAINT | VERSION | LATEST MATCHING | LATEST  |
+|---------|----------------------------------|------------|---------|-----------------|---------|
+| (Y)     | consul                           | ~0.7.3     |         | 0.7.11          | 0.11.0  |
+| (Y)     | consul_github_https              | 0.8.0      | v0.8.0  |                 | v0.11.0 |
+| (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
+| (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
+| Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | 3.1.5   |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | 3.1.5   |
+| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.22.3 |
 
 with `-o json`:
 
@@ -258,7 +272,7 @@ with `-o json`:
     "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
     "constraint": "~> 0.12",
     "version": "0.12.0",
-    "latestOverall": "3.1.3",
+    "latestOverall": "3.1.5",
     "nonMatchingUpdate": true
   },
   {
@@ -266,7 +280,15 @@ with `-o json`:
     "name": "example_git_ssh_branch",
     "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master",
     "version": "master",
-    "latestOverall": "3.1.3",
+    "latestOverall": "3.1.5",
+    "nonMatchingUpdate": true
+  },
+  {
+    "path": "examples/main.tf",
+    "name": "example_with_prerelease_versions",
+    "source": "git@github.com:kubernetes/api.git?ref=v0.22.2",
+    "version": "v0.22.2",
+    "latestOverall": "v0.22.3",
     "nonMatchingUpdate": true
   }
 ]
@@ -277,16 +299,17 @@ with `-o json`:
 $ terraform-module-versions check -all examples
 ```
 
-| UPDATE? |              NAME               | CONSTRAINT | VERSION | LATEST MATCHING | LATEST  |
-|---------|---------------------------------|------------|---------|-----------------|---------|
-| (Y)     | consul                          | ~0.7.3     |         | 0.7.11          | 0.11.0  |
-| (Y)     | consul_github_https             | 0.8.0      | v0.8.0  |                 | v0.11.0 |
-| (Y)     | consul_github_https_missing_ref | 0.7.3      |         | v0.7.3          | v0.11.0 |
-| (Y)     | consul_github_https_no_ref      |            |         |                 | v0.11.0 |
-| Y       | consul_github_ssh               | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                 | ~> 0.12    | 0.12.0  |                 | 3.1.3   |
-| (Y)     | example_git_ssh_branch          |            | master  |                 | 3.1.3   |
-| ?       | local                           |            |         |                 |         |
+| UPDATE? |               NAME               | CONSTRAINT | VERSION | LATEST MATCHING | LATEST  |
+|---------|----------------------------------|------------|---------|-----------------|---------|
+| (Y)     | consul                           | ~0.7.3     |         | 0.7.11          | 0.11.0  |
+| (Y)     | consul_github_https              | 0.8.0      | v0.8.0  |                 | v0.11.0 |
+| (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
+| (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
+| Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | 3.1.5   |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | 3.1.5   |
+| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.22.3 |
+| ?       | local                            |            |         |                 |         |
 
 ### Check for module updates using Github Token authentication
 
@@ -404,6 +427,7 @@ FLAGS
   -n=false                               (alias for -any-updates-found-nonzero-exit)
   -o markdown                            (alias for -output)
   -output markdown                       output format, one of [json jsonl junit markdown markdown-wide]
+  -pre-release=false                     include pre-release versions
   -registry-header ...                   extra HTTP headers for requests to Terraform module registries (a key/value pair KEY:VALUE, may be specified repeatedly)
   -sed=false                             generate sed statements for upgrade
   -updates-found-nonzero-exit=false      exit with a nonzero code when modules with updates matching are found (respecting version constraints)
