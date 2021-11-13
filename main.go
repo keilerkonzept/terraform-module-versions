@@ -27,7 +27,7 @@ import (
 
 var (
 	appName       = "terraform-module-versions"
-	version       = "2-SNAPSHOT"
+	version       = "3-SNAPSHOT"
 	updatesClient = update.Client{
 		Registry: registry.Client{
 			HTTP: http.DefaultClient,
@@ -44,6 +44,7 @@ var (
 		AnyUpdatesFoundNonzeroExit      bool
 		All                             bool
 		GenerateSed                     bool
+		IncludePrereleaseVersions       bool
 	}
 )
 
@@ -73,6 +74,7 @@ func main() {
 	checkFlagSet.BoolVar(&config.MatchingUpdatesFoundNonzeroExit, "updates-found-nonzero-exit", config.MatchingUpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates matching are found (respecting version constraints)")
 	checkFlagSet.BoolVar(&config.AnyUpdatesFoundNonzeroExit, "n", config.AnyUpdatesFoundNonzeroExit, "(alias for -any-updates-found-nonzero-exit)")
 	checkFlagSet.BoolVar(&config.AnyUpdatesFoundNonzeroExit, "any-updates-found-nonzero-exit", config.AnyUpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found (ignoring version constraints)")
+	checkFlagSet.BoolVar(&config.IncludePrereleaseVersions, "pre-release", config.IncludePrereleaseVersions, "include pre-release versions")
 	checkFlagSet.BoolVar(&config.All, "a", config.All, "(alias for -all)")
 	checkFlagSet.BoolVar(&config.All, "all", config.All, "include modules without updates")
 	listFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
@@ -216,7 +218,7 @@ func updates(scanResults []scan.Result) {
 			log.Printf("error: %v", err)
 			continue
 		}
-		update, err := updatesClient.Update(*parsed.Source, parsed.Version, parsed.Constraints)
+		update, err := updatesClient.Update(*parsed.Source, parsed.Version, parsed.Constraints, config.IncludePrereleaseVersions)
 		if err != nil {
 			log.Printf("error: %v", err)
 			continue

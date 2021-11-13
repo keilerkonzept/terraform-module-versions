@@ -23,13 +23,16 @@ type Update struct {
 	LatestOverallUpdate   string
 }
 
-func (c *Client) Update(s source.Source, current *semver.Version, constraints *semver.Constraints) (*Update, error) {
+func (c *Client) Update(s source.Source, current *semver.Version, constraints *semver.Constraints, includePrerelease bool) (*Update, error) {
 	versions, err := c.Versions(s)
 	if err != nil {
 		return nil, err
 	}
 	var out Update
 	for _, v := range versions {
+		if !includePrerelease && v.Prerelease() != "" {
+			continue
+		}
 		versionString := v.Original()
 		out.LatestOverallVersion = versionString
 		if current != nil && !v.GreaterThan(current) {
