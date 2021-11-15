@@ -220,7 +220,7 @@ github.com/hashicorp/hcl/v2/hclparse
 github.com/hashicorp/hcl/v2/hclsyntax
 github.com/hashicorp/hcl/v2/hclwrite
 github.com/hashicorp/hcl/v2/json
-# github.com/hashicorp/terraform-config-inspect v0.0.0-20210625153042-09f34846faab
+# github.com/hashicorp/terraform-config-inspect v0.0.0-20211115214459-90acf1ca460f
 ## explicit
 github.com/hashicorp/terraform-config-inspect/tfconfig
 # github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734

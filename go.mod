@@ -16,7 +16,7 @@ require (
 	github.com/hashicorp/go-version v1.2.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/hcl/v2 v2.10.0 // indirect
-	github.com/hashicorp/terraform-config-inspect v0.0.0-20210625153042-09f34846faab
+	github.com/hashicorp/terraform-config-inspect v0.0.0-20211115214459-90acf1ca460f
 	github.com/hashicorp/terraform-svchost v0.0.0-20200729002733-f050f53b9734
 	github.com/jstemmer/go-junit-report v0.9.1
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
