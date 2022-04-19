@@ -2,6 +2,8 @@ package modulecall
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/Masterminds/semver/v3"
 	"github.com/hashicorp/terraform-config-inspect/tfconfig"
@@ -51,7 +53,22 @@ func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
 			out.Version = version
 			out.VersionString = raw.Version
 		}
-		constraints, err := semver.NewConstraint(raw.Version)
+		var constraints *semver.Constraints
+		if strings.Contains(raw.Version, "~>") { // handle pessimistic contraint
+			pessimistic := regexp.MustCompile(`~>`)
+			nakedVersion := strings.TrimSpace(pessimistic.Split(raw.Version, 2)[1])
+			lastDot := strings.LastIndex(nakedVersion, ".")
+			if lastDot == -1 {
+				// pessimistic on a single digit means anything greater or equal
+				constraints, err = semver.NewConstraint(">= " + nakedVersion)
+			} else {
+				// pessimistic is the same as caret range after removing the last dot
+				pessimisticVersion := "^" + nakedVersion[:lastDot]
+				constraints, err = semver.NewConstraint(pessimisticVersion)
+			}
+		} else {
+			constraints, err = semver.NewConstraint(raw.Version)
+		}
 		if err != nil {
 			return nil, fmt.Errorf("parse constraint %q: %w", raw.Version, err)
 		}
