@@ -1,4 +1,4 @@
-# ff [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/peterbourgon/ff/v3) [![Latest Release](https://img.shields.io/github/release/peterbourgon/ff.svg?style=flat-square)](https://github.com/peterbourgon/ff/releases/latest) [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fpeterbourgon%2Fff%2Fbadge&style=flat-square&label=build)](https://github.com/peterbourgon/ff/actions?query=workflow%3ATest)
+# ff [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/peterbourgon/ff/v3) ![Latest Release](https://img.shields.io/github/v/release/peterbourgon/ff?style=flat-square) ![Build Status](https://github.com/peterbourgon/ff/actions/workflows/test.yml/badge.svg?branch=main)
 
 ff stands for flags-first, and provides an opinionated way to populate a
 [flag.FlagSet](https://golang.org/pkg/flag#FlagSet) with configuration data from
@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	fs := flag.NewFlagSet("my-program", flag.ExitOnError)
+	fs := flag.NewFlagSet("my-program", flag.ContinueOnError)
 	var (
 		listenAddr = fs.String("listen-addr", "localhost:8080", "listen address")
 		refresh    = fs.Duration("refresh", 15*time.Second, "refresh interval")
@@ -38,7 +38,7 @@ Then, call ff.Parse instead of fs.Parse.
 are available to control parse behavior.
 
 ```go
-	ff.Parse(fs, os.Args[1:],
+	err := ff.Parse(fs, os.Args[1:],
 		ff.WithEnvVarPrefix("MY_PROGRAM"),
 		ff.WithConfigFileFlag("config"),
 		ff.WithConfigFileParser(ff.PlainParser),
@@ -99,12 +99,15 @@ import (
 )
 
 func main() {
-	fs := flag.NewFlagSet("myservice", flag.ExitOnError)
+	fs := flag.NewFlagSet("myservice", flag.ContinueOnError)
 	var (
 		port  = fs.Int("port", 8080, "listen port for server (also via PORT)")
 		debug = fs.Bool("debug", false, "log debug information (also via DEBUG)")
 	)
-	ff.Parse(fs, os.Args[1:], ff.WithEnvVarNoPrefix())
+	if err := ff.Parse(fs, os.Args[1:], ff.WithEnvVarNoPrefix()); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
 
 	fmt.Printf("port %d, debug %v\n", *port, *debug)
 }
@@ -116,3 +119,13 @@ port 9090, debug false
 $ env PORT=9090 DEBUG=1 myservice -port=1234
 port 1234, debug true
 ```
+
+## Error handling
+
+In general, you should call flag.NewFlagSet with the flag.ContinueOnError error 
+handling strategy, which, somewhat confusingly, is the only way that ff.Parse can
+return errors. (The other strategies terminate the program on error. Rude!) This 
+is [the only way to detect certain types of parse failures][90], in addition to 
+being good practice in general.
+
+[90]: https://github.com/peterbourgon/ff/issues/90
