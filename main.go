@@ -45,6 +45,7 @@ var (
 		All                             bool
 		GenerateSed                     bool
 		IncludePrereleaseVersions       bool
+		Recursive                       bool
 	}
 )
 
@@ -78,6 +79,7 @@ func main() {
 	checkFlagSet.BoolVar(&config.All, "a", config.All, "(alias for -all)")
 	checkFlagSet.BoolVar(&config.All, "all", config.All, "include modules without updates")
 	listFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
+	listFlagSet.BoolVar(&config.Recursive, "recursive", config.Recursive, "recursively list all modules under paths")
 	checkFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
 	checkFlagSet.Var(&config.RegistryHeaders, "H", "(alias for -registry-header)")
 	checkFlagSet.Var(&config.RegistryHeaders, "registry-header", fmt.Sprintf("extra HTTP headers for requests to Terraform module registries (%s, may be specified repeatedly)", config.RegistryHeaders.Help()))
@@ -160,7 +162,7 @@ func main() {
 }
 
 func scanForModuleCalls() []scan.Result {
-	scanResults, err := scan.Scan(config.Paths)
+	scanResults, err := scan.Scan(config.Paths, config.Recursive)
 	if err != nil {
 		log.Fatal(err)
 	}

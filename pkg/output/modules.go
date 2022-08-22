@@ -80,12 +80,12 @@ func (m Modules) WriteMarkdownWide(w io.Writer) error {
 
 func (m Modules) WriteMarkdown(w io.Writer) error {
 	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"Type", "Name", "Constraint", "Version", "Source"})
+	table.SetHeader([]string{"Type", "Name", "Constraint", "Version", "Source", "Path"})
 	table.SetBorders(tablewriter.Border{Left: true, Top: false, Right: true, Bottom: false})
 	table.SetCenterSeparator("|")
 	rows := make([][]string, 0, len(m))
 	for _, item := range m {
-		row := []string{item.Type, item.Name, item.VersionConstraint, item.Version, item.Source}
+		row := []string{item.Type, item.Name, item.VersionConstraint, item.Version, item.Source, item.Path}
 		rows = append(rows, row)
 	}
 	sort.Slice(rows, func(i, j int) bool {
