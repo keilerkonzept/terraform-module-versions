@@ -44,6 +44,7 @@ func Scan(paths []string, recursive bool) ([]Result, error) {
 
 func loadSubPaths(paths []string) ([]string, error) {
 	combinedPaths := make([]string, 0)
+	pathCheck := make(map[string]bool)
 
 	for _, path := range paths {
 		err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
@@ -52,7 +53,12 @@ func loadSubPaths(paths []string) ([]string, error) {
 				return nil
 			}
 
-			combinedPaths = append(combinedPaths, path)
+			// make sure we only capture a path once
+			if _, ok := pathCheck[path]; !ok {
+				pathCheck[path] = true
+				combinedPaths = append(combinedPaths, path)
+			}
+
 			return nil
 		})
 
