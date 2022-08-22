@@ -84,6 +84,7 @@ func main() {
 	checkFlagSet.Var(&config.RegistryHeaders, "H", "(alias for -registry-header)")
 	checkFlagSet.Var(&config.RegistryHeaders, "registry-header", fmt.Sprintf("extra HTTP headers for requests to Terraform module registries (%s, may be specified repeatedly)", config.RegistryHeaders.Help()))
 	checkFlagSet.BoolVar(&config.GenerateSed, "sed", config.GenerateSed, "generate sed statements for upgrade")
+	checkFlagSet.BoolVar(&config.Recursive, "recursive", config.Recursive, "recursively check all modules under paths")
 
 	cmdList := &ffcli.Command{
 		Name:       "list",
