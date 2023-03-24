@@ -192,8 +192,8 @@ github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
-# github.com/google/go-cmp v0.5.4
-## explicit; go 1.8
+# github.com/google/go-cmp v0.5.8
+## explicit; go 1.13
 github.com/google/go-cmp/cmp
 github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
@@ -250,11 +250,13 @@ github.com/jbenet/go-context/io
 # github.com/jmespath/go-jmespath v0.4.0
 ## explicit; go 1.14
 github.com/jmespath/go-jmespath
-# github.com/jstemmer/go-junit-report v1.0.0
+# github.com/jstemmer/go-junit-report v0.9.1
 ## explicit; go 1.2
 github.com/jstemmer/go-junit-report
 github.com/jstemmer/go-junit-report/formatter
 github.com/jstemmer/go-junit-report/parser
+# github.com/jstemmer/go-junit-report/v2 v2.0.0
+## explicit; go 1.13
 # github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351
 ## explicit
 github.com/kevinburke/ssh_config
