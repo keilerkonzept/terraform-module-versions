@@ -10,7 +10,7 @@ cloud.google.com/go/internal/version
 # cloud.google.com/go/storage v1.12.0
 ## explicit; go 1.11
 cloud.google.com/go/storage
-# github.com/Masterminds/semver/v3 v3.2.0
+# github.com/Masterminds/semver/v3 v3.2.1
 ## explicit; go 1.18
 github.com/Masterminds/semver/v3
 # github.com/Microsoft/go-winio v0.4.16
@@ -255,8 +255,6 @@ github.com/jmespath/go-jmespath
 github.com/jstemmer/go-junit-report
 github.com/jstemmer/go-junit-report/formatter
 github.com/jstemmer/go-junit-report/parser
-# github.com/jstemmer/go-junit-report/v2 v2.0.0
-## explicit; go 1.13
 # github.com/kevinburke/ssh_config v0.0.0-20201106050909-4977a11b4351
 ## explicit
 github.com/kevinburke/ssh_config
