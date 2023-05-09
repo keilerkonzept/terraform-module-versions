@@ -224,15 +224,16 @@ func updates(scanResults []scan.Result) {
 			continue
 		}
 		updateOutput := output.Update{
-			Path:              m.Path,
-			Name:              m.ModuleCall.Name,
-			Source:            m.ModuleCall.Source,
-			VersionConstraint: parsed.ConstraintsString,
-			Version:           parsed.VersionString,
-			LatestMatching:    update.LatestMatchingVersion,
-			MatchingUpdate:    update.LatestMatchingUpdate != "",
-			LatestOverall:     update.LatestOverallVersion,
-			NonMatchingUpdate: update.LatestOverallUpdate != "" && update.LatestOverallUpdate != update.LatestMatchingVersion,
+			Path:                 m.Path,
+			Name:                 m.ModuleCall.Name,
+			ModuleSourceBasename: parsed.SourceBaseName,
+			Source:               m.ModuleCall.Source,
+			VersionConstraint:    parsed.ConstraintsString,
+			Version:              parsed.VersionString,
+			LatestMatching:       update.LatestMatchingVersion,
+			MatchingUpdate:       update.LatestMatchingUpdate != "",
+			LatestOverall:        update.LatestOverallVersion,
+			NonMatchingUpdate:    update.LatestOverallUpdate != "" && update.LatestOverallUpdate != update.LatestMatchingVersion,
 		}
 		hasUpdate := false
 		if updateOutput.MatchingUpdate {
