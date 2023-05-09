@@ -12,6 +12,16 @@ Supported module sources:
   - public `<NAMESPACE>/<NAME>/<PROVIDER>`
   - private `<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>`
 
+## Install
+
+### Using go
+
+```sh
+go install github.com/keilerkonzept/terraform-module-versions@3.1.10
+```
+
+The `3.1.10` can be changed to a specific tag if desired or even `latest`.
+
 ## Example
 
 ```sh
