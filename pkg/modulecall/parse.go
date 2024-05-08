@@ -17,8 +17,8 @@ type Parsed struct {
 	Raw               tfconfig.ModuleCall
 }
 
-func Parse(raw tfconfig.ModuleCall) (*Parsed, error) {
-	src, err := source.Parse(raw.Source)
+func Parse(raw tfconfig.ModuleCall, forceUrl bool) (*Parsed, error) {
+	src, err := source.Parse(raw.Source, forceUrl)
 	if err != nil {
 		return nil, fmt.Errorf("parse module call source: %w", err)
 	}
