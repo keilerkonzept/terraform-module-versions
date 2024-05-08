@@ -39,7 +39,7 @@ func (s Source) URI() string {
 
 var ErrSourceNotSupported = errors.New("source not supported")
 
-func Parse(raw string) (*Source, error) {
+func Parse(raw string, forceUrl bool) (*Source, error) {
 	if module, err := regsrc.ParseModuleSource(raw); err == nil {
 		out := &Source{
 			Registry: &Registry{
@@ -52,7 +52,7 @@ func Parse(raw string) (*Source, error) {
 		}
 		return out, nil
 	}
-	proto, detected, err := detect(raw)
+	proto, detected, err := detect(raw, forceUrl)
 	if err != nil {
 		return nil, err
 	}

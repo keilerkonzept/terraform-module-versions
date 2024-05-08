@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+
 	"net/http"
 	"os"
 	"sort"
@@ -23,6 +24,8 @@ import (
 	githttp "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/sgreben/flagvar"
+
+	ghttp "github.com/go-git/go-git/v5/plumbing/transport/http"
 )
 
 var (
@@ -33,6 +36,8 @@ var (
 			HTTP: http.DefaultClient,
 		},
 	}
+	auth = ghttp.BasicAuth{}
+
 	config struct {
 		Paths                           []string
 		ModuleNames                     flagvar.StringSet
@@ -130,6 +135,7 @@ func main() {
 		},
 	}
 
+
 	if err := cmdRoot.Parse(os.Args[1:]); err != nil {
 		log.Fatal(err)
 	}
@@ -152,6 +158,14 @@ func main() {
 	if githubToken := os.Getenv("GITHUB_TOKEN"); githubToken != "" {
 		updatesClient.GitAuth = &githttp.BasicAuth{
 			Username: githubToken,
+		}
+	}
+	basicAuthUsername := os.Getenv("BASICAUTH_USERNAME")
+	basicAuthPassword := os.Getenv("BASICAUTH_PASSWORD")
+	if basicAuthUsername != "" && basicAuthPassword != "" {
+		updatesClient.GitAuth = &githttp.BasicAuth{
+			Username: basicAuthUsername,
+			Password: basicAuthPassword,
 		}
 	}
 	if err := cmdRoot.Run(context.Background()); err != nil && !errors.Is(err, flag.ErrHelp) {
@@ -180,7 +194,7 @@ func scanForModuleCalls() []scan.Result {
 func list(scanResults []scan.Result) {
 	var out output.Modules
 	for _, m := range scanResults {
-		parsed, err := modulecall.Parse(m.ModuleCall)
+		parsed, err := modulecall.Parse(m.ModuleCall, config.UseUrl)
 		if err != nil {
 			log.Printf("error: %v", err)
 			out = append(out, output.Module{
@@ -212,8 +226,18 @@ func updates(scanResults []scan.Result) {
 		foundMatchingUpdates bool
 		foundAnyUpdates      bool
 	)
+	if len(config.BasicAuth) > 0 {
+		var authParts = strings.Split(config.BasicAuth, ":")
+		if len(authParts) != 2 {
+			log.Fatal("IllegalValueException: basic-auth should be [username]:[password]!")
+			os.Exit(2)
+		}
+		auth.Username = authParts[0]
+		auth.Password = authParts[1]
+		updatesClient.GitAuth = &auth
+	}
 	for _, m := range scanResults {
-		parsed, err := modulecall.Parse(m.ModuleCall)
+		parsed, err := modulecall.Parse(m.ModuleCall, config.UseUrl)
 		if err != nil {
 			log.Printf("error: %v", err)
 			continue
@@ -243,6 +267,7 @@ func updates(scanResults []scan.Result) {
 		if updateOutput.NonMatchingUpdate {
 			foundAnyUpdates = true
 			hasUpdate = true
+			foundNonMatchingUpdates = true
 		}
 		if !config.All && !hasUpdate {
 			continue

@@ -20,7 +20,13 @@ var goGetterDetectors = []getter.Detector{
 
 var forcedGetterRegexp = regexp.MustCompile(`^([A-Za-z0-9]+)::(.+)$`)
 
-func detect(raw string) (string, string, error) {
+func detect(raw string, forceUrl bool) (string, string, error) {
+	if (forceUrl) {
+		var httpRegexp = regexp.MustCompile(`^([^:]+:\/\/)?([^@]+@)?(.+)$`) // Remove protocol and header indicators
+		var colonRegexp = regexp.MustCompile(`^([^?]+):(\D+[\/|?$])`) // remove all colon in miduri (except for pre port indicator)
+		raw = httpRegexp.ReplaceAllString(raw, "${3}")
+		raw = colonRegexp.ReplaceAllString(raw, "${1}/${2}")
+	}
 	detected, err := getter.Detect(raw, ".", goGetterDetectors)
 	if err != nil {
 		return "", "", fmt.Errorf("detect source type: %w", err)
