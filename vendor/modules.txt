@@ -10,8 +10,8 @@ cloud.google.com/go/internal/version
 # cloud.google.com/go/storage v1.12.0
 ## explicit; go 1.11
 cloud.google.com/go/storage
-# github.com/Masterminds/semver/v3 v3.2.1
-## explicit; go 1.18
+# github.com/Masterminds/semver/v3 v3.3.0
+## explicit; go 1.21
 github.com/Masterminds/semver/v3
 # github.com/Microsoft/go-winio v0.4.16
 ## explicit; go 1.12
