@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/keilerkonzept/terraform-module-versions/internal/regsrc"
+	tfaddr "github.com/hashicorp/terraform-registry-address"
 )
 
 type Source struct {
@@ -40,14 +40,14 @@ func (s Source) URI() string {
 var ErrSourceNotSupported = errors.New("source not supported")
 
 func Parse(raw string) (*Source, error) {
-	if module, err := regsrc.ParseModuleSource(raw); err == nil {
+	if module, err := tfaddr.ParseModuleSource(raw); err == nil {
 		out := &Source{
 			Registry: &Registry{
-				Hostname:   module.Host().Raw,
-				Namespace:  module.RawNamespace,
-				Name:       module.RawName,
-				Provider:   module.RawProvider,
-				Normalized: module.Normalized(),
+				Hostname:     module.Package.Host.String(),
+				Namespace:    module.Package.Namespace,
+				Name:         module.Package.Name,
+				TargetSystem: module.Package.TargetSystem,
+				Normalized:   module.ForDisplay(),
 			},
 		}
 		return out, nil
