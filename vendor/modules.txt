@@ -314,7 +314,7 @@ github.com/jbenet/go-context/io
 # github.com/jmespath/go-jmespath v0.4.0
 ## explicit; go 1.14
 github.com/jmespath/go-jmespath
-# github.com/jstemmer/go-junit-report v0.9.1
+# github.com/jstemmer/go-junit-report v1.0.0
 ## explicit; go 1.2
 github.com/jstemmer/go-junit-report/formatter
 github.com/jstemmer/go-junit-report/parser
