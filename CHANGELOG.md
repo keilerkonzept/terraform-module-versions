@@ -1,3 +1,11 @@
+## [3.3.2](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.1...v3.3.2) (2025-02-06)
+
+
+### Bug Fixes
+
+* Merge pull request [#121](https://github.com/keilerkonzept/terraform-module-versions/issues/121) from keilerkonzept/dependabot/go_modules/github.com/Masterminds/semver/v3-3.3.1 ([2013529](https://github.com/keilerkonzept/terraform-module-versions/commit/2013529deccfc9c029ba6e3732ad19ee962dd246))
+* Merge pull request [#125](https://github.com/keilerkonzept/terraform-module-versions/issues/125) from keilerkonzept/dependabot/go_modules/github.com/peterbourgon/ff/v3-3.4.0 ([ba0b53c](https://github.com/keilerkonzept/terraform-module-versions/commit/ba0b53c66f8fb1abce4d3a4759566887753c94f4))
+
 ## [3.3.1](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.0...v3.3.1) (2025-02-06)
 
 
