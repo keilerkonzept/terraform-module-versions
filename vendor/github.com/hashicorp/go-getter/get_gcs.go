@@ -1,3 +1,6 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: MPL-2.0
+
 package getter
 
 import (
@@ -25,6 +28,12 @@ type GCSGetter struct {
 	// Timeout sets a deadline which all GCS operations should
 	// complete within. Zero value means no timeout.
 	Timeout time.Duration
+
+	// FileSizeLimit limits the size of an single
+	// decompressed file.
+	//
+	// The zero value means no limit.
+	FileSizeLimit int64
 }
 
 func (g *GCSGetter) ClientMode(u *url.URL) (ClientMode, error) {
@@ -179,11 +188,12 @@ func (g *GCSGetter) getObject(ctx context.Context, client *storage.Client, dst, 
 		return err
 	}
 
-	return copyReader(dst, rc, 0666, g.client.umask())
+	// There is no limit set for the size of an object from GCS
+	return copyReader(dst, rc, 0666, g.client.umask(), 0)
 }
 
 func (g *GCSGetter) parseURL(u *url.URL) (bucket, path, fragment string, err error) {
-	if strings.Contains(u.Host, "googleapis.com") {
+	if strings.HasSuffix(u.Host, ".googleapis.com") {
 		hostParts := strings.Split(u.Host, ".")
 		if len(hostParts) != 3 {
 			err = fmt.Errorf("URL is not a valid GCS URL")
@@ -198,6 +208,8 @@ func (g *GCSGetter) parseURL(u *url.URL) (bucket, path, fragment string, err err
 		bucket = pathParts[3]
 		path = pathParts[4]
 		fragment = u.Fragment
+	} else {
+		err = fmt.Errorf("URL is not a valid GCS URL")
 	}
 	return
 }

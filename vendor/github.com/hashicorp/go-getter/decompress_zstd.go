@@ -1,15 +1,24 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: MPL-2.0
+
 package getter
 
 import (
 	"fmt"
-	"github.com/klauspost/compress/zstd"
 	"os"
 	"path/filepath"
+
+	"github.com/klauspost/compress/zstd"
 )
 
 // ZstdDecompressor is an implementation of Decompressor that
 // can decompress .zst files.
-type ZstdDecompressor struct{}
+type ZstdDecompressor struct {
+	// FileSizeLimit limits the size of a decompressed file.
+	//
+	// The zero value means no limit.
+	FileSizeLimit int64
+}
 
 func (d *ZstdDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	if dir {
@@ -35,6 +44,6 @@ func (d *ZstdDecompressor) Decompress(dst, src string, dir bool, umask os.FileMo
 	}
 	defer zstdR.Close()
 
-	// Copy it out
-	return copyReader(dst, zstdR, 0622, umask)
+	// Copy it out, potentially using a file size limit.
+	return copyReader(dst, zstdR, 0622, umask, d.FileSizeLimit)
 }

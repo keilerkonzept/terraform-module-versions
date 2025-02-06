@@ -35,8 +35,8 @@ func (c *Client) Discover(hostname string) (string, error) {
 
 // ListVersions lists the available module versions for the a specific module.
 // ref.: https://www.terraform.io/docs/registry/api.html#list-available-versions-for-a-specific-module
-func (c *Client) ListVersions(baseURL, namespace, name, provider string) ([]string, error) {
-	url := fmt.Sprintf("%s%s/%s/%s/versions", baseURL, namespace, name, provider)
+func (c *Client) ListVersions(baseURL, namespace, name, system string) ([]string, error) {
+	url := fmt.Sprintf("%s%s/%s/%s/versions", baseURL, namespace, name, system)
 	var response struct {
 		Modules []struct {
 			Versions []struct {

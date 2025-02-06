@@ -1,8 +1,9 @@
 package source
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestParse(t *testing.T) {
@@ -70,10 +71,11 @@ func TestParse(t *testing.T) {
 			raw: "hashicorp/consul/aws",
 			want: &Source{
 				Registry: &Registry{
-					Hostname:  "registry.terraform.io",
-					Namespace: "hashicorp",
-					Name:      "consul",
-					Provider:  "aws",
+					Hostname:     "registry.terraform.io",
+					Namespace:    "hashicorp",
+					Name:         "consul",
+					TargetSystem: "aws",
+					Normalized:   "hashicorp/consul/aws",
 				},
 			},
 		},
@@ -81,10 +83,11 @@ func TestParse(t *testing.T) {
 			raw: "example.com:1234/HashiCorp/Consul/aws",
 			want: &Source{
 				Registry: &Registry{
-					Hostname:  "example.com:1234",
-					Namespace: "HashiCorp",
-					Name:      "Consul",
-					Provider:  "aws",
+					Hostname:     "example.com:1234",
+					Namespace:    "HashiCorp",
+					Name:         "Consul",
+					TargetSystem: "aws",
+					Normalized:   "example.com:1234/HashiCorp/Consul/aws",
 				},
 			},
 		},
@@ -104,8 +107,8 @@ func TestParse(t *testing.T) {
 				t.Errorf("Parse(%q) error = %v, wantErr %v", tt.raw, err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Parse(%q) = %v, want %v", tt.raw, got, tt.want)
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("Parse(%q):\n%s", tt.raw, diff)
 			}
 		})
 	}
