@@ -118,7 +118,7 @@ ${EXAMPLE_UPDATES_SINGLE}
 Using go get:
 
 ```bash
-go get -u github.com/keilerkonzept/${APP}
+go install github.com/keilerkonzept/${APP}/v3@latest
 ```
 
 Or [download the binary for your platform](https://github.com/keilerkonzept/${APP}/releases/latest) from the releases page.

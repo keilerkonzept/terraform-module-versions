@@ -26,8 +26,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | 3.2.0   |
-| (Y)     | example_git_ssh_branch           |            | master  |                 | 3.2.0   |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.4  |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.4  |
 | (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.1 |
 ```
 
@@ -213,8 +213,8 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | 3.2.0   |
-| (Y)     | example_git_ssh_branch           |            | master  |                 | 3.2.0   |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.4  |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.4  |
 | (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.1 |
 
 with `-o json`:
@@ -272,7 +272,7 @@ with `-o json`:
     "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
     "constraint": "~> 0.12",
     "version": "0.12.0",
-    "latestOverall": "3.2.0",
+    "latestOverall": "v3.3.4",
     "nonMatchingUpdate": true
   },
   {
@@ -280,7 +280,7 @@ with `-o json`:
     "name": "example_git_ssh_branch",
     "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master",
     "version": "master",
-    "latestOverall": "3.2.0",
+    "latestOverall": "v3.3.4",
     "nonMatchingUpdate": true
   },
   {
@@ -306,8 +306,8 @@ $ terraform-module-versions check -all examples
 | (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | 3.2.0   |
-| (Y)     | example_git_ssh_branch           |            | master  |                 | 3.2.0   |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.4  |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.4  |
 | (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.1 |
 | ?       | local                            |            |         |                 |         |
 
@@ -372,7 +372,7 @@ with `-o json`:
 Using go get:
 
 ```bash
-go get -u github.com/keilerkonzept/terraform-module-versions
+go install github.com/keilerkonzept/terraform-module-versions/v3@latest
 ```
 
 Or [download the binary for your platform](https://github.com/keilerkonzept/terraform-module-versions/releases/latest) from the releases page.
@@ -398,6 +398,9 @@ FLAGS
 ### `list`
 
 ```text
+DESCRIPTION
+  List referenced terraform modules with their detected versions
+
 USAGE
   terraform-module-versions list [options] [<path> ...]
 
@@ -412,6 +415,9 @@ FLAGS
 ### `check`
 
 ```text
+DESCRIPTION
+  Check referenced terraform modules' sources for newer versions
+
 USAGE
   terraform-module-versions check [options] [<path> ...]
 
