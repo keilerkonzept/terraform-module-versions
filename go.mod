@@ -1,4 +1,4 @@
-module github.com/keilerkonzept/terraform-module-versions
+module github.com/keilerkonzept/terraform-module-versions/v3
 
 go 1.23.3
 
