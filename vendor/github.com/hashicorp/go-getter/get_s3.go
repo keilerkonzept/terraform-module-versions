@@ -1,3 +1,6 @@
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: MPL-2.0
+
 package getter
 
 import (
@@ -23,7 +26,9 @@ type S3Getter struct {
 	getter
 
 	// Timeout sets a deadline which all S3 operations should
-	// complete within. Zero value means no timeout.
+	// complete within.
+	//
+	// The zero value means timeout.
 	Timeout time.Duration
 }
 
@@ -207,7 +212,8 @@ func (g *S3Getter) getObject(ctx context.Context, client *s3.S3, dst, bucket, ke
 	}
 	defer body.Close()
 
-	return copyReader(dst, body, 0666, g.client.umask())
+	// There is no limit set for the size of an object from S3
+	return copyReader(dst, body, 0666, g.client.umask(), 0)
 }
 
 func (g *S3Getter) getAWSConfig(region string, url *url.URL, creds *credentials.Credentials) *aws.Config {
@@ -246,7 +252,7 @@ func (g *S3Getter) parseUrl(u *url.URL) (region, bucket, path, version string, c
 	// This just check whether we are dealing with S3 or
 	// any other S3 compliant service. S3 has a predictable
 	// url as others do not
-	if strings.Contains(u.Host, "amazonaws.com") {
+	if strings.HasSuffix(u.Host, ".amazonaws.com") {
 		// Amazon S3 supports both virtual-hosted–style and path-style URLs to access a bucket, although path-style is deprecated
 		// In both cases few older regions supports dash-style region indication (s3-Region) even if AWS discourages their use.
 		// The same bucket could be reached with:
@@ -265,28 +271,40 @@ func (g *S3Getter) parseUrl(u *url.URL) (region, bucket, path, version string, c
 				region = "us-east-1"
 			}
 			pathParts := strings.SplitN(u.Path, "/", 3)
+			if len(pathParts) < 3 {
+				err = fmt.Errorf("URL is not a valid S3 URL")
+				return
+			}
 			bucket = pathParts[1]
 			path = pathParts[2]
 		// vhost-style, dash region indication
 		case 4:
-			// Parse the region out of the first part of the host
+			// Parse the region out of the second part of the host
 			region = strings.TrimPrefix(strings.TrimPrefix(hostParts[1], "s3-"), "s3")
 			if region == "" {
 				err = fmt.Errorf("URL is not a valid S3 URL")
 				return
 			}
 			pathParts := strings.SplitN(u.Path, "/", 2)
+			if len(pathParts) < 2 {
+				err = fmt.Errorf("URL is not a valid S3 URL")
+				return
+			}
 			bucket = hostParts[0]
 			path = pathParts[1]
 		//vhost-style, dot region indication
 		case 5:
 			region = hostParts[2]
 			pathParts := strings.SplitN(u.Path, "/", 2)
+			if len(pathParts) < 2 {
+				err = fmt.Errorf("URL is not a valid S3 URL")
+				return
+			}
 			bucket = hostParts[0]
 			path = pathParts[1]
 
 		}
-		if len(hostParts) < 3 && len(hostParts) > 5 {
+		if len(hostParts) < 3 || len(hostParts) > 5 {
 			err = fmt.Errorf("URL is not a valid S3 URL")
 			return
 		}

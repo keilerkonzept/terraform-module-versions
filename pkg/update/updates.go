@@ -68,7 +68,7 @@ func (c *Client) Versions(s source.Source) ([]*semver.Version, error) {
 		return versions, nil
 	case s.Registry != nil:
 		reg := s.Registry
-		versions, err := versions.Registry(c.Registry, reg.Hostname, reg.Namespace, reg.Name, reg.Provider)
+		versions, err := versions.Registry(c.Registry, reg.Hostname, reg.Namespace, reg.Name, reg.TargetSystem)
 		if err != nil {
 			return nil, fmt.Errorf("fetch versions from registry: %w", err)
 		}

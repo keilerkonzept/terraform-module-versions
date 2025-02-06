@@ -9,7 +9,7 @@ import (
 	"github.com/keilerkonzept/terraform-module-versions/pkg/registry"
 )
 
-func Registry(client registry.Client, hostname, namespace, name, provider string) ([]*semver.Version, error) {
+func Registry(client registry.Client, hostname, namespace, name, system string) ([]*semver.Version, error) {
 	baseURL, err := client.Discover(hostname)
 	if err != nil {
 		return nil, fmt.Errorf("discover registry at %q: %w", hostname, err)
@@ -25,7 +25,7 @@ func Registry(client registry.Client, hostname, namespace, name, provider string
 		baseURLStruct.Host = hostname
 	}
 	baseURL = baseURLStruct.String()
-	versions, err := client.ListVersions(baseURL, namespace, name, provider)
+	versions, err := client.ListVersions(baseURL, namespace, name, system)
 	if err != nil {
 		return nil, fmt.Errorf("list versions: %w", err)
 	}
