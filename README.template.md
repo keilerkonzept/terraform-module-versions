@@ -9,8 +9,8 @@ Supported module sources:
   - `github.com/...`
   - `git@github.com:...`
 - **Terraform Registry**
-  - public `<NAMESPACE>/<NAME>/<PROVIDER>`
-  - private `<HOSTNAME>/<NAMESPACE>/<NAME>/<PROVIDER>`
+  - public `<NAMESPACE>/<NAME>/<SYSTEM>`
+  - private `<HOSTNAME>/<NAMESPACE>/<NAME>/<SYSTEM>`
 
 ## Example
 
