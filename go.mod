@@ -13,7 +13,7 @@ require (
 	github.com/hashicorp/terraform-registry-address v0.2.4
 	github.com/jstemmer/go-junit-report v0.9.1
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/peterbourgon/ff/v3 v3.3.1
+	github.com/peterbourgon/ff/v3 v3.4.0
 	github.com/sgreben/flagvar v1.10.1
 )
 
