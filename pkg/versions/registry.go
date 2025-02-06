@@ -6,7 +6,7 @@ import (
 	"sort"
 
 	"github.com/Masterminds/semver/v3"
-	"github.com/keilerkonzept/terraform-module-versions/pkg/registry"
+	"github.com/keilerkonzept/terraform-module-versions/v3/pkg/registry"
 )
 
 func Registry(client registry.Client, hostname, namespace, name, system string) ([]*semver.Version, error) {
