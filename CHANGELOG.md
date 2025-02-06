@@ -1,3 +1,11 @@
+## [3.3.3](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.2...v3.3.3) (2025-02-06)
+
+
+### Bug Fixes
+
+* **ci:** Update dependabot.yml ([005e4dd](https://github.com/keilerkonzept/terraform-module-versions/commit/005e4dd0c4424ee4dd9fabbca035a0c66973f098))
+* Merge pull request [#126](https://github.com/keilerkonzept/terraform-module-versions/issues/126) from keilerkonzept/sgreben-patch-1 ([3cac94f](https://github.com/keilerkonzept/terraform-module-versions/commit/3cac94f2849c152f76db48dc8ff9d7b5cb9ac54f))
+
 ## [3.3.2](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.1...v3.3.2) (2025-02-06)
 
 
