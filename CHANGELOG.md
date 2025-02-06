@@ -1,3 +1,10 @@
+## [3.3.4](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.3...v3.3.4) (2025-02-06)
+
+
+### Bug Fixes
+
+* **versioning:** fix go module version to match current major version ([ca346c9](https://github.com/keilerkonzept/terraform-module-versions/commit/ca346c9da5e5ff600b8ff10637ba08a4dfc3c27d))
+
 ## [3.3.3](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.2...v3.3.3) (2025-02-06)
 
 
