@@ -1,5 +1,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Release
+permissions:
+  contents: write
 
 on:
   push:
@@ -27,7 +29,7 @@ jobs:
       - name: Setup Goreleaser
         run: go install github.com/goreleaser/goreleaser/v2@latest
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
+        uses: cycjimmy/semantic-release-action@b8d4c1f50343c0dec646d288d5e1dc35012c9191 # v4.1.1
         with:
           extra_plugins: |
             @semantic-release/changelog
