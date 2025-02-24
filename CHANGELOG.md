@@ -1,3 +1,10 @@
+## [3.3.5](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.4...v3.3.5) (2025-02-24)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/google/go-cmp from 0.6.0 to 0.7.0 ([4c891ed](https://github.com/keilerkonzept/terraform-module-versions/commit/4c891ed4a349b02b521b730e47b27150bdda40f2))
+
 ## [3.3.4](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.3...v3.3.4) (2025-02-06)
 
 
