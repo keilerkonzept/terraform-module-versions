@@ -1,3 +1,10 @@
+## [3.3.7](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.6...v3.3.7) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** bump golang.org/x/net from 0.35.0 to 0.36.0 ([0c730af](https://github.com/keilerkonzept/terraform-module-versions/commit/0c730afd483f21f64ba9c75a5750bcc8244cd1e0))
+
 ## [3.3.6](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.5...v3.3.6) (2025-03-03)
 
 
