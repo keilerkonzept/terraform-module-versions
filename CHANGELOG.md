@@ -1,3 +1,10 @@
+## [3.3.9](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.8...v3.3.9) (2025-04-14)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/hashicorp/terraform-registry-address ([86a8ad5](https://github.com/keilerkonzept/terraform-module-versions/commit/86a8ad54dc03dbd21c70fb98de8ff0b9957f5a7b))
+
 ## [3.3.8](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.7...v3.3.8) (2025-04-14)
 
 
