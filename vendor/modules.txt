@@ -302,8 +302,8 @@ github.com/hashicorp/hcl/v2/json
 # github.com/hashicorp/terraform-config-inspect v0.0.0-20250203082807-efaa306e97b4
 ## explicit; go 1.18
 github.com/hashicorp/terraform-config-inspect/tfconfig
-# github.com/hashicorp/terraform-registry-address v0.2.4
-## explicit; go 1.19
+# github.com/hashicorp/terraform-registry-address v0.2.5
+## explicit; go 1.23.0
 github.com/hashicorp/terraform-registry-address
 # github.com/hashicorp/terraform-svchost v0.1.1
 ## explicit; go 1.19

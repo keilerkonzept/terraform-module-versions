@@ -10,7 +10,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-getter v1.7.8
 	github.com/hashicorp/terraform-config-inspect v0.0.0-20250203082807-efaa306e97b4
-	github.com/hashicorp/terraform-registry-address v0.2.4
+	github.com/hashicorp/terraform-registry-address v0.2.5
 	github.com/jstemmer/go-junit-report v1.0.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/peterbourgon/ff/v3 v3.4.0
