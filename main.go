@@ -154,6 +154,14 @@ func main() {
 			Username: githubToken,
 		}
 	}
+	basicAuthUsername := os.Getenv("BASICAUTH_USERNAME")
+	basicAuthPassword := os.Getenv("BASICAUTH_PASSWORD")
+	if basicAuthUsername != "" && basicAuthPassword != "" {
+		updatesClient.GitAuth = &githttp.BasicAuth{
+			Username: basicAuthUsername,
+			Password: basicAuthPassword,
+		}
+	}
 	if err := cmdRoot.Run(context.Background()); err != nil && !errors.Is(err, flag.ErrHelp) {
 		log.Fatal(err)
 	}
