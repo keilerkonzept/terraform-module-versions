@@ -1,3 +1,10 @@
+## [3.3.11](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.10...v3.3.11) (2025-06-09)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/go-git/go-git/v5 from 5.16.0 to 5.16.2 ([8ef1f70](https://github.com/keilerkonzept/terraform-module-versions/commit/8ef1f70cf1a081372438d60289f95772d512e423))
+
 ## [3.3.10](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.9...v3.3.10) (2025-04-22)
 
 
