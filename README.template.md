@@ -30,6 +30,7 @@ ${EXAMPLE_PRETTY}
   - [Examples](#examples)
     - [List modules with their current versions](#list-modules-with-their-current-versions)
     - [Check for module updates](#check-for-module-updates)
+    - [Check for module updates using Basic Auth](#check-for-module-updates-using-basic-auth)
     - [Check for module updates using Github Token authentication](#check-for-module-updates-using-github-token-authentication)
     - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
   - [Get it](#get-it)
@@ -83,6 +84,14 @@ $ ${APP} check -all examples
 ```
 
 ${EXAMPLE_UPDATES_ALL_PRETTY}
+
+### Check for module updates using Basic Auth
+
+You can provide *per-hostname* Basic Auth credentials via `--git-basic-auth <host>=<username>:<password>`. For example, for a private GitLab repository:
+
+```sh
+$ ${APP} check --git-basic-auth gitlab.com=token:glpat-XXXXXXXXXXXXXXXXXXXX ./examples/private
+```
 
 ### Check for module updates using Github Token authentication
 
