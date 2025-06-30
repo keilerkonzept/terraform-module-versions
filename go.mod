@@ -5,7 +5,7 @@ go 1.23.3
 toolchain go1.23.4
 
 require (
-	github.com/Masterminds/semver/v3 v3.3.1
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/go-git/go-git/v5 v5.16.2
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-getter v1.7.8
