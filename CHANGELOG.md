@@ -1,3 +1,10 @@
+## [3.3.13](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.12...v3.3.13) (2025-07-18)
+
+
+### Bug Fixes
+
+* **deps:** bump golang.org/x/oauth2 from 0.23.0 to 0.27.0 ([507069c](https://github.com/keilerkonzept/terraform-module-versions/commit/507069c181dd45c31143168f0fb36491539d5f15))
+
 ## [3.3.12](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.11...v3.3.12) (2025-06-16)
 
 
