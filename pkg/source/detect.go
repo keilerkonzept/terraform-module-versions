@@ -11,6 +11,7 @@ import (
 // https://github.com/hashicorp/terraform/blob/f6d6446701a24c457c14a4a63c113814e3d15144/internal/initwd/getter.go#L23
 var goGetterDetectors = []getter.Detector{
 	new(getter.GitHubDetector),
+	new(getter.GitLabDetector),
 	new(getter.GitDetector),
 	new(getter.BitBucketDetector),
 	new(getter.GCSDetector),

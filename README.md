@@ -26,9 +26,9 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.4  |
-| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.4  |
-| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.1 |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.10 |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.10 |
+| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.4 |
 ```
 
 ## Contents
@@ -39,6 +39,7 @@ $ terraform-module-versions check examples
   - [Examples](#examples)
     - [List modules with their current versions](#list-modules-with-their-current-versions)
     - [Check for module updates](#check-for-module-updates)
+    - [Check for module updates using Basic Auth](#check-for-module-updates-using-basic-auth)
     - [Check for module updates using Github Token authentication](#check-for-module-updates-using-github-token-authentication)
     - [Check for updates of specific modules](#check-for-updates-of-specific-modules)
   - [Get it](#get-it)
@@ -213,9 +214,9 @@ $ terraform-module-versions check examples
 | (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.4  |
-| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.4  |
-| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.1 |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.10 |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.10 |
+| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.4 |
 
 with `-o json`:
 
@@ -272,7 +273,7 @@ with `-o json`:
     "source": "git::git@github.com:keilerkonzept/terraform-module-versions?ref=0.12.0",
     "constraint": "~> 0.12",
     "version": "0.12.0",
-    "latestOverall": "v3.3.4",
+    "latestOverall": "v3.3.10",
     "nonMatchingUpdate": true
   },
   {
@@ -280,7 +281,7 @@ with `-o json`:
     "name": "example_git_ssh_branch",
     "source": "git::ssh://git@github.com/keilerkonzept/terraform-module-versions?ref=master",
     "version": "master",
-    "latestOverall": "v3.3.4",
+    "latestOverall": "v3.3.10",
     "nonMatchingUpdate": true
   },
   {
@@ -288,7 +289,7 @@ with `-o json`:
     "name": "example_with_prerelease_versions",
     "source": "git@github.com:kubernetes/api.git?ref=v0.22.2",
     "version": "v0.22.2",
-    "latestOverall": "v0.32.1",
+    "latestOverall": "v0.32.4",
     "nonMatchingUpdate": true
   }
 ]
@@ -306,10 +307,18 @@ $ terraform-module-versions check -all examples
 | (Y)     | consul_github_https_missing_ref  | 0.7.3      |         | v0.7.3          | v0.11.0 |
 | (Y)     | consul_github_https_no_ref       |            |         |                 | v0.11.0 |
 | Y       | consul_github_ssh                | ~0.1.0     | 0.1.0   | v0.1.2          | v0.11.0 |
-| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.4  |
-| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.4  |
-| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.1 |
+| (Y)     | example_git_scp                  | ~> 0.12    | 0.12.0  |                 | v3.3.10 |
+| (Y)     | example_git_ssh_branch           |            | master  |                 | v3.3.10 |
+| (Y)     | example_with_prerelease_versions |            | v0.22.2 |                 | v0.32.4 |
 | ?       | local                            |            |         |                 |         |
+
+### Check for module updates using Basic Auth
+
+You can provide *per-hostname* Basic Auth credentials via `--git-basic-auth <host>=<username>:<password>`. For example, for a private GitLab repository:
+
+```sh
+$ terraform-module-versions check --git-basic-auth gitlab.com=token:glpat-XXXXXXXXXXXXXXXXXXXX ./examples/private
+```
 
 ### Check for module updates using Github Token authentication
 
@@ -429,6 +438,7 @@ FLAGS
   -all=false                             include modules without updates
   -any-updates-found-nonzero-exit=false  exit with a nonzero code when modules with updates are found (ignoring version constraints)
   -e=false                               (alias for -updates-found-nonzero-exit)
+  -git-basic-auth value                  Git HTTP basic auth credentials (host=<username>:<password>, may be specified repeatedly)
   -module value                          include this module (may be specified repeatedly. by default, all modules are included)
   -n=false                               (alias for -any-updates-found-nonzero-exit)
   -o markdown                            (alias for -output)
