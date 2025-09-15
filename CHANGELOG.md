@@ -1,3 +1,10 @@
+## [3.3.15](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.14...v3.3.15) (2025-09-15)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/hashicorp/go-getter from 1.7.8 to 1.8.0 ([ff00acd](https://github.com/keilerkonzept/terraform-module-versions/commit/ff00acd5f59a42a5ecc0bb0bc88583ef1e79aed4))
+
 ## [3.3.14](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.13...v3.3.14) (2025-09-15)
 
 
