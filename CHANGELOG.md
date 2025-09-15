@@ -1,3 +1,10 @@
+## [3.3.14](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.13...v3.3.14) (2025-09-15)
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/ulikunitz/xz from 0.5.10 to 0.5.14 ([0e58bf7](https://github.com/keilerkonzept/terraform-module-versions/commit/0e58bf76a621356cdd5e231e00f7d916d524a564))
+
 ## [3.3.13](https://github.com/keilerkonzept/terraform-module-versions/compare/v3.3.12...v3.3.13) (2025-07-18)
 
 
