@@ -1,14 +1,19 @@
-package safetemp
+// Copyright (c) HashiCorp, Inc.
+// SPDX-License-Identifier: MPL-2.0
+
+package getter
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
 
-// Dir creates a new temporary directory that isn't yet created. This
+// mkdirTemp creates a new temporary directory that isn't yet created. This
 // can be used with calls that expect a non-existent directory.
+//
+// The temporary directory is also evaluated for symlinks upon creation
+// as some operating systems provide symlinks by default when created.
 //
 // The directory is created as a child of a temporary directory created
 // within the directory dir starting with prefix. The temporary directory
@@ -21,9 +26,18 @@ import (
 //
 // If an error is returned, the Closer does not need to be called (and will
 // be nil).
-func Dir(dir, prefix string) (string, io.Closer, error) {
+func mkdirTemp(dir, prefix string) (string, io.Closer, error) {
 	// Create the temporary directory
-	td, err := ioutil.TempDir(dir, prefix)
+	td, err := os.MkdirTemp(dir, prefix)
+	if err != nil {
+		return "", nil, err
+	}
+
+	// we evaluate symlinks as some operating systems (eg: MacOS), that
+	// actually has any temporary directory created as a symlink.
+	// As we have only just created the temporary directory, this is a safe
+	// evaluation to make at this time.
+	td, err = filepath.EvalSymlinks(td)
 	if err != nil {
 		return "", nil, err
 	}
