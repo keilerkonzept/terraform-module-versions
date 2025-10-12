@@ -20,6 +20,7 @@ import (
 	"github.com/keilerkonzept/terraform-module-versions/v3/pkg/scan"
 	"github.com/keilerkonzept/terraform-module-versions/v3/pkg/update"
 
+	"github.com/go-git/go-git/v5/plumbing/transport"
 	githttp "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/peterbourgon/ff/v3/ffcli"
 	"github.com/sgreben/flagvar"
@@ -29,6 +30,7 @@ var (
 	appName       = "terraform-module-versions"
 	version       = "3-SNAPSHOT"
 	updatesClient = update.Client{
+		GitAuthByHost: make(map[string]transport.AuthMethod),
 		Registry: registry.Client{
 			HTTP: http.DefaultClient,
 		},
@@ -45,6 +47,7 @@ var (
 		All                             bool
 		GenerateSed                     bool
 		IncludePrereleaseVersions       bool
+		BasicAuth                       flagvar.Assignments
 	}
 )
 
@@ -82,6 +85,7 @@ func main() {
 	checkFlagSet.Var(&config.RegistryHeaders, "H", "(alias for -registry-header)")
 	checkFlagSet.Var(&config.RegistryHeaders, "registry-header", fmt.Sprintf("extra HTTP headers for requests to Terraform module registries (%s, may be specified repeatedly)", config.RegistryHeaders.Help()))
 	checkFlagSet.BoolVar(&config.GenerateSed, "sed", config.GenerateSed, "generate sed statements for upgrade")
+	checkFlagSet.Var(&config.BasicAuth, "git-basic-auth", "Git HTTP basic auth credentials (host=<username>:<password>, may be specified repeatedly)")
 
 	cmdList := &ffcli.Command{
 		Name:       "list",
@@ -149,11 +153,26 @@ func main() {
 			Nested:  http.DefaultTransport,
 		}
 	}
+
 	if githubToken := os.Getenv("GITHUB_TOKEN"); githubToken != "" {
-		updatesClient.GitAuth = &githttp.BasicAuth{
+		updatesClient.GitAuthByHost["github.com"] = &githttp.BasicAuth{
 			Username: githubToken,
 		}
 	}
+
+	for _, entry := range config.BasicAuth.Values {
+		host := entry.Key
+		basicAuth := entry.Value
+		username, password, ok := strings.Cut(basicAuth, ":")
+		if !ok {
+			log.Fatalf("cannot parse basic auth credentials for host %q: %q", host, basicAuth)
+		}
+		updatesClient.GitAuthByHost[host] = &githttp.BasicAuth{
+			Username: username,
+			Password: password,
+		}
+	}
+
 	if err := cmdRoot.Run(context.Background()); err != nil && !errors.Is(err, flag.ErrHelp) {
 		log.Fatal(err)
 	}

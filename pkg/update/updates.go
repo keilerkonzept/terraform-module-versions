@@ -12,7 +12,7 @@ import (
 
 type Client struct {
 	Registry      registry.Client
-	GitAuth       transport.AuthMethod
+	GitAuthByHost map[string]transport.AuthMethod
 	VersionsCache map[string][]*semver.Version
 }
 
@@ -50,6 +50,14 @@ func (c *Client) Update(s source.Source, current *semver.Version, constraints *s
 	return &out, nil
 }
 
+func gitRemoteHost(remoteURL string) (string, error) {
+	endpoint, err := transport.NewEndpoint(remoteURL)
+	if err != nil {
+		return "", err
+	}
+	return endpoint.Host, nil
+}
+
 func (c *Client) Versions(s source.Source) ([]*semver.Version, error) {
 	if c.VersionsCache == nil {
 		c.VersionsCache = make(map[string][]*semver.Version, 1)
@@ -60,7 +68,9 @@ func (c *Client) Versions(s source.Source) ([]*semver.Version, error) {
 	switch {
 	case s.Git != nil:
 		git := s.Git
-		versions, err := versions.Git(git.Remote, c.GitAuth)
+		host, _ := gitRemoteHost(git.Remote)
+		gitAuth := c.GitAuthByHost[host]
+		versions, err := versions.Git(git.Remote, gitAuth)
 		if err != nil {
 			return nil, fmt.Errorf("fetch versions from %q: %w", git.Remote, err)
 		}
