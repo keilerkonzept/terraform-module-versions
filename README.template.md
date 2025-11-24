@@ -91,6 +91,22 @@ $ export GITHUB_TOKEN="<your Github PAT>"
 $ ${APP} check examples
 ```
 
+### Check for module updates using basic HTTP authentication
+
+```sh
+$ export BASICAUTH_USERNAME="<username>"
+$ export BASICAUTH_PASSWORD="<password>"
+$ ${APP} check examples
+```
+
+### Check for module updates on Cloud Source
+
+```sh
+$ export BASICAUTH_USERNAME=$(gcloud config get-value core/account)
+$ export BASICAUTH_PASSWORD=$(gcloud auth print-access-token)
+$ ${APP} check examples
+```
+
 ### Check for updates of specific modules
 
 ```sh
