@@ -45,6 +45,7 @@ var (
 		All                             bool
 		GenerateSed                     bool
 		IncludePrereleaseVersions       bool
+		SearchLocalModules              bool
 	}
 )
 
@@ -75,6 +76,8 @@ func main() {
 	checkFlagSet.BoolVar(&config.AnyUpdatesFoundNonzeroExit, "n", config.AnyUpdatesFoundNonzeroExit, "(alias for -any-updates-found-nonzero-exit)")
 	checkFlagSet.BoolVar(&config.AnyUpdatesFoundNonzeroExit, "any-updates-found-nonzero-exit", config.AnyUpdatesFoundNonzeroExit, "exit with a nonzero code when modules with updates are found (ignoring version constraints)")
 	checkFlagSet.BoolVar(&config.IncludePrereleaseVersions, "pre-release", config.IncludePrereleaseVersions, "include pre-release versions")
+	checkFlagSet.BoolVar(&config.SearchLocalModules, "s", config.SearchLocalModules, "(alias for -search-local-modules)")
+	checkFlagSet.BoolVar(&config.SearchLocalModules, "search-local-modules", config.SearchLocalModules, "search for all modules in local modules")
 	checkFlagSet.BoolVar(&config.All, "a", config.All, "(alias for -all)")
 	checkFlagSet.BoolVar(&config.All, "all", config.All, "include modules without updates")
 	listFlagSet.Var(&config.ModuleNames, "module", "include this module (may be specified repeatedly. by default, all modules are included)")
@@ -160,7 +163,7 @@ func main() {
 }
 
 func scanForModuleCalls() []scan.Result {
-	scanResults, err := scan.Scan(config.Paths)
+	scanResults, err := scan.Scan(config.Paths, config.SearchLocalModules)
 	if err != nil {
 		log.Fatal(err)
 	}
